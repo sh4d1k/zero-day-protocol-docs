@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Zero Day Protocol</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 23, 42, 0.85);
+      --card-border: rgba(34, 211, 238, 0.2);
+      --cyan: #00f0ff;
+      --green: #00ff66;
+      --purple: #a855f7;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.7;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.06) 0%, transparent 40%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.9);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--cyan);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      background: var(--cyan);
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      margin-left: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .policy-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      background: rgba(0, 240, 255, 0.1);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 30%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .last-updated {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      color: #fff;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      color: var(--cyan);
+      margin: 1.8rem 0 0.8rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      color: #fff;
+      margin: 1.2rem 0 0.5rem;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    ul {
+      margin: 0.5rem 0 1.5rem 1.5rem;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    strong {
+      color: #fff;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--cyan);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    .highlight-box {
+      background: rgba(0, 240, 255, 0.05);
+      border-left: 4px solid var(--cyan);
+      padding: 1.2rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.5rem 0;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--cyan);
+      color: #000;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      text-decoration: none;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span>ZDP</span> ZERO DAY PROTOCOL
+      </a>
+      <div class="nav-links">
+        <a href="index.html#guide">Game Guide</a>
+        <a href="page.html">Privacy Policy</a>
+        <a href="index.html#deletion">Account Deletion</a>
+        <a href="index.html#contact">Support</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="policy-card">
+      <div class="badge">Legal Document</div>
+      <h1>Privacy Policy</h1>
+      <p class="last-updated">Last updated: September 02, 2026</p>
+
+      <p>This Privacy Policy describes Our policies and procedures on the collection, use, and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
+      
+      <p>We use Your Personal Data to provide and improve the Service. We collect, use, and disclose Your information as described in this Privacy Policy and, where required by applicable law, only where We have a valid legal basis to do so, including Your consent.</p>
+
+      <h2>Interpretation and Definitions</h2>
+      <h3>Interpretation</h3>
+      <p>The words whose initial letters are capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>
+
+      <h3>Definitions</h3>
+      <p>For the purposes of this Privacy Policy:</p>
+      <ul>
+        <li><strong>Account</strong> means a unique account created for You to access Our Service or parts of Our Service.</li>
+        <li><strong>Application</strong> refers to <strong>Zero Day Protocol</strong> (or <em>Zero-Day Protocol</em>), the mobile software application provided by the Company.</li>
+        <li><strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Privacy Policy) refers to MTX Games / Zero Day Protocol, Sri Lanka.</li>
+        <li><strong>Country/State</strong> refers to: Sri Lanka.</li>
+        <li><strong>Device</strong> means any device that can access the Service, such as an Android smartphone or tablet.</li>
+        <li><strong>Personal Data</strong> (or "Personal Information") is any information that relates to an identified or identifiable individual.</li>
+        <li><strong>Service</strong> refers to the Application.</li>
+        <li><strong>Service Provider</strong> means any natural or legal person who processes data on behalf of the Company (such as Google Firebase, Google Play, or Google AdMob).</li>
+        <li><strong>Usage Data</strong> refers to data collected automatically, either generated by the use of the Service or from the Service infrastructure itself (for example, the duration of a session or crash telemetry).</li>
+        <li><strong>You</strong> means the individual accessing or using the Service.</li>
+      </ul>
+
+      <h2>Collecting and Using Your Personal Data</h2>
+      <h3>Types of Data Collected</h3>
+      
+      <h4>1. Personal Data</h4>
+      <p>While using Our Service, We may collect certain personally identifiable information to provide user authentication and cloud synchronization. This includes:</p>
+      <ul>
+        <li><strong>Email address</strong> (When signing in via Google Sign-In or Firebase Authentication)</li>
+        <li><strong>Display Name and User ID (UID)</strong> (Generated by Google/Firebase to sync player progress)</li>
+        <li><strong>Game State & Profile:</strong> Unlocked nodes, cryptographic cipher scores, hardware upgrades, and virtual credit balances stored securely in Firebase Firestore.</li>
+      </ul>
+
+      <h4>2. Usage Data & Diagnostics</h4>
+      <p>Usage Data is collected automatically when using the Service. This may include information such as Your Device's IP address, device model, operating system version, unique device identifiers, in-game performance metrics, and crash diagnostic logs to help us resolve software bugs.</p>
+
+      <h4>3. Device Permissions</h4>
+      <div class="highlight-box">
+        <p><strong>Device Access Disclosures:</strong></p>
+        <ul>
+          <li><code>INTERNET</code>: Required for cloud database synchronization, user authentication, and game data retrieval.</li>
+          <li><code>VIBRATE</code>: Used for tactile haptic feedback during interactive terminal operations.</li>
+          <li><strong>Microphone / Audio Recording:</strong> Zero Day Protocol does <strong>NOT</strong> record, capture, or store microphone/audio data.</li>
+        </ul>
+      </div>
+
+      <h2>Third-Party Services & Advertising</h2>
+      <p>We work with trusted third-party service providers to facilitate and deliver game services:</p>
+      <ul>
+        <li><strong>Google Play Services & Firebase (Google LLC):</strong> Used for secure cloud database synchronization, user authentication, and performance analytics. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></li>
+        <li><strong>Google AdMob (Google LLC):</strong> Used to display in-game advertisements (such as optional rewarded video ads for in-game credits and banners). AdMob may use device advertising identifiers (GAID) in accordance with Google policies. <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">AdMob Privacy Policy</a></li>
+        <li><strong>Google Play In-App Billing:</strong> All virtual purchases are handled directly through Google Play Billing. We never collect or store your payment card numbers or banking credentials.</li>
+      </ul>
+
+      <h2>Use of Your Personal Data</h2>
+      <p>The Company may use Personal Data for the following purposes:</p>
+      <ul>
+        <li><strong>To provide and maintain Our Service:</strong> Including monitoring game stability and syncing your operative profile across devices.</li>
+        <li><strong>To manage Your Account:</strong> Managing your operative registration, profile alias, and cloud save data.</li>
+        <li><strong>To attend and manage Your requests:</strong> Responding to customer support, technical assistance, or account deletion inquiries.</li>
+        <li><strong>For security and fraud prevention:</strong> Protecting our systems against exploits, unauthorized access, and malicious intrusions.</li>
+      </ul>
+
+      <h2>Retention of Your Personal Data</h2>
+      <p>The Company will retain Your Personal Data only for as long as is necessary for the purposes set out in this Privacy Policy:</p>
+      <ul>
+        <li><strong>User Account Information:</strong> Retained for the duration of your active gameplay relationship.</li>
+        <li><strong>Customer Support Correspondence:</strong> Retained up to 24 months to resolve follow-up inquiries.</li>
+        <li><strong>Telemetry & Diagnostics:</strong> Anonymized crash logs and performance stats are retained up to 24 months for quality assurance.</li>
+      </ul>
+
+      <h2>Account and Data Deletion</h2>
+      <p>You have the absolute right to delete or request that We assist in deleting the Personal Data that We have collected about You:</p>
+      <div class="highlight-box">
+        <p><strong>How to delete your account & data:</strong></p>
+        <ul>
+          <li><strong>In-App:</strong> Open Zero Day Protocol > Navigate to <strong>Settings</strong> > <strong>Account</strong> > Click <strong>Delete Account</strong>.</li>
+          <li><strong>Via Email Request:</strong> Contact us directly at <strong><a href="mailto:cybershadic7@gmail.com">cybershadic7@gmail.com</a></strong> with your registered Google email address. We will permanently purge your account and database records within 30 days.</li>
+        </ul>
+        <a href="mailto:cybershadic7@gmail.com?subject=Zero%20Day%20Protocol%20Data%20Deletion%20Request" class="btn">Submit Deletion Request</a>
+      </div>
+
+      <h2>Children's and Minors' Privacy</h2>
+      <p>Our Service is intended for users aged 13 and older (or 16 where applicable by local law). We do not knowingly collect personal information from children under 13. If you become aware that a child has provided us with Personal Data, please contact us immediately so we can remove the data from our servers.</p>
+
+      <h2>Security of Your Personal Data</h2>
+      <p>The security of Your Personal Data is important to Us. We employ industry-standard encryption (HTTPS/TLS) and Google Firebase Security Rules to safeguard all transmitted and stored data.</p>
+
+      <h2>Changes to this Privacy Policy</h2>
+      <p>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date at the top.</p>
+
+      <h2>Contact Us</h2>
+      <p>If You have any questions or requests regarding this Privacy Policy, You can contact Us:</p>
+      <ul>
+        <li><strong>Developer:</strong> MTX Games</li>
+        <li><strong>By email:</strong> <a href="mailto:cybershadic7@gmail.com">cybershadic7@gmail.com</a></li>
+        <li><strong>By phone:</strong> +94703649949</li>
+        <li><strong>Country of Operation:</strong> Sri Lanka</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 MTX Games — Zero Day Protocol. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
