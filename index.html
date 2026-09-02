@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero Day Protocol — Official Knowledge Base & Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(34, 211, 238, 0.2);
+      --cyan: #00f0ff;
+      --green: #00ff66;
+      --purple: #a855f7;
+      --amber: #f59e0b;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--cyan);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      background: var(--cyan);
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--cyan);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 0 4rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      background: rgba(0, 240, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #ffffff 30%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 240, 255, 0.5);
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      color: var(--cyan);
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    .card p, .card li {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .card ul {
+      list-style-position: inside;
+      margin-top: 0.5rem;
+    }
+
+    .card li {
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 4rem 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-title::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 28px;
+      background: var(--cyan);
+      border-radius: 2px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--cyan);
+      color: #000;
+      font-weight: 700;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      margin-left: 0.5rem;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      padding: 2.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--cyan);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <span>ZDP</span> ZERO DAY PROTOCOL
+      </a>
+      <nav>
+        <a href="#guide">Game Guide</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#deletion">Account Deletion</a>
+        <a href="#contact">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge">Operative Knowledge Base & Support</div>
+      <h1>Zero Day Protocol</h1>
+      <p class="subtitle">Tactical cyber infiltration, cryptographic puzzle solving, and decentralized warfare.</p>
+    </section>
+
+    <!-- GAME GUIDE SECTION -->
+    <section id="guide">
+      <h2 class="section-title">Operative Field Manual & Gameplay Guide</h2>
+      <div class="grid">
+        <div class="card">
+          <h2>🌐 1. Grid Routing & Infiltration</h2>
+          <p>Rotate data conduits to link your terminal rig to high-security target mainframes. Bypass firewall locks, manage processing bandwidth, and complete connections before ICE alarms activate.</p>
+        </div>
+
+        <div class="card">
+          <h2>🔐 2. Cryptographic Ciphers</h2>
+          <p>Crack real-time binary, hex, and substitution ciphers. Decode security payloads using frequency analysis and algorithm modules to breach classified networks.</p>
+        </div>
+
+        <div class="card">
+          <h2>⚡ 3. Hardware & Mining Upgrades</h2>
+          <p>Invest mission credits to overclock processing cores, expand RAM buffers, and deploy background auto-miners that accumulate credits over time.</p>
+        </div>
+
+        <div class="card">
+          <h2>☁️ 4. Cloud Sync & Alias</h2>
+          <p>Connect your Google account to automatically preserve your upgrades, credits, and unlocked sectors across all Android devices.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIVACY POLICY SECTION -->
+    <section id="privacy">
+      <h2 class="section-title">Privacy Policy</h2>
+      <div class="card" style="margin-top: 1.5rem;">
+        <p><strong>Last Updated: September 2, 2026</strong> | Developer: MTX Games</p>
+        <br>
+        <p>Zero Day Protocol respects your privacy. We collect only the data required to provide cloud save synchronization and game features:</p>
+        
+        <h3>1. Data Collected</h3>
+        <ul>
+          <li><strong>Authentication Data:</strong> Email address, Display Name, and User ID (UID) when signing in via Google Sign-In / Firebase Auth.</li>
+          <li><strong>Game State:</strong> Progress, level completions, upgrades, high scores, and in-game credit balances.</li>
+          <li><strong>Crash & Performance Telemetry:</strong> Diagnostic logs to resolve software crashes.</li>
+        </ul>
+
+        <h3>2. Third-Party Services</h3>
+        <ul>
+          <li><strong>Google Firebase:</strong> Cloud database, authentication, and hosting.</li>
+          <li><strong>Google AdMob:</strong> In-game advertisements (rewarded ads and banners).</li>
+          <li><strong>Google Play Billing:</strong> In-app purchase processing (we do not process or store credit cards directly).</li>
+        </ul>
+
+        <h3>3. Permissions</h3>
+        <p>Zero Day Protocol requires <code>INTERNET</code> for cloud sync and <code>VIBRATE</code> for haptic feedback. We do <strong>not</strong> record, capture, or store microphone/audio data.</p>
+      </div>
+    </section>
+
+    <!-- ACCOUNT DELETION SECTION -->
+    <section id="deletion">
+      <h2 class="section-title">Account & Data Deletion Request</h2>
+      <div class="card" style="margin-top: 1.5rem;">
+        <p>You can request complete deletion of your Zero Day Protocol account and all associated cloud-saved data at any time.</p>
+        
+        <h3>How to Delete:</h3>
+        <ul>
+          <li><strong>Option 1 (In-App):</strong> Open the game > <strong>Settings</strong> > <strong>Account</strong> > <strong>Delete Account</strong>.</li>
+          <li><strong>Option 2 (Via Email):</strong> Send an email to <code>cybershadic7@gmail.com</code> with the subject <em>"Zero Day Protocol Account Deletion Request"</em> including your registered email or Operative ID.</li>
+        </ul>
+        <br>
+        <p><strong>Data Purged:</strong> Profile information, email, progress records, high scores, and inventory balances will be permanently deleted from Firebase within 30 days.</p>
+        <br>
+        <a href="mailto:cybershadic7@gmail.com?subject=Zero%20Day%20Protocol%20Account%20Deletion%20Request" class="btn">Send Deletion Request Email</a>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact">
+      <h2 class="section-title">Developer & Support</h2>
+      <div class="card" style="margin-top: 1.5rem;">
+        <p><strong>Developer:</strong> MTX Games</p>
+        <p><strong>Contact Email:</strong> <a href="mailto:cybershadic7@gmail.com" style="color: var(--cyan);">cybershadic7@gmail.com</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 MTX Games — Zero Day Protocol. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
