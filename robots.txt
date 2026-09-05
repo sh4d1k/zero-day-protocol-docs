@@ -1,0 +1,6 @@
+# robots.txt for https://mtxgames.lk/
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://mtxgames.lk/sitemap.xml
