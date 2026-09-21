@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VPN Tunnel Node // Server Ingestion Limits</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <div class="guide-badge">SECURE INTEL // PART 4 OF 4</div>
+    <h1 class="guide-title">VPN Tunnel Node</h1>
+    <div class="guide-subtitle">CRITICAL RULE // DESTINATION SERVER REJECTION</div>
+  </header>
+
+  <!-- GIF / Visual Simulation Container -->
+  <div class="media-container">
+    <div class="gif-placeholder">
+      <div class="simulated-grid">
+        <div class="simulated-cell" style="border-color: #a78bfa; color: #a78bfa;">◌</div>
+        <div class="simulated-arrow">&rarr;</div>
+        <div class="simulated-cell" style="border-color: #00ff88; background: #001a1a;">🖥️</div>
+        <div class="simulated-arrow">&rarr;</div>
+        <div class="simulated-cell" style="border-color: #ef4444; color: #ef4444;">❌</div>
+      </div>
+      <div class="placeholder-tag">[ DEMO: CLOAKED PACKET IGNORED BY SERVER &rarr; CRASHES BEYOND ]</div>
+    </div>
+  </div>
+
+  <!-- Operational Breakdown -->
+  <div class="content-card">
+    <div class="section-label">🚫 THE INGESTION PROTOCOL</div>
+    <p class="guide-text">
+      A still-cloaked packet <strong>cannot enter the destination server (Exit Node [E])</strong>. Because its handshake headers are encrypted, the server fails to recognize the transmission. The packet will pass straight through or crash into the perimeter wall behind the server!
+    </p>
+    <div class="tactical-rule rule-alert">
+      &bull; <strong>CRITICAL FAILURE:</strong> Do not route cloaked packets directly into the Exit Node without clearing the tunnel cloak.
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="section-label">💡 HOW TO UNCLOAK</div>
+    <p class="guide-text">
+      Passing through a <strong>second VPN Node</strong> toggles the encrypted tunnel OFF, returning the packet to its normal readable state so it can successfully deliver payload intelligence to the Exit Server.
+    </p>
+    <div class="tactical-rule rule-success">
+      &bull; <strong>SOLUTION:</strong> [Start] &rarr; [VPN 1 (Cloak)] &rarr; [Bypass Walls] &rarr; [VPN 2 (Uncloak)] &rarr; [Exit Server].
+    </div>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+</body>
+</html>

@@ -1,0 +1,239 @@
+/**
+ * MTXGAMES.LK — Tactical Tile Guide Stylesheet
+ * Cyberpunk Terminal Mobile-Scaled UI for In-App WebView & Web Browsers
+ */
+
+:root {
+  --bg-primary: #050508;
+  --bg-surface: #0a0a14;
+  --bg-card: #10101f;
+  --cyan-bright: #00f3ff;
+  --cyan-accent: #3dffff;
+  --cyan-dim: #024555;
+  --purple-accent: #a78bfa;
+  --green-pass: #10b981;
+  --red-fail: #ef4444;
+  --yellow-warn: #eab308;
+  --text-white: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-dim: rgba(255, 255, 255, 0.08);
+  --border-cyan: rgba(61, 255, 255, 0.25);
+  --font-mono: 'Consolas', 'Courier New', monospace;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  background-color: var(--bg-primary);
+  color: var(--text-white);
+  font-family: var(--font-sans);
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Header & Identity */
+.guide-header {
+  border-bottom: 1px solid var(--border-cyan);
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.guide-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(61, 255, 255, 0.1);
+  border: 1px solid var(--cyan-accent);
+  color: var(--cyan-accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.guide-title {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--text-white);
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.guide-subtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--purple-accent);
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+/* GIF & Animation Visual Container */
+.media-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 1px solid var(--border-cyan);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+}
+
+.media-container img,
+.media-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* GIF Placeholder Animation (Shown until Skia GIFs are produced) */
+.gif-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  background: radial-gradient(circle, rgba(0, 243, 255, 0.08) 0%, rgba(5, 5, 8, 0.95) 75%);
+  width: 100%;
+  height: 100%;
+}
+
+.simulated-grid {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.simulated-cell {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: bold;
+  border: 1.5px solid var(--cyan-accent);
+  background: rgba(0, 26, 42, 0.8);
+  box-shadow: 0 0 10px rgba(61, 255, 255, 0.2);
+}
+
+.simulated-arrow {
+  color: var(--cyan-accent);
+  font-size: 18px;
+  animation: pulse-arrow 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-arrow {
+  0%, 100% { opacity: 0.4; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(4px); }
+}
+
+.placeholder-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--cyan-accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Content & Operational Breakdown */
+.content-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dim);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cyan-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.guide-text {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.guide-text strong {
+  color: var(--text-white);
+}
+
+/* Tactical Highlights */
+.tactical-rule {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  font-family: var(--font-mono);
+}
+
+.rule-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-left: 3px solid var(--green-pass);
+  color: #34d399;
+}
+
+.rule-alert {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid var(--red-fail);
+  color: #f87171;
+}
+
+.rule-info {
+  background: rgba(167, 139, 250, 0.1);
+  border-left: 3px solid var(--purple-accent);
+  color: #c4b5fd;
+}
+
+/* Footer Status */
+.guide-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
