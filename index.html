@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Primary Meta Tags -->
-  <title>Zero Day Protocol — Cyberpunk Strategy & Network Infiltration Mobile Game | MTX Games</title>
-  <meta name="title" content="Zero Day Protocol — Cyberpunk Strategy & Network Infiltration Mobile Game | MTX Games">
-  <meta name="description" content="Zero Day Protocol is a tactical cyberpunk strategy, network routing, and cryptographic cipher puzzle game for Android by MTX Games. Official game manual, support, and privacy policy.">
-  <meta name="keywords" content="Zero Day Protocol, MTX Games, cyberpunk game, hacking game, network infiltration, cryptographic cipher, android puzzle game, botnet strategy, darkcoin">
+  <title>Zero Day Protocol — Cyberpunk Tactical Infiltration Mobile Game | MTX Games</title>
+  <meta name="title" content="Zero Day Protocol — Cyberpunk Tactical Infiltration Mobile Game | MTX Games">
+  <meta name="description" content="Zero Day Protocol is a tactical cyberpunk strategy, network routing, and cryptographic cipher puzzle game for Android by MTX Games. Official game manual, dev log, roadmap, and support.">
+  <meta name="keywords" content="Zero Day Protocol, MTX Games, cyberpunk game, hacking game, network infiltration, cryptographic cipher, android puzzle game, botnet strategy, darkcoin, skia mobile game">
   <meta name="author" content="MTX Games">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://mtxgames.lk/">
@@ -23,7 +23,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mtxgames.lk/">
   <meta property="og:title" content="Zero Day Protocol — Tactical Cyber Infiltration Game">
-  <meta property="og:description" content="Crack ciphers, route security grids, and build your decentralized botnet in Zero Day Protocol by MTX Games.">
+  <meta property="og:description" content="Route network grids, crack cryptographic ciphers, and synthesize data cores in Zero Day Protocol by MTX Games.">
   <meta property="og:image" content="https://mtxgames.lk/og-image.jpg">
   <meta property="og:site_name" content="Zero Day Protocol">
   <meta property="og:locale" content="en_US">
@@ -38,7 +38,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 
   <!-- Schema.org JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -72,7 +72,7 @@
         "@type": "VideoGame",
         "@id": "https://mtxgames.lk/#game",
         "name": "Zero Day Protocol",
-        "description": "Tactical cyberpunk strategy, cryptographic cipher solving, and network infiltration mobile game.",
+        "description": "Tactical cyberpunk strategy, cryptographic cipher solving, and network routing mobile game.",
         "genre": ["Strategy", "Puzzle", "Cyberpunk", "Simulation"],
         "gamePlatform": ["Android"],
         "operatingSystem": "Android 10+",
@@ -97,15 +97,19 @@
 
   <style>
     :root {
-      --bg: #07090e;
-      --card-bg: rgba(15, 23, 42, 0.75);
-      --card-border: rgba(34, 211, 238, 0.2);
-      --cyan: #00f0ff;
-      --green: #00ff66;
+      --bg: #050508;
+      --surface: #0a0a14;
+      --card-bg: rgba(13, 17, 28, 0.78);
+      --card-border: rgba(0, 243, 255, 0.2);
+      --cyan: #00f3ff;
+      --cyan-bright: #3dffff;
       --purple: #a855f7;
+      --green: #10b981;
       --amber: #f59e0b;
-      --text: #e2e8f0;
+      --red: #ef4444;
+      --text: #f1f5f9;
       --text-muted: #94a3b8;
+      --text-subtle: #64748b;
     }
 
     * {
@@ -117,11 +121,11 @@
     body {
       background-color: var(--bg);
       color: var(--text);
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Outfit', -apple-system, sans-serif;
       line-height: 1.6;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
@@ -130,8 +134,8 @@
 
     header {
       border-bottom: 1px solid var(--card-border);
-      background: rgba(7, 9, 14, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(5, 5, 8, 0.9);
+      backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
       z-index: 50;
@@ -144,38 +148,43 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .logo {
       font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 1.25rem;
       color: var(--cyan);
       text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
       letter-spacing: -0.5px;
     }
 
     .logo span {
       background: var(--cyan);
       color: #000;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 4px;
       font-size: 0.8rem;
+      font-weight: 900;
     }
 
     nav {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     nav a {
       color: var(--text-muted);
       text-decoration: none;
       font-weight: 500;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       transition: color 0.2s;
     }
 
@@ -183,54 +192,159 @@
       color: var(--cyan);
     }
 
+    .nav-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(0, 243, 255, 0.12);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--cyan);
+      color: #000;
+    }
+
     main {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 3rem 1.5rem 5rem;
+      padding: 3rem 1.5rem 6rem;
     }
 
+    /* Hero Section */
     .hero {
       text-align: center;
-      padding: 3rem 0 4rem;
+      padding: 2.5rem 0 3.5rem;
     }
 
-    .badge {
-      display: inline-block;
+    .hud-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.8rem;
       color: var(--cyan);
       border: 1px solid var(--cyan);
-      background: rgba(0, 240, 255, 0.1);
-      padding: 4px 12px;
+      background: rgba(0, 243, 255, 0.1);
+      padding: 4px 14px;
       border-radius: 999px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
+    .hud-badge span.pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+      display: inline-block;
+    }
+
     h1 {
-      font-size: 3rem;
+      font-size: 3.2rem;
       font-weight: 900;
       letter-spacing: -1px;
-      background: linear-gradient(135deg, #ffffff 30%, var(--cyan) 100%);
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan) 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     .subtitle {
       font-size: 1.2rem;
       color: var(--text-muted);
-      max-width: 650px;
+      max-width: 720px;
       margin: 0 auto 2rem;
+      line-height: 1.6;
     }
 
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Telemetry HUD Strip */
+    .telemetry-strip {
+      background: rgba(10, 10, 20, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .telemetry-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .telemetry-label {
+      font-size: 0.7rem;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .telemetry-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .telemetry-val.cyan { color: var(--cyan); }
+    .telemetry-val.purple { color: var(--purple); }
+    .telemetry-val.green { color: var(--green); }
+
+    /* Section Headers */
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 4.5rem 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      letter-spacing: -0.5px;
+    }
+
+    .section-title::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 26px;
+      background: var(--cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-top: -0.75rem;
+      margin-bottom: 2rem;
+      max-width: 800px;
+    }
+
+    /* Cards Grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
+      gap: 1.75rem;
     }
 
     .card {
@@ -239,83 +353,199 @@
       border-radius: 16px;
       padding: 2rem;
       backdrop-filter: blur(8px);
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
 
     .card:hover {
       transform: translateY(-4px);
-      border-color: rgba(0, 240, 255, 0.5);
+      border-color: rgba(0, 243, 255, 0.5);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.12);
+    }
+
+    .card-header-icon {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--cyan);
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      display: inline-block;
+      margin-bottom: 0.75rem;
     }
 
     .card h2 {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       color: #fff;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
     }
 
-    .card h3 {
-      font-size: 1.1rem;
-      color: var(--cyan);
-      margin: 1.5rem 0 0.5rem;
-    }
-
-    .card p, .card li {
+    .card p {
       color: var(--text-muted);
       font-size: 0.95rem;
+      line-height: 1.6;
     }
 
-    .card ul {
-      list-style-position: inside;
-      margin-top: 0.5rem;
+    .feature-tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .card li {
+    .feature-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--cyan-bright);
+      background: rgba(0, 243, 255, 0.06);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    /* Roadmap Visual Ribbon */
+    .roadmap-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .roadmap-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .roadmap-step {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1.25rem;
+      position: relative;
+    }
+
+    .roadmap-step.active {
+      border-color: var(--cyan);
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);
+      background: rgba(0, 243, 255, 0.04);
+    }
+
+    .step-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-badge.active-badge {
+      background: rgba(0, 243, 255, 0.2);
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+    }
+
+    .step-badge.next-badge {
+      background: rgba(168, 85, 247, 0.2);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+    }
+
+    .step-badge.planned-badge {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-subtle);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .step-badge.target-badge {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+
+    .roadmap-step h4 {
+      font-size: 1rem;
+      color: #fff;
+      font-weight: 700;
       margin-bottom: 0.4rem;
     }
 
-    .section-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #fff;
-      margin: 4rem 0 1.5rem;
+    .roadmap-step p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Transmissions Banner */
+    .transmissions-banner {
+      background: linear-gradient(135deg, rgba(0, 243, 255, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%), var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.25rem;
       display: flex;
-      align-items: center;
-      gap: 0.75rem;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
-    .section-title::before {
-      content: "";
-      display: inline-block;
-      width: 4px;
-      height: 28px;
-      background: var(--cyan);
-      border-radius: 2px;
+    @media (min-width: 768px) {
+      .transmissions-banner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
 
+    .transmissions-banner h3 {
+      font-size: 1.35rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .transmissions-banner p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 600px;
+    }
+
+    /* Buttons */
     .btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       background: var(--cyan);
       color: #000;
       font-weight: 700;
       padding: 0.75rem 1.75rem;
       border-radius: 8px;
       text-decoration: none;
-      transition: opacity 0.2s;
-      margin-top: 1rem;
+      transition: all 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
     }
 
     .btn:hover {
-      opacity: 0.9;
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+      transform: translateY(-2px);
     }
 
     .btn-secondary {
-      background: transparent;
+      background: rgba(255, 255, 255, 0.05);
       color: var(--cyan);
       border: 1px solid var(--cyan);
-      margin-left: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 243, 255, 0.15);
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
     }
 
     footer {
@@ -326,9 +556,19 @@
       font-size: 0.9rem;
     }
 
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--cyan);
+    }
+
     code {
       font-family: 'JetBrains Mono', monospace;
-      background: rgba(0, 240, 255, 0.1);
+      background: rgba(0, 243, 255, 0.1);
       color: var(--cyan);
       padding: 2px 6px;
       border-radius: 4px;
@@ -344,98 +584,288 @@
         <span>ZDP</span> ZERO DAY PROTOCOL
       </a>
       <nav>
-        <a href="#guide">Game Guide</a>
-        <a href="PRIVACY_POLICY.html">Privacy Policy</a>
-        <a href="TERMS_OF_SERVICE.html">Terms of Service</a>
-        <a href="#deletion">Account Deletion</a>
-        <a href="#contact">Support</a>
+        <a href="#pillars">The Pillars</a>
+        <a href="#loadout">Loadout</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="transmissions.html">Transmissions</a>
+        <a href="GAME_GUIDE.md">Field Manual</a>
+        <a href="PRIVACY_POLICY.html">Privacy</a>
+        <a href="#deletion">Deletion</a>
+        <a href="#contact" class="nav-btn">Support</a>
       </nav>
     </div>
   </header>
 
   <main>
+    <!-- HERO SECTION -->
     <section class="hero">
-      <div class="badge">Operative Knowledge Base & Support</div>
-      <h1>Zero Day Protocol</h1>
-      <p class="subtitle">Tactical cyber infiltration, cryptographic puzzle solving, and decentralized warfare.</p>
-    </section>
+      <div class="hud-badge">
+        <span class="pulse-dot"></span>
+        <span>OPERATIVE KNOWLEDGE BASE // TACTICAL NET-RUNNER SIMULATION</span>
+      </div>
+      <h1>Breach the Grid.<br>Crack the Cipher.<br>Own the Network.</h1>
+      <p class="subtitle">
+        Zero Day Protocol combines high-stakes network routing, real-time cryptographic deciphering, and decentralized botnet synthesis on Android.
+      </p>
 
-    <!-- GAME GUIDE SECTION -->
-    <section id="guide">
-      <h2 class="section-title">Operative Field Manual & Gameplay Guide</h2>
-      <div class="grid">
-        <div class="card">
-          <h2>🌐 1. Grid Routing & Infiltration</h2>
-          <p>Rotate data conduits to link your terminal rig to high-security target mainframes. Bypass firewall locks, manage processing bandwidth, and complete connections before ICE alarms activate.</p>
+      <div class="hero-actions">
+        <a href="#pillars" class="btn">⚡ Explore The 3 Pillars</a>
+        <a href="transmissions.html" class="btn btn-secondary">📡 Firmware Transmissions (Dev Log)</a>
+        <a href="GAME_GUIDE.md" class="btn btn-secondary">🛡️ Operative Manual</a>
+      </div>
+
+      <!-- LIVE TELEMETRY STRIP -->
+      <div class="telemetry-strip">
+        <div class="telemetry-item">
+          <span class="telemetry-label">Closed Testing Track</span>
+          <span class="telemetry-val cyan">v1.0.9 (Build 10)</span>
         </div>
-
-        <div class="card">
-          <h2>🔐 2. Cryptographic Ciphers</h2>
-          <p>Crack real-time binary, hex, and substitution ciphers. Decode security payloads using frequency analysis and algorithm modules to breach classified networks.</p>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Active Dev Milestone</span>
+          <span class="telemetry-val purple">Skia GPU Engine (v1.1.0)</span>
         </div>
-
-        <div class="card">
-          <h2>⚡ 3. Hardware & Mining Upgrades</h2>
-          <p>Invest mission credits to overclock processing cores, expand RAM buffers, and deploy background auto-miners that accumulate credits over time.</p>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Campaign Sectors</span>
+          <span class="telemetry-val">28 Network Nodes</span>
         </div>
-
-        <div class="card">
-          <h2>☁️ 4. Cloud Sync & Alias</h2>
-          <p>Connect your Google account to automatically preserve your upgrades, credits, and unlocked sectors across all Android devices.</p>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Open Testing Horizon</span>
+          <span class="telemetry-val green">Google Play Target</span>
         </div>
       </div>
     </section>
 
-    <!-- PRIVACY POLICY SUMMARY SECTION -->
+    <!-- THE 3 CORE GAMEPLAY PILLARS -->
+    <section id="pillars">
+      <h2 class="section-title">The Three Core Gameplay Pillars</h2>
+      <p class="section-desc">
+        Zero-Day Protocol centers on three deeply interlinked pillars, seamlessly flowing from grid infiltration to cryptographic decoding and hardware synthesis.
+      </p>
+
+      <div class="grid">
+        <!-- PILLAR 01: ROUTER PUZZLE ENGINE -->
+        <div class="card">
+          <span class="card-header-icon">PILLAR 01 // ROUTER ENGINE</span>
+          <h2>🌐 Network Grid Infiltration</h2>
+          <p>
+            Command the transmission grid. Route real-time data packets from your terminal rig to high-security target nodes before detection counters trigger connection termination.
+          </p>
+          <div class="feature-tag-list">
+            <span class="feature-tag">28-Node Campaign</span>
+            <span class="feature-tag">Packet Momentum Physics</span>
+            <span class="feature-tag">Sentry ICE Beams</span>
+            <span class="feature-tag">EMP Timed Charges</span>
+            <span class="feature-tag">Timed Gates</span>
+            <span class="feature-tag">Data Spoofers</span>
+            <span class="feature-tag">Yellow ICE Firewalls</span>
+            <span class="feature-tag">Skia GPU Canvas</span>
+          </div>
+        </div>
+
+        <!-- PILLAR 02: CIPHER GATEWAY -->
+        <div class="card">
+          <span class="card-header-icon">PILLAR 02 // CIPHER GATEWAY</span>
+          <h2>🔐 Cryptographic Security Gateway</h2>
+          <p>
+            Break corporate cryptographic defenses. Decode binary, hex, and substitution sequences under timed lockouts using frequency analysis and algorithm modules.
+          </p>
+          <div class="feature-tag-list">
+            <span class="feature-tag">Matrix Shuffle v3 Keypad</span>
+            <span class="feature-tag">Pattern Decryption</span>
+            <span class="feature-tag">Binary / Hex Clues</span>
+            <span class="feature-tag">Anti-Brute Force Protection</span>
+            <span class="feature-tag">Insta-Win Countermeasures</span>
+          </div>
+        </div>
+
+        <!-- PILLAR 03: DECRYPTOR LAB & ECONOMY -->
+        <div class="card">
+          <span class="card-header-icon">PILLAR 03 // DECRYPTOR LAB</span>
+          <h2>⚡ Data Core Synthesis &amp; Economy</h2>
+          <p>
+            Extract classified data cores from breached mainframes. Merge matching cores in your 16-slot inventory, synthesize higher tier rewards, and deploy background Dark Coin mining rigs.
+          </p>
+          <div class="feature-tag-list">
+            <span class="feature-tag">16-Slot Core Inventory</span>
+            <span class="feature-tag">Single-Batch Synthesis</span>
+            <span class="feature-tag">Dark Coin Miner Rigs</span>
+            <span class="feature-tag">Quantum Crystal Research</span>
+            <span class="feature-tag">Diminishing Star Rewards</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OPERATIVE IDENTITY & LOADOUT -->
+    <section id="loadout">
+      <h2 class="section-title">Operative Identity &amp; Custom Loadout</h2>
+      <p class="section-desc">
+        Customize your net-runner signature on the network. Equip custom packet trails, heads, and establish your operative alias on the global leaderboards.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <span class="card-header-icon">LOADOUT // COSMETICS</span>
+          <h2>🎨 Packet Heads &amp; Particle Trails</h2>
+          <p>
+            Equip custom cosmetic trails and packet heads via the Loadout menu. Rendered in real-time by the Skia GPU engine, your custom telemetry leaves a distinct visual signature across all 28 sectors.
+          </p>
+        </div>
+
+        <div class="card">
+          <span class="card-header-icon">DOSSIER // IDENTITY</span>
+          <h2>👤 Operative Alias &amp; Cloud Profile</h2>
+          <p>
+            Sync seamlessly with Google Play Games. Your custom Operative Alias, cleared campaign star clearances, high scores, and hardware upgrades persist automatically across all your Android devices.
+          </p>
+        </div>
+
+        <div class="card">
+          <span class="card-header-icon">TELEMETRY // HAPTICS</span>
+          <h2>📳 Tactile Controls &amp; Stepped Haptics</h2>
+          <p>
+            Discrete stepped buttons and authentic tactile vibration patterns provide physical feedback on every tile placement, core merge, miner harvest, and security breach.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROADMAP TO OPEN TESTING -->
+    <section id="roadmap">
+      <h2 class="section-title">Roadmap to Google Play Open Testing</h2>
+      <p class="section-desc">
+        Zero Day Protocol is executing a disciplined, 4-step sequence before launching into Google Play Open Testing:
+      </p>
+
+      <div class="roadmap-container">
+        <div class="roadmap-steps">
+          <div class="roadmap-step active">
+            <span class="step-badge active-badge">STEP 1 // IN PROGRESS</span>
+            <h4>Skia GPU Migration</h4>
+            <p>Moving the router puzzle engine to React Native Skia GPU rendering for locked 60 FPS motion and vector tiles.</p>
+          </div>
+
+          <div class="roadmap-step">
+            <span class="step-badge next-badge">STEP 2 // NEXT</span>
+            <h4>Cyber Globe Hub</h4>
+            <p>3D interactive tactical world globe level-selection hub replacing the vertical node list.</p>
+          </div>
+
+          <div class="roadmap-step">
+            <span class="step-badge planned-badge">STEP 3 // PLANNED</span>
+            <h4>Dynamic Level OTA</h4>
+            <p>Over-the-air level updates and balancing served directly from mtxgames.lk without APK installs.</p>
+          </div>
+
+          <div class="roadmap-step">
+            <span class="step-badge planned-badge">STEP 4 // PLANNED</span>
+            <h4>Multiplayer PvP</h4>
+            <p>Player-built level designer and asynchronous PvP core-stealing network heists.</p>
+          </div>
+
+          <div class="roadmap-step">
+            <span class="step-badge target-badge">GOAL // OPEN TESTING</span>
+            <h4>Google Play Launch</h4>
+            <p>Public open testing track release across global Android devices upon completion of all 4 milestones.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRANSMISSIONS PROMO BANNER -->
+    <section style="margin-top: 3.5rem;">
+      <div class="transmissions-banner">
+        <div>
+          <h3>📡 Firmware Transmissions &amp; Patch Notes</h3>
+          <p>
+            Track technical changelogs, engine physics refinements, Sentry beam calibrations, and release dispatches as each build ships.
+          </p>
+        </div>
+        <a href="transmissions.html" class="btn">Read All Transmissions &rarr;</a>
+      </div>
+    </section>
+
+    <!-- FIELD MANUAL & GUIDES LINK -->
+    <section id="manual" style="margin-top: 4rem;">
+      <h2 class="section-title">Operative Field Manual &amp; Tile Registry</h2>
+      <p class="section-desc">
+        Study target network mechanics, node behavior types, and tactical routing strategies:
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h2>📖 Operative Field Manual</h2>
+          <p>
+            Complete tactical guide detailing target selection, network conduit alignment, cryptographic cipher cracking, and mining reinvestment strategies.
+          </p>
+          <div style="margin-top: 1rem;">
+            <a href="GAME_GUIDE.md" class="btn btn-secondary">Open Field Manual &rarr;</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🛡️ VPN Tunnel Node Guide</h2>
+          <p>
+            Explore the multi-part tactical tile guide explaining transmission encapsulation, stealth cloaking, and ICE avoidance mechanisms.
+          </p>
+          <div style="margin-top: 1rem;">
+            <a href="guides/tiles/vpn/page_1.html" class="btn btn-secondary">View Tile Guide &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIVACY POLICY SUMMARY -->
     <section id="privacy">
       <h2 class="section-title">Privacy Policy Summary</h2>
       <div class="card" style="margin-top: 1.5rem;">
-        <p><strong>Last Updated: September 5, 2026</strong> | Developer: MTX Games (Sri Lanka)</p>
+        <p><strong>Last Updated: September 29, 2026</strong> | Developer: MTX Games (Sri Lanka)</p>
         <br>
         <p>Zero Day Protocol respects your privacy. We collect only the data required to provide cloud save synchronization, game features, and stability:</p>
         
-        <h3>1. Data Collected</h3>
-        <ul>
+        <h3 style="color: var(--cyan); margin: 1rem 0 0.5rem;">1. Data Collected</h3>
+        <ul style="list-style-position: inside; color: var(--text-muted); margin-bottom: 1rem;">
           <li><strong>Authentication Data:</strong> Email address, Display Name, and User ID (UID) when signing in via Google Sign-In / Firebase Auth.</li>
           <li><strong>Game State:</strong> Progress, level completions, upgrades, high scores, and in-game credit balances stored securely on Firebase.</li>
-          <li><strong>Crash & Performance Telemetry:</strong> Diagnostic logs to resolve software crashes and improve performance.</li>
+          <li><strong>Crash & Performance Telemetry:</strong> Diagnostic logs to resolve software crashes and optimize performance.</li>
         </ul>
 
-        <h3>2. Third-Party Services</h3>
-        <ul>
+        <h3 style="color: var(--cyan); margin: 1rem 0 0.5rem;">2. Third-Party Services</h3>
+        <ul style="list-style-position: inside; color: var(--text-muted); margin-bottom: 1rem;">
           <li><strong>Google Firebase:</strong> Cloud database, authentication, and hosting.</li>
           <li><strong>Google AdMob:</strong> In-game advertisements (rewarded ads and banners).</li>
           <li><strong>Google Play Billing:</strong> In-app purchase processing (we do not process or store credit cards directly).</li>
         </ul>
 
-        <h3>3. Permissions</h3>
-        <p>Zero Day Protocol requires <code>INTERNET</code> for cloud sync and <code>VIBRATE</code> for haptic feedback. We do <strong>NOT</strong> record, capture, or store microphone/audio data.</p>
-        <br>
+        <h3 style="color: var(--cyan); margin: 1rem 0 0.5rem;">3. Permissions</h3>
+        <p style="margin-bottom: 1.25rem;">
+          Zero Day Protocol requires <code>INTERNET</code> for cloud sync and <code>VIBRATE</code> for tactile haptic feedback. We do <strong>NOT</strong> record, capture, or store microphone/audio data.
+        </p>
         <a href="PRIVACY_POLICY.html" class="btn">Read Full Legal Privacy Policy &rarr;</a>
       </div>
     </section>
 
     <!-- ACCOUNT DELETION SECTION -->
     <section id="deletion">
-      <h2 class="section-title">Account & Data Deletion Request</h2>
+      <h2 class="section-title">Account &amp; Data Deletion Request</h2>
       <div class="card" style="margin-top: 1.5rem;">
         <p>You can request complete deletion of your Zero Day Protocol account and all associated cloud-saved data at any time.</p>
         
-        <h3>How to Delete:</h3>
-        <ul>
-          <li><strong>Option 1 (In-App):</strong> Open the game > <strong>Settings</strong> > <strong>Account</strong> > <strong>Delete Account</strong>.</li>
+        <h3 style="color: var(--cyan); margin: 1rem 0 0.5rem;">How to Delete:</h3>
+        <ul style="list-style-position: inside; color: var(--text-muted); margin-bottom: 1rem;">
+          <li><strong>Option 1 (In-App):</strong> Open the game &gt; <strong>Settings</strong> &gt; <strong>Account</strong> &gt; <strong>Delete Account</strong>.</li>
           <li><strong>Option 2 (Via Email):</strong> Send an email to <code>cybershadic7@gmail.com</code> with the subject <em>"Zero Day Protocol Account Deletion Request"</em> including your registered email or Operative ID.</li>
         </ul>
-        <br>
-        <p><strong>Data Purged:</strong> Profile information, email, progress records, high scores, and inventory balances will be permanently deleted from Firebase within 30 days.</p>
-        <br>
+        <p style="margin-bottom: 1.25rem;">
+          <strong>Data Purged:</strong> Profile information, email, progress records, high scores, and inventory balances will be permanently deleted from Firebase within 30 days.
+        </p>
         <a href="mailto:cybershadic7@gmail.com?subject=Zero%20Day%20Protocol%20Account%20Deletion%20Request" class="btn">Send Deletion Request Email</a>
       </div>
     </section>
 
-    <!-- CONTACT SECTION -->
+    <!-- DEVELOPER & SUPPORT -->
     <section id="contact">
-      <h2 class="section-title">Developer & Support</h2>
+      <h2 class="section-title">Developer &amp; Support</h2>
       <div class="card" style="margin-top: 1.5rem;">
         <p><strong>Developer:</strong> MTX Games</p>
         <p><strong>Email:</strong> <a href="mailto:cybershadic7@gmail.com" style="color: var(--cyan);">cybershadic7@gmail.com</a></p>
@@ -446,7 +876,7 @@
   </main>
 
   <footer>
-    <p>&copy; 2026 MTX Games — Zero Day Protocol. All rights reserved. | <a href="PRIVACY_POLICY.html" style="color: var(--text-muted);">Privacy Policy</a> | <a href="TERMS_OF_SERVICE.html" style="color: var(--text-muted);">Terms of Service</a></p>
+    <p>&copy; 2026 MTX Games — Zero Day Protocol. All rights reserved. | <a href="PRIVACY_POLICY.html">Privacy Policy</a> | <a href="TERMS_OF_SERVICE.html">Terms of Service</a> | <a href="transmissions.html">Transmissions</a></p>
   </footer>
 
 </body>

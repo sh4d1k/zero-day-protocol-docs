@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Firmware Transmissions & Development Log — Zero Day Protocol | MTX Games</title>
+  <meta name="title" content="Firmware Transmissions & Development Log — Zero Day Protocol | MTX Games">
+  <meta name="description" content="Official public development chainlog and firmware transmissions for Zero Day Protocol by MTX Games. Track gameplay features, balance patches, engine physics, and the roadmap to Open Testing.">
+  <meta name="keywords" content="Zero Day Protocol changelog, Zero Day Protocol patch notes, MTX Games, cyberpunk game updates, game development log, android tactical puzzle">
+  <meta name="author" content="MTX Games">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://mtxgames.lk/transmissions.html">
+  
+  <!-- Favicons and App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-512.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <meta name="theme-color" content="#07090e">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mtxgames.lk/transmissions.html">
+  <meta property="og:title" content="Zero Day Protocol — Firmware Transmissions & Development Log">
+  <meta property="og:description" content="Track public development dispatches, engine physics upgrades, tactical features, and the roadmap to Google Play Open Testing.">
+  <meta property="og:image" content="https://mtxgames.lk/og-image.jpg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050508;
+      --surface: #0a0a14;
+      --card-bg: rgba(13, 17, 28, 0.78);
+      --card-border: rgba(0, 243, 255, 0.2);
+      --cyan: #00f3ff;
+      --cyan-bright: #3dffff;
+      --purple: #a855f7;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', -apple-system, sans-serif;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(5, 5, 8, 0.88);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--cyan);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      background: var(--cyan);
+      color: #000;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--cyan);
+    }
+
+    .nav-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(0, 243, 255, 0.12);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .hero-transmissions {
+      text-align: center;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 2.5rem;
+    }
+
+    .hud-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      background: rgba(0, 243, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 30%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 1.5rem;
+    }
+
+    /* Search & Filter Toolbar */
+    .filter-bar {
+      background: rgba(10, 10, 20, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .filter-bar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 8px 12px 8px 36px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--cyan);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      font-size: 0.85rem;
+    }
+
+    .version-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pill:hover, .pill.active {
+      background: rgba(0, 243, 255, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* Timeline & Dispatches */
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .dispatch-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .dispatch-card:hover {
+      border-color: rgba(0, 243, 255, 0.45);
+    }
+
+    .dispatch-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .dispatch-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .dispatch-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .status-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tag-dev {
+      background: rgba(0, 243, 255, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+
+    .tag-closed {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid var(--purple);
+      color: var(--purple);
+    }
+
+    .tag-baseline {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--green);
+      color: var(--green);
+    }
+
+    .dispatch-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+    }
+
+    .dispatch-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dispatch-summary {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .feature-bullet {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--cyan);
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
+    .feature-item strong {
+      color: #fff;
+    }
+
+    .badge-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--cyan-bright);
+      margin-right: 4px;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      padding: 2.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--cyan);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span>ZDP</span> ZERO DAY PROTOCOL
+      </a>
+      <nav>
+        <a href="index.html#pillars">The Pillars</a>
+        <a href="index.html#roadmap">Roadmap</a>
+        <a href="transmissions.html" class="active">Transmissions</a>
+        <a href="GAME_GUIDE.md">Field Manual</a>
+        <a href="PRIVACY_POLICY.html">Privacy Policy</a>
+        <a href="index.html#contact" class="nav-btn">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-transmissions">
+      <div class="hud-badge">PROTOCOL DISPATCHES // PUBLIC LOG</div>
+      <h1>Firmware Transmissions</h1>
+      <p class="subtitle">
+        Public development ledger, balance recalibrations, engine physics evolutions, and telemetry milestones as Zero-Day Protocol builds towards Google Play Open Testing.
+      </p>
+    </section>
+
+    <!-- Search & Filter Controls -->
+    <div class="filter-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Filter transmissions by keyword (e.g. Skia, Sentry, EMP, Glide, Keypad)..."
+          oninput="filterTransmissions()"
+        />
+      </div>
+      <div class="version-pills">
+        <button class="pill active" onclick="setVersionFilter('all', this)">ALL</button>
+        <button class="pill" onclick="setVersionFilter('v1.1.0', this)">v1.1.0 (DEV)</button>
+        <button class="pill" onclick="setVersionFilter('v1.0.9', this)">v1.0.9 (CLOSED)</button>
+        <button class="pill" onclick="setVersionFilter('v1.0.8', this)">v1.0.8 (BASELINE)</button>
+      </div>
+    </div>
+
+    <!-- No Results Warning -->
+    <div id="noResults" class="no-results">
+      ⚡ NO TRANSMISSIONS MATCH YOUR QUERY. TRY ANOTHER KEYWORD OR CLEAR FILTER.
+    </div>
+
+    <!-- Chronological Transmissions Stream -->
+    <div class="timeline" id="transmissionsList">
+
+      <!-- DISPATCH 01: v1.1.0 (In Progress) -->
+      <article class="dispatch-card" data-version="v1.1.0">
+        <div class="dispatch-header">
+          <div class="dispatch-version">
+            <span>DISPATCH // v1.1.0</span>
+            <span class="status-tag tag-dev">ACTIVE DEV BUILD // BUILD 11</span>
+          </div>
+          <div class="dispatch-meta">TARGET MILESTONE: SKIA GPU ENGINE</div>
+        </div>
+        <h2 class="dispatch-title">⚡ GPU Board Rendering, Tactical Glide Physics &amp; Vector Iconography</h2>
+        <p class="dispatch-summary">
+          Major modernization phase transitioning the puzzle engine from composite component rendering to locked 60 FPS GPU canvas execution (React Native Skia), introducing tactile motion interpolation, and refining tactical routing rules.
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">GRAPHICS</span>
+              <strong>React Native Skia GPU Board Engine:</strong> Transferred packet transit, Sentry scans, particle trails, and full grid tiles to dedicated hardware-accelerated Skia rendering, eliminating frame jitter during high-density multi-packet bursts.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">CONTROLS</span>
+              <strong>Tactical Tile Glide &amp; Motion Physics:</strong> Introduced 150ms smooth ease-out gliding for tap-moves and tap-swaps, animated 220ms flight paths between inventory tray and board, and responsive drag-preview snap-back for rejected drop attempts.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">GESTURES</span>
+              <strong>Direct Drag-to-Swap:</strong> Operatives can now drag a placed board tile directly onto another occupied tile to trigger an instant location swap, protected by a 500ms safety buffer preventing accidental busy-state corruption.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">ART</span>
+              <strong>Vector Neon Tile Iconography:</strong> Replaced placeholder glyphs with bespoke neon line vector icon paths across all tile families, visual previews, and tray slots.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">ENGINE</span>
+              <strong>Catch-Up Ticks Clock Synchronization:</strong> Late engine ticks are now replayed (up to 5 per fire) rather than dropped, ensuring Timed Gates, Sentries, EMP fuses, and integrity decay maintain true real-time velocity regardless of device load.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">ICE RULES</span>
+              <strong>Sentry Scanning Beams &amp; EMP Timed Charges:</strong> Red Sentries actively project a forward scan beam that neutralizes uncloaked packets; payloads entering an EMP cell instantly arm a 500ms timed charge that locks and detonates.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">HUD</span>
+              <strong>Integrity v2 &amp; Throttle Decay Scaling:</strong> Decay rate scales dynamically with transmission throttle (0.5× at full speed, 2× at low speed). Upgraded in-game HUD to display independent baseline survival (N/1000) and bonus extraction (X/800) counters.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">COSMETICS</span>
+              <strong>Operative Loadout &amp; Custom Packet Trails:</strong> Added operative loadout interface enabling operatives to equip custom packet heads and particle trail effects.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- DISPATCH 02: v1.0.9 (Closed Testing) -->
+      <article class="dispatch-card" data-version="v1.0.9">
+        <div class="dispatch-header">
+          <div class="dispatch-version">
+            <span>DISPATCH // v1.0.9</span>
+            <span class="status-tag tag-closed">CLOSED TESTING // BUILD 10</span>
+          </div>
+          <div class="dispatch-meta">GOOGLE PLAY CLOSED TRACK</div>
+        </div>
+        <h2 class="dispatch-title">🛡️ 28-Sector Campaign Expansion, Matrix Shuffle v3 &amp; Haptic Upgrades</h2>
+        <p class="dispatch-summary">
+          Comprehensive gameplay content update delivering the full 28-level campaign sector line, anti-brute-force cipher security mechanics, and calibrated tactile feedback.
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">CAMPAIGN</span>
+              <strong>28 Campaign Sectors:</strong> Expanded node progression through high-security corporate networks, featuring Yellow ICE firewalls, dynamic data spoofers, and multi-packet convergence puzzles.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">CIPHER</span>
+              <strong>Matrix Shuffle v3 Keypad:</strong> Randomized dynamic cipher keypad layout with scramble sequences that test operative speed and prevent pattern memorization.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">FEEDBACK</span>
+              <strong>Tactile Stepped Controls &amp; Vibration Feedback:</strong> Replaced continuous sliders with stepped discrete buttons across settings; integrated haptic vibration for placements, collections, upgrades, and alerts.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">ECONOMY</span>
+              <strong>4-Tier Clearance Rewards:</strong> Calibrated reward progression based on integrity clearance tiers (Root 100%, User 60%, Guest 30%, Restricted 0%) with diminishing replay returns to prevent economic inflation.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">SAFETY</span>
+              <strong>Confirmation Safeguards:</strong> Added confirmation modal barriers before spending Quantum Credits or Dark Coins to prevent accidental currency depletion.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- DISPATCH 03: v1.0.8 (Alpha Baseline) -->
+      <article class="dispatch-card" data-version="v1.0.8">
+        <div class="dispatch-header">
+          <div class="dispatch-version">
+            <span>DISPATCH // v1.0.8</span>
+            <span class="status-tag tag-baseline">ALPHA MILESTONE // BUILD 8</span>
+          </div>
+          <div class="dispatch-meta">INITIAL INTEGRATION BASELINE</div>
+        </div>
+        <h2 class="dispatch-title">🌐 Core Gameplay Pillars Integration &amp; Cloud Profile Sync</h2>
+        <p class="dispatch-summary">
+          Foundational release unifying the 3 Core Gameplay Pillars into a persistent progression loop with Google Play Services authentication.
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">PILLARS</span>
+              <strong>Three-Pillar Core Loop:</strong> Established seamless transition between Network Infiltration (Router), Security Clearance (Cipher), and Data Synthesis (Decryptor Lab).
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">MINING</span>
+              <strong>Passive Dark Coin Miner Hardware:</strong> Introduced background auto-mining rigs with capacity and generation rate upgrade trees.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">SYNTHESIS</span>
+              <strong>Data Core Decryptor Lab:</strong> Implemented 16-slot core inventory, synthesis merge mechanics, and tiered reward payouts.
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-bullet">&bull;</span>
+            <div>
+              <span class="badge-pill">CLOUD</span>
+              <strong>Cross-Device Save Synchronization:</strong> Integrated Google Play authentication enabling seamless progress sync across Android hardware.
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 MTX Games — Zero Day Protocol. All rights reserved. | <a href="PRIVACY_POLICY.html">Privacy Policy</a> | <a href="TERMS_OF_SERVICE.html">Terms of Service</a> | <a href="index.html#contact">Support</a></p>
+  </footer>
+
+  <script>
+    let currentVersion = 'all';
+
+    function setVersionFilter(version, el) {
+      currentVersion = version;
+      document.querySelectorAll('.version-pills .pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      filterTransmissions();
+    }
+
+    function filterTransmissions() {
+      const query = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const cards = document.querySelectorAll('.dispatch-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardVer = card.getAttribute('data-version') || '';
+        const cardText = card.textContent.toLowerCase();
+
+        const matchesVersion = (currentVersion === 'all' || cardVer === currentVersion);
+        const matchesQuery = (!query || cardText.includes(query));
+
+        if (matchesVersion && matchesQuery) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      const noResults = document.getElementById('noResults');
+      if (visibleCount === 0) {
+        noResults.style.display = 'block';
+      } else {
+        noResults.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
