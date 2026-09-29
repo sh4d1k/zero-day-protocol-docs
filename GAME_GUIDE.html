@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Operative Field Manual & Gameplay Guide — Zero Day Protocol | MTX Games</title>
+  <meta name="title" content="Operative Field Manual & Gameplay Guide — Zero Day Protocol | MTX Games">
+  <meta name="description" content="Official tactical field manual and gameplay guide for Zero Day Protocol by MTX Games. Master grid routing, cipher decryption, data core synthesis, and terminal upgrades.">
+  <meta name="keywords" content="Zero Day Protocol game guide, Zero Day Protocol field manual, network routing guide, cipher decoding tutorial, MTX Games, cyberpunk mobile game">
+  <meta name="author" content="MTX Games">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://mtxgames.lk/GAME_GUIDE.html">
+  
+  <!-- Favicons and App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-512.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <meta name="theme-color" content="#07090e">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://mtxgames.lk/GAME_GUIDE.html">
+  <meta property="og:title" content="Zero Day Protocol — Operative Field Manual & Gameplay Guide">
+  <meta property="og:description" content="Master network routing, cryptographic cipher decoding, and data core synthesis in Zero Day Protocol by MTX Games.">
+  <meta property="og:image" content="https://mtxgames.lk/og-image.jpg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050508;
+      --surface: #0a0a14;
+      --card-bg: rgba(13, 17, 28, 0.78);
+      --card-border: rgba(0, 243, 255, 0.2);
+      --cyan: #00f3ff;
+      --cyan-bright: #3dffff;
+      --purple: #a855f7;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', -apple-system, sans-serif;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(5, 5, 8, 0.9);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--cyan);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      background: var(--cyan);
+      color: #000;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--cyan);
+    }
+
+    .nav-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(0, 243, 255, 0.12);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .hero-manual {
+      text-align: center;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 3rem;
+    }
+
+    .hud-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      background: rgba(0, 243, 255, 0.1);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: 2.7rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.8rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 3.5rem 0 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      letter-spacing: -0.5px;
+    }
+
+    .section-title::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 24px;
+      background: var(--cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      backdrop-filter: blur(8px);
+      margin-bottom: 1.5rem;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Core Loop Visual Flowchart */
+    .flowchart-container {
+      background: rgba(10, 10, 20, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .flow-step {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .flow-step:hover {
+      border-color: rgba(0, 243, 255, 0.4);
+    }
+
+    .flow-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--cyan);
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid var(--cyan);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      shrink-0;
+    }
+
+    .flow-content h4 {
+      font-size: 1.1rem;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .flow-content p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .flow-arrow {
+      text-align: center;
+      color: var(--cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      line-height: 0.5;
+      margin: -0.25rem 0;
+    }
+
+    /* Grid layout */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tactical-list {
+      list-style-position: inside;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .tactical-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    .tactical-list strong {
+      color: var(--cyan-bright);
+    }
+
+    .tactical-rule {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      margin: 1rem 0;
+      line-height: 1.5;
+    }
+
+    .rule-info {
+      background: rgba(0, 243, 255, 0.08);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      color: var(--cyan-bright);
+    }
+
+    .rule-warn {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fcd34d;
+    }
+
+    .rule-success {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--cyan);
+      color: #000;
+      font-weight: 700;
+      padding: 0.65rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    .btn:hover {
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 243, 255, 0.15);
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      padding: 2.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--cyan);
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0, 243, 255, 0.1);
+      color: var(--cyan);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span>ZDP</span> ZERO DAY PROTOCOL
+      </a>
+      <nav>
+        <a href="index.html#pillars">The Pillars</a>
+        <a href="index.html#roadmap">Roadmap</a>
+        <a href="transmissions.html">Transmissions</a>
+        <a href="GAME_GUIDE.html" class="active">Field Manual</a>
+        <a href="PRIVACY_POLICY.html">Privacy</a>
+        <a href="index.html#contact" class="nav-btn">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-manual">
+      <div class="hud-badge">CLASSIFIED INTEL // MTX GAMES FIELD MANUAL</div>
+      <h1>Operative Field Manual</h1>
+      <p class="subtitle">
+        Tactical handbook for freelance net-runners operating across high-security corporate network grids, encrypted security vaults, and decentralized mining rings.
+      </p>
+    </section>
+
+    <!-- SECTION 1: CORE MISSION -->
+    <section id="mission">
+      <h2 class="section-title">The Core Mission</h2>
+      <div class="card">
+        <p>
+          In <strong>Zero Day Protocol</strong>, you operate as an elite freelance net-runner in a dystopian cyberpunk network war. Your directive is to penetrate corporate security infrastructure, crack encrypted databanks, deploy zero-day exploits, and extract high-value digital intelligence before <strong>Intrusion Countermeasure Electronics (ICE)</strong> can trace your physical rig.
+        </p>
+        <div class="tactical-rule rule-info">
+          &bull; <strong>PRIMARY OPERATIONAL GOAL:</strong> Deliver transmission data packets to target mainframe nodes with maximum integrity retention, cracking cryptographic gateways and synthesizing extracted data cores into permanent hardware upgrades.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: THE 5-PHASE GAME LOOP -->
+    <section id="loop">
+      <h2 class="section-title">The Tactical Infiltration Loop</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+        Every network breach follows a disciplined, 5-phase operational lifecycle:
+      </p>
+
+      <div class="flowchart-container">
+        <!-- Step 1 -->
+        <div class="flow-step">
+          <div class="flow-number">01</div>
+          <div class="flow-content">
+            <h4>Target Selection (Network Node Matrix)</h4>
+            <p>Select target corporate network nodes across 28 campaign sectors, evaluating ICE difficulty ratings, Yellow ICE firewalls, and data core payout yields.</p>
+          </div>
+        </div>
+
+        <div class="flow-arrow">&darr;</div>
+
+        <!-- Step 2 -->
+        <div class="flow-step">
+          <div class="flow-number">02</div>
+          <div class="flow-content">
+            <h4>Intrusion &amp; Routing Puzzle</h4>
+            <p>Deploy and align signal conduits across the grid during the countdown phase. Route high-velocity data packets safely through Sentry scan beams, EMP fuses, and Timed Gates.</p>
+          </div>
+        </div>
+
+        <div class="flow-arrow">&darr;</div>
+
+        <!-- Step 3 -->
+        <div class="flow-step">
+          <div class="flow-number">03</div>
+          <div class="flow-content">
+            <h4>Cryptographic Cipher Gateway</h4>
+            <p>Decrypt security payloads under time pressure. Use clue frequency analysis and the randomized Matrix Shuffle v3 keypad to breach access locks.</p>
+          </div>
+        </div>
+
+        <div class="flow-arrow">&darr;</div>
+
+        <!-- Step 4 -->
+        <div class="flow-step">
+          <div class="flow-number">04</div>
+          <div class="flow-content">
+            <h4>Data Core Extraction &amp; Economic Payout</h4>
+            <p>Secure decrypted data cores (256MB–8GB), Dark Coins (DC), and Quantum Credits (QC) scaled by your final integrity clearance tier (Root, User, Guest).</p>
+          </div>
+        </div>
+
+        <div class="flow-arrow">&darr;</div>
+
+        <!-- Step 5 -->
+        <div class="flow-step">
+          <div class="flow-number">05</div>
+          <div class="flow-content">
+            <h4>Terminal Synthesis &amp; Hardware Upgrades</h4>
+            <p>Merge extracted cores in your 16-slot Decryptor Lab, overclock CPU bandwidth, expand buffer memory, and deploy passive Dark Coin mining rigs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: KEY GAME SYSTEMS -->
+    <section id="systems">
+      <h2 class="section-title">Key Operational Systems</h2>
+
+      <div class="grid-2">
+        <!-- System 1 -->
+        <div class="card">
+          <h3>🌐 1. Network Router Engine</h3>
+          <p>
+            The puzzle grid operates on dynamic packet momentum. Packets smoothly accelerate through conduits, and tiles entering busy states (packet center transit) temporarily lock against displacement.
+          </p>
+          <ul class="tactical-list">
+            <li><strong>Planning Phase:</strong> Countdown timeline allowing careful tile placement before packets auto-release.</li>
+            <li><strong>Sentry ICE Beams:</strong> Red Sentries project continuous forward scan beams; amber Sentries rest and turn.</li>
+            <li><strong>EMP Timed Charges:</strong> Payloads arm EMP cells upon entry; charges lock and detonate 500ms later.</li>
+            <li><strong>Tile Glide &amp; Swapping:</strong> Tap-moves and drag-to-swap actions glide seamlessly across cells.</li>
+          </ul>
+        </div>
+
+        <!-- System 2 -->
+        <div class="card">
+          <h3>🔐 2. Cipher Security Modules</h3>
+          <p>
+            Secondary security gateways require real-time cryptographic deduction before lockout countermeasures trigger:
+          </p>
+          <ul class="tactical-list">
+            <li><strong>Matrix Shuffle v3:</strong> Dynamic scrambling scrambles the keypad layout on entry to test operative pattern recognition.</li>
+            <li><strong>Binary &amp; Hex Clues:</strong> Decipher clue streams using position logic and frequency analysis.</li>
+            <li><strong>Insta-Win Exploits:</strong> Deploy rare Decryptor tools to bypass emergency lockdown thresholds.</li>
+          </ul>
+        </div>
+
+        <!-- System 3 -->
+        <div class="card">
+          <h3>⚡ 3. Decryptor Lab &amp; Hardware Upgrades</h3>
+          <p>
+            Reinvest mission spoils directly into your terminal infrastructure:
+          </p>
+          <ul class="tactical-list">
+            <li><strong>Data Core Synthesis:</strong> Merge duplicate encrypted cores to unlock higher-tier intelligence assets.</li>
+            <li><strong>Overclocked Processing Cores:</strong> Increase transmission speed and extend breach time limits.</li>
+            <li><strong>Buffer Memory Slots:</strong> Expand placement undos and tactical routing recovery buffers.</li>
+            <li><strong>Passive Mining Rigs:</strong> Deploy background mining rigs that generate Dark Coins over time.</li>
+          </ul>
+        </div>
+
+        <!-- System 4 -->
+        <div class="card">
+          <h3>☁️ 4. Cloud Sync &amp; Operative Identity</h3>
+          <p>
+            Seamless progression persistence powered by Google Play Games:
+          </p>
+          <ul class="tactical-list">
+            <li><strong>Operative Alias:</strong> Establish your hacker callsign on the global leaderboard rankings.</li>
+            <li><strong>Cross-Device Cloud Sync:</strong> Automatically synchronize levels, upgrades, and inventory balances.</li>
+            <li><strong>Custom Loadout:</strong> Equip neon particle trails and custom packet heads rendered on the GPU canvas.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: INTERACTIVE TILE MANUALS -->
+    <section id="tile-guides">
+      <h2 class="section-title">Tactical Tile Manuals</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+        Detailed technical breakdowns of specific node behaviors:
+      </p>
+
+      <div class="card">
+        <h3>🛡️ VPN Tunnel Node // Stealth Cloaking</h3>
+        <p>
+          Encapsulates transmission data packets inside an encrypted, stealth-shielded layer. Cloaked packets evade standard Sentry detection beams and pass unmolested through monitored sectors.
+        </p>
+        <div style="margin-top: 1rem;">
+          <a href="guides/tiles/vpn/page_1.html" class="btn">Open Interactive VPN Guide &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: TOP OPERATIVE TIPS -->
+    <section id="tips">
+      <h2 class="section-title">Top Operative Tips</h2>
+      <div class="card">
+        <div class="tactical-rule rule-warn">
+          <strong>TIP 01 // NEVER RUSH THE PLANNING PHASE:</strong> Take full advantage of the planning countdown. Study Sentry patrol vectors, timed gate cycles, and payload target locations before releasing transmission packets.
+        </div>
+        <div class="tactical-rule rule-success">
+          <strong>TIP 02 // REINVEST IN MINING RIGS EARLY:</strong> Background Dark Coin miners passively accumulate funds even when your terminal is dormant, providing critical liquidity for high-tier core synthesis.
+        </div>
+        <div class="tactical-rule rule-info">
+          <strong>TIP 03 // WATCH THE INTEGRITY HUD:</strong> Maintain a minimum 900/1000 integrity score to achieve 3-Star Root Clearance for maximum Quantum Credit rewards and leaderboard standing.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: SUPPORT & COMMUNITY -->
+    <section id="support">
+      <h2 class="section-title">Support &amp; Operative Assistance</h2>
+      <div class="card">
+        <p><strong>Developer:</strong> MTX Games</p>
+        <p><strong>Operative Support Email:</strong> <a href="mailto:cybershadic7@gmail.com" style="color: var(--cyan);">cybershadic7@gmail.com</a></p>
+        <p><strong>Hotline:</strong> <a href="tel:+94703649949" style="color: var(--cyan);">+94703649949</a></p>
+        <p><strong>Location:</strong> Sri Lanka</p>
+        <div style="margin-top: 1rem;">
+          <a href="index.html" class="btn btn-secondary">&larr; Return to Intel Portal</a>
+          <a href="transmissions.html" class="btn btn-secondary" style="margin-left: 0.5rem;">View Firmware Transmissions &rarr;</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 MTX Games — Zero Day Protocol. All rights reserved. | <a href="PRIVACY_POLICY.html">Privacy Policy</a> | <a href="TERMS_OF_SERVICE.html">Terms of Service</a> | <a href="transmissions.html">Transmissions</a></p>
+  </footer>
+
+</body>
+</html>
