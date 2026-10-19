@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Start Node // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <h1 class="guide-title">Start Node</h1>
+    <div class="guide-subtitle">TAP TO RELEASE PACKET</div>
+  </header>
+
+  <!-- 5x5 Interactive Board Animation -->
+  <div class="media-container board-5x5" id="boardContainer">
+    <!-- 5x5 Board Grid -->
+    <div class="board-grid-5x5" id="boardGrid">
+      <!-- 25 cells populated dynamically by JS for pixel-perfect alignment -->
+    </div>
+
+    <!-- Packet element -->
+    <div class="packet-object" id="packet"></div>
+    <div class="packet-trail" id="packetTrail"></div>
+
+    <!-- Hand Pointer with Index Finger -->
+    <div class="hand-pointer" id="handPointer">
+      <img src="../../assets/icons/hand-tap.svg" alt="Tap Pointer" />
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        Tap the <span class="highlight-green">Start Node</span> to release the packet.
+      </div>
+    </div>
+    <div class="simple-sub">
+      The green arrow shows which direction the packet will shoot.
+    </div>
+  </div>
+
+  <!-- Operational Status / Field Note -->
+  <div class="content-card">
+    <div class="section-label">⚡ QUICK TIP</div>
+    <p class="guide-text">
+      Make sure your path is ready before tapping. Once released, the packet moves forward continuously.
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script -->
+  <script>
+    (function () {
+      const COLS = 5;
+      const ROWS = 5;
+
+      // Location: Middle of the bottom row (Column 2, Row 4)
+      const NODE_COL = 2;
+      const NODE_ROW = 4;
+
+      const boardGrid = document.getElementById('boardGrid');
+      const boardContainer = document.getElementById('boardContainer');
+      const packet = document.getElementById('packet');
+      const packetTrail = document.getElementById('packetTrail');
+      const handPointer = document.getElementById('handPointer');
+
+      let startCellElement = null;
+      let tapRippleElement = null;
+      const cellElements = [];
+
+      // 1. Build the 5x5 Grid Cells
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'board-cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          // Target starter node cell (Center of bottom row)
+          if (r === NODE_ROW && c === NODE_COL) {
+            cell.classList.add('start-node-cell');
+            cell.innerHTML = `
+              <!-- Approach 1: External SVG Asset (Replaceable by UI/UX) -->
+              <img src="../../assets/icons/starter-node.svg" class="node-icon-img" alt="Starter Node" />
+              <div class="tap-ripple" id="tapRipple"></div>
+            `;
+            startCellElement = cell;
+          }
+
+          boardGrid.appendChild(cell);
+          cellElements.push(cell);
+        }
+      }
+
+      tapRippleElement = document.getElementById('tapRipple');
+
+      // Helper to calculate element center relative to board container
+      function getCellCenter(cell) {
+        const containerRect = boardContainer.getBoundingClientRect();
+        const cellRect = cell.getBoundingClientRect();
+        return {
+          x: cellRect.left - containerRect.left + cellRect.width / 2,
+          y: cellRect.top - containerRect.top + cellRect.height / 2,
+          width: cellRect.width,
+          height: cellRect.height
+        };
+      }
+
+      // Highlight a cell when the packet traverses it
+      function setCellTraversed(row, col, active) {
+        const target = cellElements.find(
+          el => parseInt(el.dataset.row, 10) === row && parseInt(el.dataset.col, 10) === col
+        );
+        if (target && !target.classList.contains('start-node-cell')) {
+          if (active) target.classList.add('cell-traversed');
+          else target.classList.remove('cell-traversed');
+        }
+      }
+
+      function clearTraversedCells() {
+        cellElements.forEach(el => el.classList.remove('cell-traversed'));
+      }
+
+      // 2. Animation Timeline Sequence
+      // Total cycle: ~4.2 seconds
+      let animTimer = null;
+
+      function runAnimationCycle() {
+        if (!startCellElement) return;
+
+        const cellPos = getCellCenter(startCellElement);
+        clearTraversedCells();
+
+        // Initial State
+        packet.style.opacity = '0';
+        packetTrail.style.opacity = '0';
+        handPointer.style.opacity = '0';
+        handPointer.style.transition = 'none';
+
+        // Position hand so fingertip (~22px x, 6px y of 50px hand SVG) taps node center
+        const targetHandX = cellPos.x - 22;
+        const targetHandY = cellPos.y - 6;
+
+        // Start hand from bottom-right outside the node
+        handPointer.style.transform = `translate(${targetHandX + 50}px, ${targetHandY + 50}px) scale(1)`;
+
+        // Step 1: Hand enters and hovers over node (0.2s -> 0.9s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease';
+          handPointer.style.opacity = '1';
+          handPointer.style.transform = `translate(${targetHandX}px, ${targetHandY}px) scale(1)`;
+        }, 200);
+
+        // Step 2: Hand taps down on the node (1.0s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.16s cubic-bezier(0.3, 0, 0.8, 0.15)';
+          handPointer.style.transform = `translate(${targetHandX}px, ${targetHandY}px) scale(0.85)`;
+
+          // Visual node tap triggers
+          startCellElement.classList.add('node-tapped');
+          if (tapRippleElement) {
+            tapRippleElement.classList.remove('active');
+            void tapRippleElement.offsetWidth; // Reflow
+            tapRippleElement.classList.add('active');
+          }
+        }, 1000);
+
+        // Step 3: Hand lifts and retracts (1.25s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.5s ease-out, opacity 0.4s ease-out';
+          handPointer.style.transform = `translate(${targetHandX + 45}px, ${targetHandY + 45}px) scale(1)`;
+          handPointer.style.opacity = '0';
+          startCellElement.classList.remove('node-tapped');
+        }, 1250);
+
+        // Step 4: Packet launches upward up the center column (1.3s -> 2.6s)
+        setTimeout(() => {
+          const startY = cellPos.y;
+          const exitY = -25; // Shoots beyond top border of the 5x5 board
+          const launchDuration = 1300; // ms
+          const startTime = performance.now();
+
+          packet.style.left = `${cellPos.x}px`;
+          packet.style.top = `${startY}px`;
+          packet.style.opacity = '1';
+
+          packetTrail.style.left = `${cellPos.x}px`;
+          packetTrail.style.top = `${startY}px`;
+          packetTrail.style.opacity = '0.9';
+
+          function step(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(1, elapsed / launchDuration);
+            // Ease-in acceleration (smooth momentum like Zero-Day Protocol packet physics)
+            const easeProgress = Math.pow(progress, 1.25);
+
+            const currentY = startY + (exitY - startY) * easeProgress;
+            packet.style.top = `${currentY}px`;
+            packetTrail.style.top = `${currentY + 2}px`;
+
+            // Calculate which row the packet is currently traversing
+            const boardRect = boardContainer.getBoundingClientRect();
+            const relY = currentY / boardRect.height;
+            const currentRow = Math.floor(relY * ROWS);
+
+            // Light up traversed cells in the center column
+            for (let r = NODE_ROW - 1; r >= currentRow && r >= 0; r--) {
+              setCellTraversed(r, NODE_COL, true);
+            }
+
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              // Packet has exited beyond the 5x5 board!
+              packet.style.opacity = '0';
+              packetTrail.style.opacity = '0';
+            }
+          }
+
+          requestAnimationFrame(step);
+        }, 1300);
+
+        // Step 5: Settle and loop reset (4.0s)
+        animTimer = setTimeout(() => {
+          clearTraversedCells();
+          runAnimationCycle();
+        }, 4000);
+      }
+
+      // Start loop when page loads
+      window.addEventListener('load', () => {
+        setTimeout(runAnimationCycle, 200);
+      });
+
+      // Recalculate on window resize / orientation change
+      window.addEventListener('resize', () => {
+        clearTimeout(animTimer);
+        clearTraversedCells();
+        runAnimationCycle();
+      });
+    })();
+  </script>
+</body>
+</html>

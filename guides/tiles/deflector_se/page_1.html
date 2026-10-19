@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tile Placement // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <!-- Header (Badge removed per user preference) -->
+  <header class="guide-header">
+    <h1 class="guide-title">Tile Placement</h1>
+    <div class="guide-subtitle">DRAG &amp; DROP FROM INVENTORY</div>
+  </header>
+
+  <!-- Drag & Drop Interactive Board Demo -->
+  <div class="media-container drag-demo" id="boardContainer">
+    <!-- 5x5 Board Grid -->
+    <div class="board-grid-5x5" id="boardGrid">
+      <!-- 25 cells populated dynamically by JS -->
+    </div>
+
+    <!-- Inventory Tray Dock -->
+    <div class="inventory-rack" id="inventoryRack">
+      <div class="inventory-rack-label">OPERATIVE INVENTORY</div>
+      <div class="inventory-slots-row">
+        <!-- Inactive Slot -->
+        <div class="inventory-slot slot-empty"></div>
+
+        <!-- Active Inventory Slot -->
+        <div class="inventory-slot" id="inventorySlot">
+          <div class="inventory-slot-tile" id="slotTileContent">
+            <!-- Approach 1: External SVG Asset (Replaceable by UI/UX) -->
+            <img src="../../assets/icons/deflector-se.svg" class="node-icon-img" alt="Inventory Tile" />
+          </div>
+          <div class="tap-ripple" id="invTapRipple"></div>
+          <span class="slot-badge" id="slotBadge">1</span>
+        </div>
+
+        <!-- Inactive Slot -->
+        <div class="inventory-slot slot-empty"></div>
+      </div>
+    </div>
+
+    <!-- Floating Drag Proxy attached to finger -->
+    <div class="drag-proxy" id="dragProxy" style="top: 0; left: 0;">
+      <img src="../../assets/icons/deflector-se.svg" alt="Dragging Tile" />
+    </div>
+
+    <!-- Hand Pointer with Index Finger -->
+    <div class="hand-pointer" id="handPointer" style="top: 0; left: 0;">
+      <img src="../../assets/icons/hand-tap.svg" alt="Tap Pointer" />
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon, General Tile Placement Focus) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        Drag a tile from your <span class="highlight-cyan" style="color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);">inventory</span> onto the grid.
+      </div>
+    </div>
+    <div class="simple-sub">
+      Touch and hold any tile in your inventory, then drag it onto an empty grid cell.
+    </div>
+  </div>
+
+  <!-- Quick Operational Tip -->
+  <div class="content-card">
+    <div class="section-label">⚡ TACTICAL BRIEFING</div>
+    <p class="guide-text">
+      You can place and rearrange tiles before or during transmission to direct the packet's path.
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script -->
+  <script>
+    (function () {
+      const COLS = 5;
+      const ROWS = 5;
+
+      // Target placement cell: Top-Left Corner (Column 0, Row 0)
+      const TARGET_COL = 0;
+      const TARGET_ROW = 0;
+
+      // Exact fingertip coordinates within the 48px SVG hand
+      const FINGER_TIP_X = 21.5;
+      const FINGER_TIP_Y = 5.0;
+
+      const boardGrid = document.getElementById('boardGrid');
+      const boardContainer = document.getElementById('boardContainer');
+      const inventorySlot = document.getElementById('inventorySlot');
+      const slotTileContent = document.getElementById('slotTileContent');
+      const slotBadge = document.getElementById('slotBadge');
+      const invTapRipple = document.getElementById('invTapRipple');
+      const dragProxy = document.getElementById('dragProxy');
+      const handPointer = document.getElementById('handPointer');
+
+      let targetCellElement = null;
+      let placedTileElement = null;
+      let snapShockwaveElement = null;
+      const cellElements = [];
+
+      // 1. Build the 5x5 Grid Cells
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'board-cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          // Target drop cell: Top-Left (0, 0)
+          if (r === TARGET_ROW && c === TARGET_COL) {
+            cell.classList.add('target-cell-indicator');
+            cell.innerHTML = `
+              <div class="placed-tile-content" id="placedTile" style="opacity: 0;">
+                <img src="../../assets/icons/deflector-se.svg" class="node-icon-img" alt="Placed Tile" />
+              </div>
+              <div class="snap-shockwave" id="snapShockwave"></div>
+            `;
+            targetCellElement = cell;
+          }
+
+          boardGrid.appendChild(cell);
+          cellElements.push(cell);
+        }
+      }
+
+      placedTileElement = document.getElementById('placedTile');
+      snapShockwaveElement = document.getElementById('snapShockwave');
+
+      // Helper to calculate element center relative to board container
+      function getElementCenter(elem) {
+        const containerRect = boardContainer.getBoundingClientRect();
+        const rect = elem.getBoundingClientRect();
+        return {
+          x: rect.left - containerRect.left + rect.width / 2,
+          y: rect.top - containerRect.top + rect.height / 2
+        };
+      }
+
+      // 2. Drag & Drop Animation Cycle
+      // Total cycle: ~5.0 seconds
+      let cycleTimer = null;
+
+      function runDragCycle() {
+        if (!targetCellElement || !inventorySlot) return;
+
+        const invCenter = getElementCenter(inventorySlot);
+        const targetCenter = getElementCenter(targetCellElement);
+
+        // Initial State
+        targetCellElement.classList.remove('snap-ready');
+        placedTileElement.style.transition = 'none';
+        placedTileElement.style.opacity = '0';
+
+        slotTileContent.style.transition = 'none';
+        slotTileContent.style.opacity = '1';
+        slotBadge.innerText = '1';
+        slotBadge.style.opacity = '1';
+        inventorySlot.classList.remove('slot-empty');
+
+        dragProxy.style.opacity = '0';
+        dragProxy.style.transition = 'none';
+        handPointer.style.opacity = '0';
+        handPointer.style.transition = 'none';
+
+        // Precise positioning: hand top-left so fingertip rests on element center
+        const invHandX = invCenter.x - FINGER_TIP_X;
+        const invHandY = invCenter.y - FINGER_TIP_Y;
+
+        const targetHandX = targetCenter.x - FINGER_TIP_X;
+        const targetHandY = targetCenter.y - FINGER_TIP_Y;
+
+        // Start hand offset to the bottom-right
+        handPointer.style.transform = `translate(${invHandX + 50}px, ${invHandY + 45}px) scale(1)`;
+
+        // Step 1: Hand enters and hovers index finger over inventory slot (0.2s -> 0.8s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease';
+          handPointer.style.opacity = '1';
+          handPointer.style.transform = `translate(${invHandX}px, ${invHandY}px) scale(1)`;
+        }, 200);
+
+        // Step 2: Hand presses down & picks up tile (0.9s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.16s ease-in';
+          handPointer.style.transform = `translate(${invHandX}px, ${invHandY}px) scale(0.88)`;
+
+          // Touch ripple on inventory slot
+          invTapRipple.classList.remove('active');
+          void invTapRipple.offsetWidth;
+          invTapRipple.classList.add('active');
+
+          // Inventory slot empties
+          slotTileContent.style.transition = 'opacity 0.2s ease';
+          slotTileContent.style.opacity = '0.15';
+          slotBadge.innerText = '0';
+          slotBadge.style.opacity = '0.5';
+          inventorySlot.classList.add('slot-empty');
+
+          // Drag proxy appears directly under fingertip at inventory center
+          dragProxy.style.left = `${invCenter.x}px`;
+          dragProxy.style.top = `${invCenter.y}px`;
+          dragProxy.style.opacity = '1';
+          dragProxy.style.transition = 'none';
+        }, 900);
+
+        // Step 3: Tactile hold delay, then drag tile & hand in 100% synchronized lockstep (1.15s -> 2.35s)
+        setTimeout(() => {
+          // CRITICAL: Disable CSS transitions on hand during RAF to prevent lagging behind the tile!
+          handPointer.style.transition = 'none';
+          dragProxy.style.transition = 'none';
+
+          const dragDuration = 1200; // ms
+          const startTime = performance.now();
+
+          // Highlight target cell as tile approaches
+          setTimeout(() => {
+            targetCellElement.classList.add('snap-ready');
+          }, 550);
+
+          function stepDrag(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(1, elapsed / dragDuration);
+
+            // Smooth easeInOut drag trajectory
+            const ease = progress < 0.5 
+              ? 2 * progress * progress 
+              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+            // Both tile and hand are computed synchronously from the same (curX, curY)
+            const curX = invCenter.x + (targetCenter.x - invCenter.x) * ease;
+            const curY = invCenter.y + (targetCenter.y - invCenter.y) * ease;
+
+            dragProxy.style.left = `${curX}px`;
+            dragProxy.style.top = `${curY}px`;
+
+            // Fingertip stays locked to tile center with zero frame lag
+            handPointer.style.transform = `translate(${curX - FINGER_TIP_X}px, ${curY - FINGER_TIP_Y}px) scale(0.88)`;
+
+            if (progress < 1) {
+              requestAnimationFrame(stepDrag);
+            }
+          }
+
+          requestAnimationFrame(stepDrag);
+        }, 1150);
+
+        // Step 4: Drop & Snap into top-left cell (2.45s)
+        setTimeout(() => {
+          // Release fingertip (scale back to 1)
+          handPointer.style.transition = 'transform 0.16s ease-out';
+          handPointer.style.transform = `translate(${targetHandX}px, ${targetHandY}px) scale(1)`;
+
+          // Hide floating proxy, show snapped tile on board
+          dragProxy.style.opacity = '0';
+          placedTileElement.style.opacity = '1';
+          targetCellElement.classList.remove('snap-ready');
+
+          // Snap shockwave ripple
+          snapShockwaveElement.classList.remove('active');
+          void snapShockwaveElement.offsetWidth;
+          snapShockwaveElement.classList.add('active');
+        }, 2450);
+
+        // Step 5: Hand smoothly lifts and fades out (2.7s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.5s ease-out, opacity 0.4s ease-out';
+          handPointer.style.transform = `translate(${targetHandX + 45}px, ${targetHandY + 45}px) scale(1)`;
+          handPointer.style.opacity = '0';
+        }, 2700);
+
+        // Step 6: Placed tile on board fades away (3.5s)
+        setTimeout(() => {
+          placedTileElement.style.transition = 'opacity 0.6s ease';
+          placedTileElement.style.opacity = '0';
+        }, 3500);
+
+        // Step 7: Tile in inventory slot fades back in (4.0s)
+        setTimeout(() => {
+          inventorySlot.classList.remove('slot-empty');
+          slotTileContent.style.transition = 'opacity 0.5s ease';
+          slotTileContent.style.opacity = '1';
+          slotBadge.innerText = '1';
+          slotBadge.style.opacity = '1';
+        }, 4000);
+
+        // Step 8: Settle and loop reset (4.8s)
+        cycleTimer = setTimeout(() => {
+          runDragCycle();
+        }, 4800);
+      }
+
+      // Start loop when page loads
+      window.addEventListener('load', () => {
+        setTimeout(runDragCycle, 200);
+      });
+
+      // Recalculate on window resize / orientation change
+      window.addEventListener('resize', () => {
+        clearTimeout(cycleTimer);
+        runDragCycle();
+      });
+    })();
+  </script>
+</body>
+</html>
