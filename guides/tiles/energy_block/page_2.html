@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Energy Cache // Dynamic Pool Division // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* Dedicated Showcase Container */
+    .media-container.energy-demo {
+      aspect-ratio: auto;
+      max-width: 360px;
+      min-height: 250px;
+      margin: 0 auto 16px auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      background: #02050b;
+      border: 1px solid var(--border-cyan);
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.12);
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+      gap: 12px;
+    }
+
+    /* Fixed 200 Banner */
+    .fixed-pool-header {
+      width: 100%;
+      background: rgba(0, 243, 255, 0.08);
+      border: 1px solid rgba(0, 243, 255, 0.35);
+      border-radius: 6px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+    .fixed-pool-label {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 800;
+      color: #00f3ff;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .fixed-pool-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 900;
+      color: #ffffff;
+      background: rgba(0, 243, 255, 0.2);
+      border: 1px solid #00f3ff;
+      border-radius: 4px;
+      padding: 1px 6px;
+      box-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+    }
+
+    /* Equation Stage */
+    .equation-stage {
+      width: 100%;
+      min-height: 110px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 10px 4px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Left Side: Blocks Container */
+    .blocks-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+      transition: all 0.35s ease;
+    }
+
+    /* Energy Block Chip */
+    .energy-chip {
+      background: rgba(28, 22, 0, 0.9);
+      border: 1.5px solid #facc15;
+      border-radius: 8px;
+      padding: 6px 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.3), inset 0 0 6px rgba(250, 204, 21, 0.2);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .energy-chip.spawn-anim {
+      animation: chip-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes chip-pop {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+        box-shadow: 0 0 28px #facc15;
+      }
+      70% {
+        transform: scale(1.15);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .energy-chip-icon {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .energy-chip-val {
+      font-family: var(--font-mono);
+      font-weight: 900;
+      color: #facc15;
+      text-shadow: 0 0 8px rgba(250, 204, 21, 0.7);
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    /* Operator Symbols (+ and =) */
+    .op-symbol {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 0 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    .op-symbol.op-equals {
+      font-size: 18px;
+      color: #00f3ff;
+      text-shadow: 0 0 8px #00f3ff;
+      padding: 0 4px;
+    }
+
+    /* Right Side: Fixed 200 Core Box */
+    .total-core-box {
+      background: rgba(0, 32, 48, 0.9);
+      border: 1.8px solid #00f3ff;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      box-shadow: 0 0 16px rgba(0, 243, 255, 0.45), inset 0 0 8px rgba(0, 243, 255, 0.25);
+      flex-shrink: 0;
+    }
+    .total-core-label {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      font-weight: 800;
+      color: #00f3ff;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .total-core-num {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 0 10px #00f3ff;
+      line-height: 1;
+    }
+
+    /* Dynamic Phase Readout Banner */
+    .phase-readout {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px dashed rgba(250, 204, 21, 0.4);
+      border-radius: 6px;
+      padding: 6px 8px;
+      text-align: center;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .phase-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #facc15;
+      box-shadow: 0 0 6px #facc15;
+      animation: dot-pulse 1s infinite alternate;
+    }
+    @keyframes dot-pulse {
+      0% { opacity: 0.4; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+    .phase-text {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 800;
+      color: #facc15;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <h1 class="guide-title">Energy Cache</h1>
+    <div class="guide-subtitle">DYNAMIC POOL DIVISION PROTOCOL</div>
+  </header>
+
+  <!-- Animated Equation Showcase Container -->
+  <div class="media-container energy-demo" id="energyStageContainer">
+    <!-- Top Fixed Readout -->
+    <div class="fixed-pool-header">
+      <span class="fixed-pool-label">⚡ SECTOR INTEGRITY POOL</span>
+      <span class="fixed-pool-badge">LOCKED: 200 PTS</span>
+    </div>
+
+    <!-- Main Equation Stage -->
+    <div class="equation-stage" id="equationStage">
+      <!-- Blocks container (dynamically rebuilt per phase) -->
+      <div class="blocks-container" id="blocksContainer"></div>
+
+      <!-- Equals sign -->
+      <div class="op-symbol op-equals">=</div>
+
+      <!-- Permanent Fixed 200 Total Box -->
+      <div class="total-core-box">
+        <span class="total-core-label">FIXED TOTAL</span>
+        <span class="total-core-num">200</span>
+      </div>
+    </div>
+
+    <!-- Phase Status Readout -->
+    <div class="phase-readout">
+      <div class="phase-dot"></div>
+      <span class="phase-text" id="phaseText">1 BLOCK DEPLOYED → 200 PTS EACH</span>
+    </div>
+  </div>
+
+  <!-- Simple Explanation (Direct & Bold) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        The Total Energy Pool is <span class="highlight-cyan" style="color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);">Fixed at 200</span>.
+      </div>
+    </div>
+    <div class="simple-sub">
+      No matter how many energy blocks spawn across the board, the sector bonus remains <strong style="color: #00f3ff;">200 points</strong>. If multiple blocks appear, the 200 points are divided equally among them!
+    </div>
+  </div>
+
+  <!-- Tactical Briefing Card -->
+  <div class="content-card">
+    <div class="section-label">⚡ DYNAMIC POOL DIVISION</div>
+    <p class="guide-text">
+      • <strong>1 Block</strong> on board = <strong>200 pts</strong>.<br>
+      • <strong>2 Blocks</strong> on board = <strong>100 pts each</strong> (100 + 100 = 200).<br>
+      • <strong>4 Blocks</strong> on board = <strong>50 pts each</strong> (50 + 50 + 50 + 50 = 200).<br>
+      To achieve maximum <strong>3-Star ROOT Clearance</strong>, operatives must harvest <strong>EVERY</strong> active energy block on the grid!
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script -->
+  <script>
+    (function () {
+      const blocksContainer = document.getElementById('blocksContainer');
+      const phaseText = document.getElementById('phaseText');
+
+      const stages = [
+        {
+          count: 1,
+          val: 200,
+          label: '1 BLOCK DEPLOYED → 200 PTS EACH',
+          chipWidth: 54,
+          fontSize: 14,
+          iconSize: 22
+        },
+        {
+          count: 2,
+          val: 100,
+          label: '2 BLOCKS DEPLOYED → 100 PTS EACH',
+          chipWidth: 46,
+          fontSize: 12,
+          iconSize: 18
+        },
+        {
+          count: 4,
+          val: 50,
+          label: '4 BLOCKS DEPLOYED → 50 PTS EACH',
+          chipWidth: 36,
+          fontSize: 10,
+          iconSize: 14
+        }
+      ];
+
+      let currentStageIdx = 0;
+      let timer = null;
+
+      function renderStage(idx) {
+        const stage = stages[idx];
+        blocksContainer.innerHTML = '';
+
+        for (let i = 0; i < stage.count; i++) {
+          if (i > 0) {
+            const plus = document.createElement('div');
+            plus.className = 'op-symbol';
+            plus.textContent = '+';
+            blocksContainer.appendChild(plus);
+          }
+
+          const chip = document.createElement('div');
+          chip.className = 'energy-chip spawn-anim';
+          chip.style.width = `${stage.chipWidth}px`;
+          chip.innerHTML = `
+            <img src="../../assets/icons/energy-cell.svg" class="energy-chip-icon" style="width: ${stage.iconSize}px; height: ${stage.iconSize}px;" alt="Energy Bolt" />
+            <span class="energy-chip-val" style="font-size: ${stage.fontSize}px;">${stage.val}</span>
+          `;
+          blocksContainer.appendChild(chip);
+        }
+
+        phaseText.textContent = stage.label;
+      }
+
+      function loop() {
+        renderStage(currentStageIdx);
+        currentStageIdx = (currentStageIdx + 1) % stages.length;
+        timer = setTimeout(loop, 2200);
+      }
+
+      window.addEventListener('load', () => {
+        loop();
+      });
+    })();
+  </script>
+</body>
+</html>

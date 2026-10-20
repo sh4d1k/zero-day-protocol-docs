@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Energy Cache // Double-Edged Sword // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* Dedicated Showcase Container */
+    .media-container.energy-demo {
+      aspect-ratio: auto;
+      max-width: 360px;
+      margin: 0 auto 16px auto;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #02050b;
+      border: 1px solid var(--border-cyan);
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.12);
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .energy-svg-diagram {
+      width: 100%;
+      max-width: 310px;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 16px rgba(0, 0, 0, 0.8));
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <h1 class="guide-title">Energy Cache</h1>
+    <div class="guide-subtitle">DOUBLE-EDGED SWORD PROTOCOL</div>
+  </header>
+
+  <!-- Big Divided Energy Block Showcase -->
+  <div class="media-container energy-demo" id="energyContainer">
+    <svg class="energy-svg-diagram" viewBox="0 0 300 270" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Yellow Neon Glow -->
+        <filter id="glowYellow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+
+        <!-- Red Neon Glow -->
+        <filter id="glowRed" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+
+        <!-- Fissure Laser Seam Glow -->
+        <filter id="fissureGlow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="2.5" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+
+        <!-- Yellow Surface Gradient -->
+        <linearGradient id="yellowSideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#3d2f00" />
+          <stop offset="60%" stop-color="#1f1600" />
+          <stop offset="100%" stop-color="#0a0700" />
+        </linearGradient>
+
+        <!-- Red Surface Gradient -->
+        <linearGradient id="redSideGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#33060a" />
+          <stop offset="60%" stop-color="#1a0204" />
+          <stop offset="100%" stop-color="#080002" />
+        </linearGradient>
+      </defs>
+
+      <!-- Chassis Outer Frame -->
+      <rect x="12" y="12" width="276" height="246" rx="14" fill="#03060f" stroke="rgba(0, 243, 255, 0.35)" stroke-width="1.8" />
+
+      <!-- Corner Brackets -->
+      <path d="M12 36 L12 12 L36 12" fill="none" stroke="#00f3ff" stroke-width="3" />
+      <path d="M288 36 L288 12 L264 12" fill="none" stroke="#00f3ff" stroke-width="3" />
+      <path d="M12 234 L12 258 L36 258" fill="none" stroke="#00f3ff" stroke-width="3" />
+      <path d="M288 234 L288 258 L264 258" fill="none" stroke="#00f3ff" stroke-width="3" />
+
+      <!-- Clip Path for Inner Square -->
+      <clipPath id="innerBlockClip">
+        <rect x="18" y="18" width="264" height="234" rx="10" />
+      </clipPath>
+
+      <g clip-path="url(#innerBlockClip)">
+        <!-- 1. UPPER-RIGHT YELLOW HALF (COLLECTED REWARD) -->
+        <!-- Angled cut: from (18, 92) to (282, 178) -->
+        <polygon points="18,18 282,18 282,178 18,92" fill="url(#yellowSideGrad)" />
+        <polygon points="18,18 282,18 282,178 18,92" fill="none" stroke="rgba(250, 204, 21, 0.3)" stroke-width="1" />
+
+        <!-- Circuit Texture Trace on Yellow Side -->
+        <path d="M140 32 L200 32 L215 48 L260 48" fill="none" stroke="rgba(250, 204, 21, 0.22)" stroke-width="1.5" />
+        <circle cx="260" cy="48" r="3" fill="#facc15" opacity="0.6" />
+        <path d="M90 45 L130 45 L145 60 L180 60" fill="none" stroke="rgba(250, 204, 21, 0.18)" stroke-width="1.2" />
+
+        <!-- Yellow Core Content -->
+        <g transform="translate(148, 50)">
+          <!-- Mini Energy Bolt Icon -->
+          <path d="M12 2 L4 13 H11 L10 22 L18 11 H11 Z" fill="#facc15" stroke="#ffffff" stroke-width="0.8" filter="url(#glowYellow)" />
+          
+          <!-- Big Yellow +200 Text -->
+          <text x="32" y="24" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="34" font-weight="900" fill="#facc15" filter="url(#glowYellow)">
+            +200
+          </text>
+        </g>
+        
+        <!-- Yellow Label Badges -->
+        <text x="180" y="104" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" font-weight="800" fill="#fef08a" letter-spacing="1.5">
+          COLLECTED
+        </text>
+        <text x="180" y="120" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="8.5" font-weight="700" fill="#eab308" letter-spacing="0.8">
+          REWARD // +200 POOL
+        </text>
+
+        <!-- 2. LOWER-LEFT RED HALF (MISSED PENALTY) -->
+        <polygon points="18,92 282,178 282,252 18,252" fill="url(#redSideGrad)" />
+        <polygon points="18,92 282,178 282,252 18,252" fill="none" stroke="rgba(239, 68, 68, 0.3)" stroke-width="1" />
+
+        <!-- Circuit Texture Trace on Red Side -->
+        <path d="M40 220 L80 220 L95 205 L150 205" fill="none" stroke="rgba(239, 68, 68, 0.22)" stroke-width="1.5" />
+        <circle cx="40" cy="220" r="3" fill="#ef4444" opacity="0.6" />
+        <path d="M110 238 L160 238 L175 224 L210 224" fill="none" stroke="rgba(239, 68, 68, 0.18)" stroke-width="1.2" />
+
+        <!-- Red Core Content -->
+        <g transform="translate(34, 142)">
+          <!-- Alert Warning Hexagon -->
+          <polygon points="11,2 20,7 20,17 11,22 2,17 2,7" fill="#450a0a" stroke="#ef4444" stroke-width="1.5" filter="url(#glowRed)" />
+          <text x="11" y="16" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">!</text>
+
+          <!-- Big Red -200 Text -->
+          <text x="32" y="24" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="34" font-weight="900" fill="#ef4444" filter="url(#glowRed)">
+            -200
+          </text>
+        </g>
+
+        <!-- Red Label Badges -->
+        <text x="66" y="196" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" font-weight="800" fill="#fca5a5" letter-spacing="1.5">
+          MISSED
+        </text>
+        <text x="66" y="212" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="8.5" font-weight="700" fill="#f87171" letter-spacing="0.8">
+          PUNISHED // -200 INTEGRITY
+        </text>
+
+        <!-- 3. ANGLED FISSURE DIVIDER LINE -->
+        <line x1="16" y1="92" x2="284" y2="178" stroke="rgba(0, 243, 255, 0.4)" stroke-width="6" />
+        <line x1="16" y1="92" x2="284" y2="178" stroke="#ffffff" stroke-width="2.2" filter="url(#fissureGlow)" />
+        <line x1="16" y1="92" x2="284" y2="178" stroke="#00f3ff" stroke-width="1" />
+
+        <!-- Center Dividing Badge -->
+        <g transform="translate(150, 135)">
+          <rect x="-42" y="-10" width="84" height="20" rx="5" fill="#070c18" stroke="#00f3ff" stroke-width="1.2" filter="url(#fissureGlow)" />
+          <text x="0" y="4" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="7.5" font-weight="900" fill="#00f3ff" text-anchor="middle" letter-spacing="1.2">
+            DUAL-POLARITY
+          </text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Simple Explanation (Direct & Bold) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        Energy Blocks are <span class="highlight-yellow" style="color: #facc15; text-shadow: 0 0 10px rgba(250, 204, 21, 0.6);">Double-Edged Swords</span>.
+      </div>
+    </div>
+    <div class="simple-sub">
+      When your payload collects an energy block, you are rewarded with <strong style="color: #facc15;">+200</strong> integrity score. But if you fail to collect it, you are punished with a harsh <strong style="color: #ef4444;">-200</strong> penalty on your clearance rating!
+    </div>
+  </div>
+
+  <!-- Tactical Briefing Card -->
+  <div class="content-card">
+    <div class="section-label">⚡ RISK VS REWARD ARCHITECTURE</div>
+    <p class="guide-text">
+      Energy caches actively monitor throughput. Collecting every active block is essential for achieving a <strong>3-Star ROOT Clearance</strong>. Plan your deflector path carefully to harvest the cache on your way to the server!
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+</body>
+</html>
