@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tile Placement // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <h1 class="guide-title">Tile Placement</h1>
+    <div class="guide-subtitle">TAP TO SELECT &amp; PLACE</div>
+  </header>
+
+  <!-- Interactive Board Simulation -->
+  <div class="media-container drag-demo" id="boardContainer">
+    <!-- 5x5 Board Grid -->
+    <div class="board-grid-5x5" id="boardGrid">
+      <!-- 25 cells populated dynamically by JS -->
+    </div>
+
+    <!-- Inventory Tray Dock -->
+    <div class="inventory-rack" id="inventoryRack">
+      <div class="inventory-rack-label">OPERATIVE INVENTORY</div>
+      <div class="inventory-slots-row">
+        <!-- Inactive Slot (Spacer) -->
+        <div class="inventory-slot slot-empty"></div>
+
+        <!-- Slot 1: SW Deflector -->
+        <div class="inventory-slot" id="slotSW">
+          <div class="inventory-slot-tile" id="slotTileSW">
+            <img src="../../assets/icons/deflector-sw.svg" class="node-icon-img" alt="Deflector SW" />
+          </div>
+          <div class="tap-ripple" id="rippleSW"></div>
+          <span class="slot-badge" id="badgeSW">1</span>
+        </div>
+
+        <!-- Slot 2: NW Deflector -->
+        <div class="inventory-slot" id="slotNW">
+          <div class="inventory-slot-tile" id="slotTileNW">
+            <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="Deflector NW" />
+          </div>
+          <div class="tap-ripple" id="rippleNW"></div>
+          <span class="slot-badge" id="badgeNW">1</span>
+        </div>
+
+        <!-- Inactive Slot (Spacer) -->
+        <div class="inventory-slot slot-empty"></div>
+      </div>
+    </div>
+
+    <!-- Flying Tile Proxies for Glide Animation -->
+    <div class="drag-proxy flying-proxy" id="flyingTileSW" style="opacity: 0;">
+      <img src="../../assets/icons/deflector-sw.svg" alt="Flying SW Tile" />
+    </div>
+    <div class="drag-proxy flying-proxy" id="flyingTileNW" style="opacity: 0;">
+      <img src="../../assets/icons/deflector-nw.svg" alt="Flying NW Tile" />
+    </div>
+
+    <!-- Hand Pointer with Index Finger -->
+    <div class="hand-pointer" id="handPointer" style="top: 0; left: 0;">
+      <img src="../../assets/icons/hand-tap.svg" alt="Tap Pointer" />
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        Tap a tile to <span class="highlight-cyan" style="color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);">select</span>, then tap any cell to <span class="highlight-cyan" style="color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);">place</span>.
+      </div>
+    </div>
+    <div class="simple-sub">
+      Tap any inventory tile to arm it, then tap an empty cell on the grid to fly it into position immediately.
+    </div>
+  </div>
+
+  <!-- Operational Status / Tactical Note -->
+  <div class="content-card">
+    <div class="section-label">⚡ AUTOMATIC SELECTION SEQUENCE</div>
+    <p class="guide-text">
+      When a tile is placed, operative selection automatically shifts to the next inventory item. This allows swift chained deployments: <strong>tap tile &rarr; tap cell &rarr; tap cell</strong>.
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script -->
+  <script>
+    (function () {
+      const COLS = 5;
+      const ROWS = 5;
+
+      // Coordinates:
+      // Pre-placed SE tile: Top-Left (Row 0, Col 0)
+      const PREPLACED_COL = 0;
+      const PREPLACED_ROW = 0;
+
+      // Target 1: Top-Row Middle (Row 0, Col 2) for SW
+      const TARGET1_COL = 2;
+      const TARGET1_ROW = 0;
+
+      // Target 2: Center (Row 2, Col 2) for NW
+      const TARGET2_COL = 2;
+      const TARGET2_ROW = 2;
+
+      // Exact fingertip coordinates within the 48px SVG hand
+      const FINGER_TIP_X = 21.5;
+      const FINGER_TIP_Y = 5.0;
+
+      const boardGrid = document.getElementById('boardGrid');
+      const boardContainer = document.getElementById('boardContainer');
+
+      const slotSW = document.getElementById('slotSW');
+      const slotNW = document.getElementById('slotNW');
+      const slotTileSW = document.getElementById('slotTileSW');
+      const slotTileNW = document.getElementById('slotTileNW');
+      const badgeSW = document.getElementById('badgeSW');
+      const badgeNW = document.getElementById('badgeNW');
+      const rippleSW = document.getElementById('rippleSW');
+      const rippleNW = document.getElementById('rippleNW');
+
+      const flyingTileSW = document.getElementById('flyingTileSW');
+      const flyingTileNW = document.getElementById('flyingTileNW');
+      const handPointer = document.getElementById('handPointer');
+
+      let target1CellElement = null;
+      let target2CellElement = null;
+      let placedTileSW = null;
+      let placedTileNW = null;
+      let shockwaveSW = null;
+      let shockwaveNW = null;
+
+      // 1. Build the 5x5 Grid Cells
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'board-cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          // (0, 0): Pre-placed SE Deflector
+          if (r === PREPLACED_ROW && c === PREPLACED_COL) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-se.svg" class="node-icon-img" alt="Pre-placed SE Deflector" />
+              </div>
+            `;
+          }
+          // (2, 0): Target 1 for SW Tile
+          else if (r === TARGET1_ROW && c === TARGET1_COL) {
+            cell.classList.add('target-cell-indicator');
+            cell.innerHTML = `
+              <div class="placed-tile-content" id="placedTileSW" style="opacity: 0;">
+                <img src="../../assets/icons/deflector-sw.svg" class="node-icon-img" alt="Placed SW Deflector" />
+              </div>
+              <div class="snap-shockwave" id="shockwaveSW"></div>
+              <div class="tap-ripple" id="rippleCell1"></div>
+            `;
+            target1CellElement = cell;
+          }
+          // (2, 2): Target 2 for NW Tile (Center)
+          else if (r === TARGET2_ROW && c === TARGET2_COL) {
+            cell.classList.add('target-cell-indicator');
+            cell.innerHTML = `
+              <div class="placed-tile-content" id="placedTileNW" style="opacity: 0;">
+                <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="Placed NW Deflector" />
+              </div>
+              <div class="snap-shockwave" id="shockwaveNW"></div>
+              <div class="tap-ripple" id="rippleCell2"></div>
+            `;
+            target2CellElement = cell;
+          }
+
+          boardGrid.appendChild(cell);
+        }
+      }
+
+      placedTileSW = document.getElementById('placedTileSW');
+      placedTileNW = document.getElementById('placedTileNW');
+      shockwaveSW = document.getElementById('shockwaveSW');
+      shockwaveNW = document.getElementById('shockwaveNW');
+      const rippleCell1 = document.getElementById('rippleCell1');
+      const rippleCell2 = document.getElementById('rippleCell2');
+
+      // Helper to calculate element center relative to board container
+      function getElementCenter(elem) {
+        const containerRect = boardContainer.getBoundingClientRect();
+        const rect = elem.getBoundingClientRect();
+        return {
+          x: rect.left - containerRect.left + rect.width / 2,
+          y: rect.top - containerRect.top + rect.height / 2
+        };
+      }
+
+      // Smooth flying animation helper
+      function animateFlight(flyingElem, fromPt, toPt, durationMs, onComplete) {
+        flyingElem.style.left = `${fromPt.x}px`;
+        flyingElem.style.top = `${fromPt.y}px`;
+        flyingElem.style.opacity = '1';
+        flyingElem.style.transform = 'translate(-50%, -50%) scale(1.08)';
+
+        const startTime = performance.now();
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / durationMs);
+
+          // Ease out cubic for crisp, snappy flight
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const curX = fromPt.x + (toPt.x - fromPt.x) * ease;
+          const curY = fromPt.y + (toPt.y - fromPt.y) * ease;
+          const curScale = 1.08 - 0.08 * ease;
+
+          flyingElem.style.left = `${curX}px`;
+          flyingElem.style.top = `${curY}px`;
+          flyingElem.style.transform = `translate(-50%, -50%) scale(${curScale})`;
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            flyingElem.style.opacity = '0';
+            if (onComplete) onComplete();
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      let cycleTimer = null;
+
+      function runPlacementCycle() {
+        if (!target1CellElement || !target2CellElement || !slotSW || !slotNW) return;
+
+        const slotSWCenter = getElementCenter(slotSW);
+        const slotNWCenter = getElementCenter(slotNW);
+        const target1Center = getElementCenter(target1CellElement);
+        const target2Center = getElementCenter(target2CellElement);
+
+        // Reset Initial State
+        target1CellElement.classList.remove('snap-ready');
+        target2CellElement.classList.remove('snap-ready');
+        placedTileSW.style.transition = 'none';
+        placedTileSW.style.opacity = '0';
+        placedTileNW.style.transition = 'none';
+        placedTileNW.style.opacity = '0';
+
+        flyingTileSW.style.opacity = '0';
+        flyingTileNW.style.opacity = '0';
+
+        slotSW.classList.remove('slot-selected', 'slot-empty');
+        slotNW.classList.remove('slot-selected', 'slot-empty');
+        slotTileSW.style.transition = 'none';
+        slotTileSW.style.opacity = '1';
+        slotTileNW.style.transition = 'none';
+        slotTileNW.style.opacity = '1';
+        badgeSW.innerText = '1';
+        badgeSW.style.opacity = '1';
+        badgeNW.innerText = '1';
+        badgeNW.style.opacity = '1';
+
+        handPointer.style.opacity = '0';
+        handPointer.style.transition = 'none';
+
+        // Precise positioning coordinates for fingertip
+        const swHandX = slotSWCenter.x - FINGER_TIP_X;
+        const swHandY = slotSWCenter.y - FINGER_TIP_Y;
+        const target1HandX = target1Center.x - FINGER_TIP_X;
+        const target1HandY = target1Center.y - FINGER_TIP_Y;
+        const target2HandX = target2Center.x - FINGER_TIP_X;
+        const target2HandY = target2Center.y - FINGER_TIP_Y;
+
+        // Position hand off-screen bottom right
+        handPointer.style.transform = `translate(${swHandX + 45}px, ${swHandY + 40}px) scale(1)`;
+
+        // Step 1: Hand enters and hovers over SW inventory slot (0.2s -> 0.65s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease';
+          handPointer.style.opacity = '1';
+          handPointer.style.transform = `translate(${swHandX}px, ${swHandY}px) scale(1)`;
+        }, 200);
+
+        // Step 2: [ TAP 1 ] Hand taps SW slot to select it (0.75s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.12s ease-in';
+          handPointer.style.transform = `translate(${swHandX}px, ${swHandY}px) scale(0.88)`;
+
+          rippleSW.classList.remove('active');
+          void rippleSW.offsetWidth;
+          rippleSW.classList.add('active');
+
+          slotSW.classList.add('slot-selected');
+        }, 750);
+
+        // Step 3: Hand lifts from SW and travels towards top-row middle cell (2, 0) (0.95s -> 1.55s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.6s cubic-bezier(0.2, 0.8, 0.25, 1)';
+          handPointer.style.transform = `translate(${target1HandX}px, ${target1HandY}px) scale(1)`;
+          target1CellElement.classList.add('snap-ready');
+        }, 950);
+
+        // Step 4: [ TAP 2 ] Hand taps cell (2, 0) & SW tile flies into position (1.65s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.12s ease-in';
+          handPointer.style.transform = `translate(${target1HandX}px, ${target1HandY}px) scale(0.88)`;
+
+          // Ripple on target cell 1
+          rippleCell1.classList.remove('active');
+          void rippleCell1.offsetWidth;
+          rippleCell1.classList.add('active');
+
+          // SW inventory slot empties & clears selection
+          slotSW.classList.remove('slot-selected');
+          slotSW.classList.add('slot-empty');
+          slotTileSW.style.transition = 'opacity 0.2s ease';
+          slotTileSW.style.opacity = '0.15';
+          badgeSW.innerText = '0';
+          badgeSW.style.opacity = '0.5';
+
+          // SW Tile flies to cell (2, 0)
+          animateFlight(flyingTileSW, slotSWCenter, target1Center, 280, () => {
+            placedTileSW.style.opacity = '1';
+            target1CellElement.classList.remove('snap-ready');
+
+            shockwaveSW.classList.remove('active');
+            void shockwaveSW.offsetWidth;
+            shockwaveSW.classList.add('active');
+          });
+
+          // AUTOMATIC SELECTION SHIFT: Selection instantly jumps to NW slot!
+          slotNW.classList.add('slot-selected');
+        }, 1650);
+
+        // Step 5: Hand lifts from cell 1 and quickly moves to center cell (2, 2) (1.85s -> 2.35s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1)';
+          handPointer.style.transform = `translate(${target2HandX}px, ${target2HandY}px) scale(1)`;
+          target2CellElement.classList.add('snap-ready');
+        }, 1850);
+
+        // Step 6: [ TAP 3 ] Hand taps center cell (2, 2) & NW tile flies into position (2.45s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.12s ease-in';
+          handPointer.style.transform = `translate(${target2HandX}px, ${target2HandY}px) scale(0.88)`;
+
+          // Ripple on target cell 2
+          rippleCell2.classList.remove('active');
+          void rippleCell2.offsetWidth;
+          rippleCell2.classList.add('active');
+
+          // NW inventory slot empties & clears selection
+          slotNW.classList.remove('slot-selected');
+          slotNW.classList.add('slot-empty');
+          slotTileNW.style.transition = 'opacity 0.2s ease';
+          slotTileNW.style.opacity = '0.15';
+          badgeNW.innerText = '0';
+          badgeNW.style.opacity = '0.5';
+
+          // NW Tile flies to center cell (2, 2)
+          animateFlight(flyingTileNW, slotNWCenter, target2Center, 280, () => {
+            placedTileNW.style.opacity = '1';
+            target2CellElement.classList.remove('snap-ready');
+
+            shockwaveNW.classList.remove('active');
+            void shockwaveNW.offsetWidth;
+            shockwaveNW.classList.add('active');
+          });
+        }, 2450);
+
+        // Step 7: Hand releases and floats out (2.75s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.45s ease-out, opacity 0.35s ease-out';
+          handPointer.style.transform = `translate(${target2HandX + 45}px, ${target2HandY + 45}px) scale(1)`;
+          handPointer.style.opacity = '0';
+        }, 2750);
+
+        // Step 8: Placed tiles fade away (3.6s) - Note: SE at (0, 0) stays!
+        setTimeout(() => {
+          placedTileSW.style.transition = 'opacity 0.6s ease';
+          placedTileSW.style.opacity = '0';
+          placedTileNW.style.transition = 'opacity 0.6s ease';
+          placedTileNW.style.opacity = '0';
+        }, 3600);
+
+        // Step 9: Inventory fades back in with SW & NW restored (4.2s)
+        setTimeout(() => {
+          slotSW.classList.remove('slot-empty');
+          slotNW.classList.remove('slot-empty');
+          slotTileSW.style.transition = 'opacity 0.45s ease';
+          slotTileSW.style.opacity = '1';
+          slotTileNW.style.transition = 'opacity 0.45s ease';
+          slotTileNW.style.opacity = '1';
+          badgeSW.innerText = '1';
+          badgeSW.style.opacity = '1';
+          badgeNW.innerText = '1';
+          badgeNW.style.opacity = '1';
+        }, 4200);
+
+        // Step 10: Settle and loop reset (4.9s)
+        cycleTimer = setTimeout(() => {
+          runPlacementCycle();
+        }, 4900);
+      }
+
+      // Start loop on page load
+      window.addEventListener('load', () => {
+        setTimeout(runPlacementCycle, 200);
+      });
+
+      // Recalculate on window resize / orientation change
+      window.addEventListener('resize', () => {
+        clearTimeout(cycleTimer);
+        runPlacementCycle();
+      });
+    })();
+  </script>
+</body>
+</html>

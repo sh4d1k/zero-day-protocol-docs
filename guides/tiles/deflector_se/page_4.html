@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tile Swapping // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <h1 class="guide-title">Tile Modification</h1>
+    <div class="guide-subtitle">DRAG TO SWAP POSITIONS</div>
+  </header>
+
+  <!-- Interactive Board Simulation -->
+  <div class="media-container drag-demo" id="boardContainer">
+    <!-- 5x5 Board Grid -->
+    <div class="board-grid-5x5" id="boardGrid">
+      <!-- 25 cells populated dynamically by JS -->
+    </div>
+
+    <!-- Inventory Tray Dock (Indicating tactical in-field manipulation) -->
+    <div class="inventory-rack" id="inventoryRack">
+      <div class="inventory-rack-label">TACTICAL IN-FIELD CONTROL</div>
+      <div class="inventory-slots-row">
+        <div class="inventory-slot slot-empty"></div>
+        <div class="inventory-slot slot-empty"></div>
+        <div class="inventory-slot slot-empty"></div>
+      </div>
+    </div>
+
+    <!-- Dragging Proxies -->
+    <div class="drag-proxy" id="dragProxyNW" style="opacity: 0;">
+      <img src="../../assets/icons/deflector-nw.svg" alt="Dragging NW Deflector" />
+    </div>
+    <div class="drag-proxy" id="dragProxyNE" style="opacity: 0;">
+      <img src="../../assets/icons/deflector-ne.svg" alt="Dragging NE Deflector" />
+    </div>
+
+    <!-- Glide Proxies for the Displaced Tiles -->
+    <div class="drag-proxy flying-proxy" id="flyingProxyNE" style="opacity: 0;">
+      <img src="../../assets/icons/deflector-ne.svg" alt="Swapping NE Deflector" />
+    </div>
+    <div class="drag-proxy flying-proxy" id="flyingProxyNW" style="opacity: 0;">
+      <img src="../../assets/icons/deflector-nw.svg" alt="Swapping NW Deflector" />
+    </div>
+
+    <!-- Hand Pointer with Index Finger -->
+    <div class="hand-pointer" id="handPointer" style="top: 0; left: 0;">
+      <img src="../../assets/icons/hand-tap.svg" alt="Tap Pointer" />
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        Drag one placed tile onto another to <span class="highlight-cyan" style="color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);">swap</span> them.
+      </div>
+    </div>
+    <div class="simple-sub">
+      Touch and hold any tile already placed on the grid, then drag it directly onto another placed tile. Release to exchange their positions instantly.
+    </div>
+  </div>
+
+  <!-- Tactical Briefing Card -->
+  <div class="content-card">
+    <div class="section-label">⚡ DYNAMIC HARDWARE SWAPPING</div>
+    <p class="guide-text">
+      Swapping allows instant routing reconfiguration without having to recall tiles back into your inventory. Both nodes update trajectories simultaneously.
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script -->
+  <script>
+    (function () {
+      const COLS = 5;
+      const ROWS = 5;
+
+      // 3 Static Anchored Tiles:
+      // (0, 0): SE Deflector ╔
+      // (2, 0): SW Deflector ╗
+      // (2, 2): NW Deflector ╝ (Center)
+
+      // 2 Swappable Tiles:
+      // Cell A: Middle-bottom (Col 2, Row 4) -> Starts with NW
+      const CELL_A_COL = 2;
+      const CELL_A_ROW = 4;
+
+      // Cell B: Bottom-right (Col 4, Row 4) -> Starts with NE
+      const CELL_B_COL = 4;
+      const CELL_B_ROW = 4;
+
+      // Fingertip offset inside 48px SVG hand
+      const FINGER_TIP_X = 21.5;
+      const FINGER_TIP_Y = 5.0;
+
+      const boardGrid = document.getElementById('boardGrid');
+      const boardContainer = document.getElementById('boardContainer');
+
+      const dragProxyNW = document.getElementById('dragProxyNW');
+      const dragProxyNE = document.getElementById('dragProxyNE');
+      const flyingProxyNE = document.getElementById('flyingProxyNE');
+      const flyingProxyNW = document.getElementById('flyingProxyNW');
+      const handPointer = document.getElementById('handPointer');
+
+      let cellAElement = null;
+      let cellBElement = null;
+      let contentA_NW = null;
+      let contentA_NE = null;
+      let contentB_NE = null;
+      let contentB_NW = null;
+      let shockwaveA = null;
+      let shockwaveB = null;
+
+      // 1. Build the 5x5 Grid Cells
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'board-cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          // (0, 0): Pre-placed SE Deflector
+          if (r === 0 && c === 0) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-se.svg" class="node-icon-img" alt="Pre-placed SE Deflector" />
+              </div>
+            `;
+          }
+          // (2, 0): Pre-placed SW Deflector
+          else if (r === 0 && c === 2) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-sw.svg" class="node-icon-img" alt="Pre-placed SW Deflector" />
+              </div>
+            `;
+          }
+          // (2, 2): Pre-placed NW Deflector (Center)
+          else if (r === 2 && c === 2) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="Pre-placed NW Deflector" />
+              </div>
+            `;
+          }
+          // (2, 4): Swappable Cell A (Middle Bottom)
+          else if (r === CELL_A_ROW && c === CELL_A_COL) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" id="contentA_NW" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="Tile A NW" />
+              </div>
+              <div class="placed-tile-content" id="contentA_NE" style="opacity: 0; position: absolute; inset: 0;">
+                <img src="../../assets/icons/deflector-ne.svg" class="node-icon-img" alt="Tile A NE" />
+              </div>
+              <div class="snap-shockwave" id="shockwaveA"></div>
+            `;
+            cellAElement = cell;
+          }
+          // (4, 4): Swappable Cell B (Bottom Right)
+          else if (r === CELL_B_ROW && c === CELL_B_COL) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" id="contentB_NE" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-ne.svg" class="node-icon-img" alt="Tile B NE" />
+              </div>
+              <div class="placed-tile-content" id="contentB_NW" style="opacity: 0; position: absolute; inset: 0;">
+                <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="Tile B NW" />
+              </div>
+              <div class="snap-shockwave" id="shockwaveB"></div>
+            `;
+            cellBElement = cell;
+          }
+
+          boardGrid.appendChild(cell);
+        }
+      }
+
+      contentA_NW = document.getElementById('contentA_NW');
+      contentA_NE = document.getElementById('contentA_NE');
+      contentB_NE = document.getElementById('contentB_NE');
+      contentB_NW = document.getElementById('contentB_NW');
+      shockwaveA = document.getElementById('shockwaveA');
+      shockwaveB = document.getElementById('shockwaveB');
+
+      // Helper to calculate element center relative to board container
+      function getElementCenter(elem) {
+        const containerRect = boardContainer.getBoundingClientRect();
+        const rect = elem.getBoundingClientRect();
+        return {
+          x: rect.left - containerRect.left + rect.width / 2,
+          y: rect.top - containerRect.top + rect.height / 2
+        };
+      }
+
+      // Smooth flying animation helper
+      function animateFlight(flyingElem, fromPt, toPt, durationMs, onComplete) {
+        flyingElem.style.left = `${fromPt.x}px`;
+        flyingElem.style.top = `${fromPt.y}px`;
+        flyingElem.style.opacity = '1';
+        flyingElem.style.transform = 'translate(-50%, -50%) scale(1.08)';
+
+        const startTime = performance.now();
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / durationMs);
+
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const curX = fromPt.x + (toPt.x - fromPt.x) * ease;
+          const curY = fromPt.y + (toPt.y - fromPt.y) * ease;
+          const curScale = 1.08 - 0.08 * ease;
+
+          flyingElem.style.left = `${curX}px`;
+          flyingElem.style.top = `${curY}px`;
+          flyingElem.style.transform = `translate(-50%, -50%) scale(${curScale})`;
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            flyingElem.style.opacity = '0';
+            if (onComplete) onComplete();
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      let cycleTimer = null;
+
+      function runContinuousSwapCycle() {
+        if (!cellAElement || !cellBElement) return;
+
+        const centerA = getElementCenter(cellAElement);
+        const centerB = getElementCenter(cellBElement);
+
+        // Reset to initial: Cell A has NW, Cell B has NE
+        cellAElement.classList.remove('snap-ready', 'swap-flash');
+        cellBElement.classList.remove('snap-ready', 'swap-flash');
+
+        contentA_NW.style.transition = 'none';
+        contentA_NW.style.opacity = '1';
+        contentA_NE.style.transition = 'none';
+        contentA_NE.style.opacity = '0';
+
+        contentB_NE.style.transition = 'none';
+        contentB_NE.style.opacity = '1';
+        contentB_NW.style.transition = 'none';
+        contentB_NW.style.opacity = '0';
+
+        dragProxyNW.style.opacity = '0';
+        dragProxyNE.style.opacity = '0';
+        flyingProxyNE.style.opacity = '0';
+        flyingProxyNW.style.opacity = '0';
+
+        handPointer.style.opacity = '0';
+        handPointer.style.transition = 'none';
+
+        const handA_X = centerA.x - FINGER_TIP_X;
+        const handA_Y = centerA.y - FINGER_TIP_Y;
+        const handB_X = centerB.x - FINGER_TIP_X;
+        const handB_Y = centerB.y - FINGER_TIP_Y;
+
+        // Position hand off-screen to the bottom-left
+        handPointer.style.transform = `translate(${handA_X - 40}px, ${handA_Y + 45}px) scale(1)`;
+
+        // ========================================================
+        // PART 1: SWAP NW (at Cell A) ONTO NE (at Cell B)
+        // ========================================================
+
+        // 1.1 Hand enters and hovers over Cell A (2, 4) (0.2s -> 0.65s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease';
+          handPointer.style.opacity = '1';
+          handPointer.style.transform = `translate(${handA_X}px, ${handA_Y}px) scale(1)`;
+        }, 200);
+
+        // 1.2 Hand presses down (touch & 0.2s hold) (0.70s -> 0.90s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.12s ease-in';
+          handPointer.style.transform = `translate(${handA_X}px, ${handA_Y}px) scale(0.88)`;
+
+          contentA_NW.style.transition = 'opacity 0.2s ease';
+          contentA_NW.style.opacity = '0.25';
+
+          dragProxyNW.style.left = `${centerA.x}px`;
+          dragProxyNW.style.top = `${centerA.y}px`;
+          dragProxyNW.style.opacity = '1';
+        }, 700);
+
+        // 1.3 Drag NW from Cell A across to Cell B (0.95s -> 1.65s)
+        setTimeout(() => {
+          handPointer.style.transition = 'none';
+          dragProxyNW.style.transition = 'none';
+
+          const dragDuration = 700;
+          const startTime = performance.now();
+
+          setTimeout(() => {
+            cellBElement.classList.add('snap-ready');
+          }, 350);
+
+          function stepDrag1(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(1, elapsed / dragDuration);
+
+            const ease = progress < 0.5 
+              ? 2 * progress * progress 
+              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+            const curX = centerA.x + (centerB.x - centerA.x) * ease;
+            const curY = centerA.y + (centerB.y - centerA.y) * ease;
+
+            dragProxyNW.style.left = `${curX}px`;
+            dragProxyNW.style.top = `${curY}px`;
+            handPointer.style.transform = `translate(${curX - FINGER_TIP_X}px, ${curY - FINGER_TIP_Y}px) scale(0.88)`;
+
+            if (progress < 1) {
+              requestAnimationFrame(stepDrag1);
+            }
+          }
+          requestAnimationFrame(stepDrag1);
+        }, 950);
+
+        // 1.4 Release on Cell B: NW lands on B, NE flies to A (1.68s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.14s ease-out';
+          handPointer.style.transform = `translate(${handB_X}px, ${handB_Y}px) scale(1)`;
+
+          dragProxyNW.style.opacity = '0';
+          cellBElement.classList.remove('snap-ready');
+          contentB_NE.style.opacity = '0';
+          contentB_NW.style.opacity = '1';
+
+          cellBElement.classList.add('swap-flash');
+          shockwaveB.classList.remove('active');
+          void shockwaveB.offsetWidth;
+          shockwaveB.classList.add('active');
+
+          // NE flies to Cell A
+          animateFlight(flyingProxyNE, centerB, centerA, 280, () => {
+            contentA_NW.style.opacity = '0';
+            contentA_NE.style.opacity = '1';
+
+            cellAElement.classList.add('swap-flash');
+            shockwaveA.classList.remove('active');
+            void shockwaveA.offsetWidth;
+            shockwaveA.classList.add('active');
+          });
+        }, 1680);
+
+        // ========================================================
+        // PART 2: SWAP NE (now at Cell A) ONTO NW (now at Cell B)
+        // ========================================================
+
+        // 2.1 Hand travels back from Cell B to Cell A (2.30s -> 2.80s)
+        setTimeout(() => {
+          cellAElement.classList.remove('swap-flash');
+          cellBElement.classList.remove('swap-flash');
+
+          handPointer.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.25, 1)';
+          handPointer.style.transform = `translate(${handA_X}px, ${handA_Y}px) scale(1)`;
+        }, 2300);
+
+        // 2.2 Hand presses down on Cell A (touch & 0.2s hold on NE) (2.90s -> 3.10s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.12s ease-in';
+          handPointer.style.transform = `translate(${handA_X}px, ${handA_Y}px) scale(0.88)`;
+
+          contentA_NE.style.transition = 'opacity 0.2s ease';
+          contentA_NE.style.opacity = '0.25';
+
+          dragProxyNE.style.left = `${centerA.x}px`;
+          dragProxyNE.style.top = `${centerA.y}px`;
+          dragProxyNE.style.opacity = '1';
+        }, 2900);
+
+        // 2.3 Drag NE from Cell A across to Cell B (3.15s -> 3.85s)
+        setTimeout(() => {
+          handPointer.style.transition = 'none';
+          dragProxyNE.style.transition = 'none';
+
+          const dragDuration = 700;
+          const startTime = performance.now();
+
+          setTimeout(() => {
+            cellBElement.classList.add('snap-ready');
+          }, 350);
+
+          function stepDrag2(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(1, elapsed / dragDuration);
+
+            const ease = progress < 0.5 
+              ? 2 * progress * progress 
+              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+            const curX = centerA.x + (centerB.x - centerA.x) * ease;
+            const curY = centerA.y + (centerB.y - centerA.y) * ease;
+
+            dragProxyNE.style.left = `${curX}px`;
+            dragProxyNE.style.top = `${curY}px`;
+            handPointer.style.transform = `translate(${curX - FINGER_TIP_X}px, ${curY - FINGER_TIP_Y}px) scale(0.88)`;
+
+            if (progress < 1) {
+              requestAnimationFrame(stepDrag2);
+            }
+          }
+          requestAnimationFrame(stepDrag2);
+        }, 3150);
+
+        // 2.4 Release on Cell B: NE lands on B, NW flies to A (3.88s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.14s ease-out';
+          handPointer.style.transform = `translate(${handB_X}px, ${handB_Y}px) scale(1)`;
+
+          dragProxyNE.style.opacity = '0';
+          cellBElement.classList.remove('snap-ready');
+          contentB_NW.style.opacity = '0';
+          contentB_NE.style.opacity = '1';
+
+          cellBElement.classList.add('swap-flash');
+          shockwaveB.classList.remove('active');
+          void shockwaveB.offsetWidth;
+          shockwaveB.classList.add('active');
+
+          // NW flies back to Cell A
+          animateFlight(flyingProxyNW, centerB, centerA, 280, () => {
+            contentA_NE.style.opacity = '0';
+            contentA_NW.style.opacity = '1';
+
+            cellAElement.classList.add('swap-flash');
+            shockwaveA.classList.remove('active');
+            void shockwaveA.offsetWidth;
+            shockwaveA.classList.add('active');
+          });
+        }, 3880);
+
+        // 2.5 Hand lifts slightly and glides back to start position (4.3s -> 4.8s)
+        setTimeout(() => {
+          handPointer.style.transition = 'transform 0.5s ease-out, opacity 0.35s ease-out';
+          handPointer.style.transform = `translate(${handA_X - 35}px, ${handA_Y + 40}px) scale(1)`;
+          handPointer.style.opacity = '0';
+        }, 4300);
+
+        // 2.6 Loop continues seamlessly: next cycle begins (5.0s)
+        cycleTimer = setTimeout(() => {
+          runContinuousSwapCycle();
+        }, 5000);
+      }
+
+      // Start loop on page load
+      window.addEventListener('load', () => {
+        setTimeout(runContinuousSwapCycle, 200);
+      });
+
+      // Recalculate on window resize / orientation change
+      window.addEventListener('resize', () => {
+        clearTimeout(cycleTimer);
+        runContinuousSwapCycle();
+      });
+    })();
+  </script>
+</body>
+</html>

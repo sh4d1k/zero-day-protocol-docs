@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Return to Tray // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <h1 class="guide-title">Tile Modification</h1>
+    <div class="guide-subtitle">DESELECT &amp; RETURN TO TRAY</div>
+  </header>
+
+  <!-- Interactive Board Simulation -->
+  <div class="media-container drag-demo" id="boardContainer">
+    <!-- 5x5 Board Grid -->
+    <div class="board-grid-5x5" id="boardGrid">
+      <!-- 25 cells populated dynamically by JS -->
+    </div>
+
+    <!-- Inventory Tray Dock -->
+    <div class="inventory-rack" id="inventoryRack">
+      <div class="inventory-rack-label">TACTICAL INVENTORY CONTROL</div>
+      <div class="inventory-slots-row">
+        <!-- Slot 1: Armed Shift Register (Pre-selected) -->
+        <div class="inventory-slot slot-selected" id="slotShift">
+          <div class="inventory-slot-tile" id="slotTileShift">
+            <img src="../../assets/icons/shift-register.svg" class="node-icon-img" alt="Shift Register" />
+          </div>
+          <div class="tap-ripple ripple-cyan" id="rippleShift"></div>
+          <span class="slot-badge" id="badgeShift">1</span>
+        </div>
+
+        <!-- Slot 2: Empty Receiving Slot (For Recalled NW Tile) -->
+        <div class="inventory-slot slot-empty" id="slotReturnNW">
+          <div class="inventory-slot-tile" id="slotTileReturnNW" style="opacity: 0;">
+            <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="Recalled NW Deflector" />
+          </div>
+          <div class="snap-shockwave" id="shockwaveReturn"></div>
+          <span class="slot-badge" id="badgeReturnNW" style="opacity: 0;">1</span>
+        </div>
+
+        <!-- Slot 3: Empty Spacer Slot -->
+        <div class="inventory-slot slot-empty"></div>
+      </div>
+    </div>
+
+    <!-- Floating Status Text: UNSELECTED -->
+    <div class="floating-text-label" id="unselectedLabel">UNSELECTED</div>
+
+    <!-- Return Flying Proxy (NW Tile in middle returning to tray) -->
+    <div class="drag-proxy flying-proxy" id="flyingProxyNW" style="opacity: 0;">
+      <img src="../../assets/icons/deflector-nw.svg" alt="Returning NW Deflector" />
+    </div>
+
+    <!-- Hand Pointer with Index Finger -->
+    <div class="hand-pointer" id="handPointer" style="top: 0; left: 0; opacity: 0;">
+      <img src="../../assets/icons/hand-tap.svg" alt="Tap Pointer" />
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        Tap armed tile to <span class="highlight-cyan" style="color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);">deselect</span>. Double-tap to <span class="highlight-cyan" style="color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);">recall</span>.
+      </div>
+    </div>
+    <div class="simple-sub">
+      Tap an armed inventory tile to cancel placement without deploying. Rapidly double-tap any placed tile on the grid to instantly return it back into your tactical tray.
+    </div>
+  </div>
+
+  <!-- Tactical Briefing Card -->
+  <div class="content-card">
+    <div class="section-label">⚡ INVENTORY CONTROL &amp; HARDWARE RECOVERY</div>
+    <p class="guide-text">
+      Disarming an active inventory selection safeguards against misplacing tiles while scanning trajectories. Double-tapping placed hardware releases it instantly back into reserve memory.
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script -->
+  <script>
+    (function () {
+      const COLS = 5;
+      const ROWS = 5;
+
+      // Center tile (middle of the 5x5 board):
+      // Row 2, Col 2: NW Deflector ╝ (Target for Double-Tap Recall)
+      const CELL_MID_ROW = 2;
+      const CELL_MID_COL = 2;
+
+      // 2 Settled Tiles from previous swap manual:
+      // Middle-bottom (Col 2, Row 4) -> Settled with NE ╚
+      const CELL_A_COL = 2;
+      const CELL_A_ROW = 4;
+
+      // Bottom-right (Col 4, Row 4) -> Settled with NW ╝
+      const CELL_B_COL = 4;
+      const CELL_B_ROW = 4;
+
+      // Fingertip offset inside 48px SVG hand
+      const FINGER_TIP_X = 21.5;
+      const FINGER_TIP_Y = 5.0;
+
+      const boardGrid = document.getElementById('boardGrid');
+      const boardContainer = document.getElementById('boardContainer');
+
+      const slotShift = document.getElementById('slotShift');
+      const rippleShift = document.getElementById('rippleShift');
+      const unselectedLabel = document.getElementById('unselectedLabel');
+
+      const slotReturnNW = document.getElementById('slotReturnNW');
+      const slotTileReturnNW = document.getElementById('slotTileReturnNW');
+      const badgeReturnNW = document.getElementById('badgeReturnNW');
+      const shockwaveReturn = document.getElementById('shockwaveReturn');
+
+      const flyingProxyNW = document.getElementById('flyingProxyNW');
+      const handPointer = document.getElementById('handPointer');
+
+      let cellMidElement = null;
+      let contentMid_NW = null;
+      let rippleMid1 = null;
+      let rippleMid2 = null;
+      let shockwaveMid = null;
+
+      // 1. Build the 5x5 Grid Cells
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'board-cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          // (0, 0): Pre-placed SE Deflector
+          if (r === 0 && c === 0) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-se.svg" class="node-icon-img" alt="Pre-placed SE Deflector" />
+              </div>
+            `;
+          }
+          // (0, 2): Pre-placed SW Deflector
+          else if (r === 0 && c === 2) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-sw.svg" class="node-icon-img" alt="Pre-placed SW Deflector" />
+              </div>
+            `;
+          }
+          // (2, 2): NW Deflector in the Middle (Target for Double-Tap Recall)
+          else if (r === CELL_MID_ROW && c === CELL_MID_COL) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" id="contentMid_NW" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="Center NW Deflector" />
+              </div>
+              <div class="tap-ripple ripple-cyan" id="rippleMid1"></div>
+              <div class="tap-ripple ripple-cyan" id="rippleMid2"></div>
+              <div class="snap-shockwave" id="shockwaveMid"></div>
+            `;
+            cellMidElement = cell;
+          }
+          // (4, 2): Settled NE Deflector
+          else if (r === CELL_A_ROW && c === CELL_A_COL) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-ne.svg" class="node-icon-img" alt="Settled NE Deflector" />
+              </div>
+            `;
+          }
+          // (4, 4): Settled NW Deflector
+          else if (r === CELL_B_ROW && c === CELL_B_COL) {
+            cell.innerHTML = `
+              <div class="placed-tile-content" style="opacity: 1;">
+                <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="Settled NW Deflector" />
+              </div>
+            `;
+          }
+
+          boardGrid.appendChild(cell);
+        }
+      }
+
+      contentMid_NW = document.getElementById('contentMid_NW');
+      rippleMid1 = document.getElementById('rippleMid1');
+      rippleMid2 = document.getElementById('rippleMid2');
+      shockwaveMid = document.getElementById('shockwaveMid');
+
+      // Helper to calculate element center relative to board container
+      function getElementCenter(elem) {
+        const containerRect = boardContainer.getBoundingClientRect();
+        const rect = elem.getBoundingClientRect();
+        return {
+          x: rect.left - containerRect.left + rect.width / 2,
+          y: rect.top - containerRect.top + rect.height / 2
+        };
+      }
+
+      // Smooth flying animation helper
+      function animateFlight(flyingElem, fromPt, toPt, durationMs, onComplete) {
+        flyingElem.style.left = `${fromPt.x}px`;
+        flyingElem.style.top = `${fromPt.y}px`;
+        flyingElem.style.opacity = '1';
+        flyingElem.style.transform = 'translate(-50%, -50%) scale(1.08)';
+
+        const startTime = performance.now();
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / durationMs);
+
+          // Smooth cubic ease out
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const curX = fromPt.x + (toPt.x - fromPt.x) * ease;
+          const curY = fromPt.y + (toPt.y - fromPt.y) * ease;
+          const curScale = 1.08 - 0.08 * ease;
+
+          flyingElem.style.left = `${curX}px`;
+          flyingElem.style.top = `${curY}px`;
+          flyingElem.style.transform = `translate(-50%, -50%) scale(${curScale})`;
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            flyingElem.style.opacity = '0';
+            if (onComplete) onComplete();
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      let activeTimeouts = [];
+      function schedule(fn, delay) {
+        const t = setTimeout(fn, delay);
+        activeTimeouts.push(t);
+        return t;
+      }
+
+      function clearAllScheduled() {
+        activeTimeouts.forEach(t => clearTimeout(t));
+        activeTimeouts = [];
+      }
+
+      function runReturnCycle() {
+        clearAllScheduled();
+
+        // 1. Calculate Element Coordinates
+        const centerShift = getElementCenter(slotShift);
+        const centerReturnSlot = getElementCenter(slotReturnNW);
+        const centerMid = getElementCenter(cellMidElement);
+
+        const handShift_X = centerShift.x - FINGER_TIP_X;
+        const handShift_Y = centerShift.y - FINGER_TIP_Y;
+
+        const handMid_X = centerMid.x - FINGER_TIP_X;
+        const handMid_Y = centerMid.y - FINGER_TIP_Y;
+
+        // Reset elements
+        slotShift.classList.add('slot-selected');
+        contentMid_NW.style.opacity = '1';
+        contentMid_NW.style.transition = 'opacity 0.25s ease';
+
+        slotReturnNW.classList.add('slot-empty');
+        slotTileReturnNW.style.opacity = '0';
+        badgeReturnNW.style.opacity = '0';
+
+        unselectedLabel.classList.remove('active');
+        unselectedLabel.style.left = `${centerShift.x}px`;
+        unselectedLabel.style.top = `${centerShift.y - 28}px`;
+
+        flyingProxyNW.style.opacity = '0';
+
+        // Hand starts hidden slightly below inventory
+        handPointer.style.transition = 'none';
+        handPointer.style.transform = `translate(${handShift_X + 30}px, ${handShift_Y + 50}px) scale(1)`;
+        handPointer.style.opacity = '0';
+
+        // ========================================================
+        // STEP 1: MOVE HAND TO ARMED SHIFT TILE IN INVENTORY
+        // ========================================================
+        schedule(() => {
+          handPointer.style.transition = 'transform 0.55s cubic-bezier(0.2, 0.8, 0.25, 1), opacity 0.3s ease';
+          handPointer.style.transform = `translate(${handShift_X}px, ${handShift_Y}px) scale(1)`;
+          handPointer.style.opacity = '1';
+        }, 400);
+
+        // ========================================================
+        // STEP 2: TAP SHIFT TILE -> DESELECT & FLOAT "UNSELECTED"
+        // ========================================================
+        schedule(() => {
+          // Tap down
+          handPointer.style.transition = 'transform 0.12s ease-in';
+          handPointer.style.transform = `translate(${handShift_X}px, ${handShift_Y}px) scale(0.88)`;
+
+          // Ripple feedback
+          rippleShift.classList.remove('active');
+          void rippleShift.offsetWidth;
+          rippleShift.classList.add('active');
+
+          // Deselect armed slot
+          slotShift.classList.remove('slot-selected');
+
+          // Float UNSELECTED text
+          unselectedLabel.classList.remove('active');
+          void unselectedLabel.offsetWidth;
+          unselectedLabel.classList.add('active');
+        }, 1050);
+
+        // Hand lifts after tap
+        schedule(() => {
+          handPointer.style.transition = 'transform 0.18s ease-out';
+          handPointer.style.transform = `translate(${handShift_X}px, ${handShift_Y}px) scale(1)`;
+        }, 1250);
+
+        // ========================================================
+        // STEP 3: MOVE HAND TO NW TILE IN THE MIDDLE (2, 2)
+        // ========================================================
+        schedule(() => {
+          handPointer.style.transition = 'transform 0.65s cubic-bezier(0.25, 0.9, 0.3, 1)';
+          handPointer.style.transform = `translate(${handMid_X}px, ${handMid_Y}px) scale(1)`;
+        }, 1600);
+
+        // ========================================================
+        // STEP 4: FIRST TAP OF DOUBLE-TAP SEQUENCE ON MIDDLE NW TILE
+        // ========================================================
+        schedule(() => {
+          handPointer.style.transition = 'transform 0.1s ease-in';
+          handPointer.style.transform = `translate(${handMid_X}px, ${handMid_Y}px) scale(0.88)`;
+
+          rippleMid1.classList.remove('active');
+          void rippleMid1.offsetWidth;
+          rippleMid1.classList.add('active');
+        }, 2350);
+
+        // Hand springs up slightly between taps
+        schedule(() => {
+          handPointer.style.transition = 'transform 0.1s ease-out';
+          handPointer.style.transform = `translate(${handMid_X}px, ${handMid_Y}px) scale(0.96)`;
+        }, 2480);
+
+        // ========================================================
+        // STEP 5: SECOND TAP OF DOUBLE-TAP SEQUENCE (CONFIRMS RECALL)
+        // ========================================================
+        schedule(() => {
+          handPointer.style.transition = 'transform 0.1s ease-in';
+          handPointer.style.transform = `translate(${handMid_X}px, ${handMid_Y}px) scale(0.85)`;
+
+          rippleMid2.classList.remove('active');
+          void rippleMid2.offsetWidth;
+          rippleMid2.classList.add('active');
+
+          shockwaveMid.classList.remove('active');
+          void shockwaveMid.offsetWidth;
+          shockwaveMid.classList.add('active');
+        }, 2620);
+
+        // ========================================================
+        // STEP 6: NW TILE IN MIDDLE RECALLS TO TRAY (FLIES DOWN)
+        // ========================================================
+        schedule(() => {
+          // Hand releases and pulls back slightly so flight path is visible
+          handPointer.style.transition = 'transform 0.35s ease-out, opacity 0.4s ease';
+          handPointer.style.transform = `translate(${handMid_X + 28}px, ${handMid_Y - 20}px) scale(1)`;
+
+          // Placed tile on grid disappears
+          contentMid_NW.style.opacity = '0';
+
+          // Flying proxy glides into Inventory Slot 2
+          animateFlight(flyingProxyNW, centerMid, centerReturnSlot, 540, () => {
+            // Settle inside inventory slot
+            slotReturnNW.classList.remove('slot-empty');
+            slotTileReturnNW.style.opacity = '1';
+            badgeReturnNW.style.opacity = '1';
+
+            shockwaveReturn.classList.remove('active');
+            void shockwaveReturn.offsetWidth;
+            shockwaveReturn.classList.add('active');
+          });
+        }, 2850);
+
+        // Hand fades away during hold
+        schedule(() => {
+          handPointer.style.opacity = '0';
+        }, 3600);
+
+        // ========================================================
+        // STEP 7: SETTLE SHOWCASE & NEXT LOOP RESTART
+        // ========================================================
+        schedule(() => {
+          // Smooth fade reset before restarting loop
+          boardContainer.style.transition = 'opacity 0.4s ease';
+          boardContainer.style.opacity = '0.4';
+        }, 6200);
+
+        schedule(() => {
+          boardContainer.style.opacity = '1';
+          runReturnCycle();
+        }, 6650);
+      }
+
+      // Start loop on page load
+      window.addEventListener('load', () => {
+        setTimeout(runReturnCycle, 200);
+      });
+
+      // Recalculate coordinates on window resize / orientation change
+      window.addEventListener('resize', () => {
+        clearAllScheduled();
+        boardContainer.style.opacity = '1';
+        runReturnCycle();
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Deflector Dynamics // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* Dedicated Board Demo Container with Mounted Top Legend */
+    .media-container.deflectors-demo {
+      aspect-ratio: auto;
+      max-width: 360px;
+      margin: 0 auto 14px auto;
+      padding: 10px 10px 12px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+      background: #02050b;
+      border: 1px solid var(--border-cyan);
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.12);
+    }
+
+    /* 4 Deflector Visuals & Tactical Legend (MOUNTED AT TOP OF BOARD) */
+    .deflector-legend-bar {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin: 0;
+      box-sizing: border-box;
+      z-index: 5;
+    }
+    .deflector-chip {
+      background: rgba(0, 26, 42, 0.75);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      border-radius: 6px;
+      padding: 6px 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 8px rgba(0, 243, 255, 0.12);
+    }
+    .deflector-chip.chip-active {
+      border-color: #00f3ff;
+      background: rgba(0, 50, 85, 0.95);
+      box-shadow: 0 0 16px rgba(0, 243, 255, 0.7), inset 0 0 8px rgba(0, 243, 255, 0.4);
+      transform: scale(1.05);
+    }
+    .deflector-chip-icon {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+    .deflector-chip-label {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 800;
+      color: #00f3ff;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .deflector-chip-sub {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    /* 5x5 Board Grid inside Demo */
+    .deflectors-demo .board-grid-5x5 {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    /* Center Middle Open Corridor Cell (Row 2, Col 2) */
+    .board-cell.corridor-center {
+      background: rgba(0, 243, 255, 0.05);
+      border: 1.5px dashed rgba(0, 243, 255, 0.35);
+      position: relative;
+    }
+    .board-cell.corridor-center::before {
+      content: 'OPEN';
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 6px;
+      font-weight: 800;
+      color: rgba(0, 243, 255, 0.4);
+      letter-spacing: 0.05em;
+      pointer-events: none;
+    }
+
+    /* Traversed Cell Glow */
+    .board-cell.cell-traversed {
+      background: rgba(0, 243, 255, 0.26) !important;
+      border-color: rgba(0, 243, 255, 0.7) !important;
+      box-shadow: 0 0 12px rgba(0, 243, 255, 0.45) !important;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    /* Middle Corridor Bright Transversal Pulse */
+    .board-cell.corridor-center.cell-traversed {
+      background: rgba(0, 243, 255, 0.45) !important;
+      border: 1.5px solid #00f3ff !important;
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.85), inset 0 0 10px rgba(0, 243, 255, 0.5) !important;
+    }
+    .board-cell.corridor-center.cell-traversed::before {
+      color: #ffffff;
+      text-shadow: 0 0 8px #00f3ff;
+    }
+
+    .board-cell.corridor-flash {
+      animation: corridor-pulse 0.45s ease-out;
+    }
+    @keyframes corridor-pulse {
+      0% {
+        background: rgba(0, 243, 255, 0.65) !important;
+        box-shadow: 0 0 26px #00f3ff, inset 0 0 14px #00f3ff !important;
+      }
+      100% {
+        background: rgba(0, 243, 255, 0.45) !important;
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.85), inset 0 0 10px rgba(0, 243, 255, 0.5) !important;
+      }
+    }
+
+    /* Cell Flash on Deflection */
+    .board-cell.deflect-hit {
+      animation: deflect-pulse 0.45s ease-out;
+    }
+    @keyframes deflect-pulse {
+      0% {
+        background: rgba(0, 243, 255, 0.55);
+        box-shadow: 0 0 22px #00f3ff;
+      }
+      100% {
+        background: rgba(3, 18, 30, 0.6);
+        box-shadow: none;
+      }
+    }
+
+    /* Server Delivery Glow */
+    .server-cell {
+      background: rgba(0, 30, 50, 0.85);
+      border: 1.5px solid #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+      z-index: 2;
+    }
+    .server-cell.delivered {
+      animation: server-capture 0.6s ease-out;
+    }
+    @keyframes server-capture {
+      0% {
+        background: rgba(0, 255, 102, 0.4);
+        border-color: #00ff66;
+        box-shadow: 0 0 28px #00ff66;
+        transform: scale(0.96);
+      }
+      100% {
+        background: rgba(0, 30, 50, 0.85);
+        border-color: #38bdf8;
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <h1 class="guide-title">Deflector Dynamics</h1>
+    <div class="guide-subtitle">90° MULTI-VECTOR REDIRECTION</div>
+  </header>
+
+  <!-- Interactive Board Simulation with Mounted Top Legend -->
+  <div class="media-container deflectors-demo" id="boardContainer">
+    <!-- 4 Deflector Visuals & Tactical Legend (MOUNTED AT TOP OF BOARD) -->
+    <div class="deflector-legend-bar" id="legendBar">
+      <div class="deflector-chip" id="chipSE">
+        <img src="../../assets/icons/deflector-se.svg" class="deflector-chip-icon" alt="SE Deflector" />
+        <span class="deflector-chip-label">╔ SE</span>
+        <span class="deflector-chip-sub">N &rarr; E</span>
+      </div>
+      <div class="deflector-chip" id="chipSW">
+        <img src="../../assets/icons/deflector-sw.svg" class="deflector-chip-icon" alt="SW Deflector" />
+        <span class="deflector-chip-label">╗ SW</span>
+        <span class="deflector-chip-sub">E &rarr; S</span>
+      </div>
+      <div class="deflector-chip" id="chipNE">
+        <img src="../../assets/icons/deflector-ne.svg" class="deflector-chip-icon" alt="NE Deflector" />
+        <span class="deflector-chip-label">╚ NE</span>
+        <span class="deflector-chip-sub">S &rarr; E</span>
+      </div>
+      <div class="deflector-chip" id="chipNW">
+        <img src="../../assets/icons/deflector-nw.svg" class="deflector-chip-icon" alt="NW Deflector" />
+        <span class="deflector-chip-label">╝ NW</span>
+        <span class="deflector-chip-sub">E &rarr; N</span>
+      </div>
+    </div>
+
+    <!-- 5x5 Board Grid -->
+    <div class="board-grid-5x5" id="boardGrid">
+      <!-- 25 cells populated dynamically by JS -->
+    </div>
+
+    <!-- Active Flying Packet -->
+    <div class="packet-object" id="packetObj" style="opacity: 0; left: 0; top: 0;"></div>
+
+    <!-- Floating Delivered Score Label -->
+    <div class="floating-text-label" id="deliveryLabel" style="color: #00ff66; text-shadow: 0 0 10px rgba(0, 255, 102, 0.9);">
+      ROOT CLEARANCE // DELIVERED
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        Deflectors redirect payloads at <span class="highlight-cyan" style="color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);">90° angles</span>.
+      </div>
+    </div>
+    <div class="simple-sub">
+      Every deflector bends incoming transmissions by exactly 90 degrees. With the middle tile cleared, payloads launch from the bottom-left node, travel straight through the center, and turn through all 4 deflectors into the server.
+    </div>
+  </div>
+
+  <!-- Tactical Briefing Card -->
+  <div class="content-card">
+    <div class="section-label">⚡ 4-WAY DEFLECTION ARCHITECTURE</div>
+    <p class="guide-text">
+      Payloads possess strict linear momentum and cannot steer independently. By coordinating <strong>╔</strong>, <strong>╗</strong>, <strong>╚</strong>, and <strong>╝</strong>, operators navigate complex matrix corridors and bypass grid edge hazards.
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Simulation Script -->
+  <script>
+    (function () {
+      const COLS = 5;
+      const ROWS = 5;
+
+      const boardGrid = document.getElementById('boardGrid');
+      const boardContainer = document.getElementById('boardContainer');
+      const packetObj = document.getElementById('packetObj');
+      const deliveryLabel = document.getElementById('deliveryLabel');
+
+      const chipSE = document.getElementById('chipSE');
+      const chipSW = document.getElementById('chipSW');
+      const chipNE = document.getElementById('chipNE');
+      const chipNW = document.getElementById('chipNW');
+
+      const cellElements = {};
+
+      // 1. Build the 5x5 Grid Cells
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'board-cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          const key = `${r},${c}`;
+
+          // (4, 0): Bottom-Left Starter Node SU (Launches North)
+          if (r === 4 && c === 0) {
+            cell.className = 'board-cell start-node-cell';
+            cell.innerHTML = `
+              <img src="../../assets/icons/starter-node.svg" class="node-icon-img" alt="Starter Node SU" />
+              <div class="tap-ripple" id="rippleStart"></div>
+            `;
+          }
+          // (0, 0): Top-Left SE Deflector ╔ (Turns North to East)
+          else if (r === 0 && c === 0) {
+            cell.innerHTML = `
+              <div class="placed-tile-content">
+                <img src="../../assets/icons/deflector-se.svg" class="node-icon-img" alt="SE Deflector" />
+              </div>
+              <div class="snap-shockwave" id="shockSE"></div>
+            `;
+          }
+          // (0, 2): Top-Middle SW Deflector ╗ (Turns East to South)
+          else if (r === 0 && c === 2) {
+            cell.innerHTML = `
+              <div class="placed-tile-content">
+                <img src="../../assets/icons/deflector-sw.svg" class="node-icon-img" alt="SW Deflector" />
+              </div>
+              <div class="snap-shockwave" id="shockSW"></div>
+            `;
+          }
+          // (4, 2): Bottom-Middle NE Deflector ╚ (Turns South to East)
+          else if (r === 4 && c === 2) {
+            cell.innerHTML = `
+              <div class="placed-tile-content">
+                <img src="../../assets/icons/deflector-ne.svg" class="node-icon-img" alt="NE Deflector" />
+              </div>
+              <div class="snap-shockwave" id="shockNE"></div>
+            `;
+          }
+          // (4, 4): Bottom-Right NW Deflector ╝ (Turns East to North)
+          else if (r === 4 && c === 4) {
+            cell.innerHTML = `
+              <div class="placed-tile-content">
+                <img src="../../assets/icons/deflector-nw.svg" class="node-icon-img" alt="NW Deflector" />
+              </div>
+              <div class="snap-shockwave" id="shockNW"></div>
+            `;
+          }
+          // (0, 4): Top-Right Target Server E (Destination)
+          else if (r === 0 && c === 4) {
+            cell.className = 'board-cell server-cell';
+            cell.innerHTML = `
+              <img src="../../assets/icons/target-server.svg" class="node-icon-img" alt="Target Server" />
+              <div class="tap-ripple" id="rippleServer" style="border-color: #00ff66; box-shadow: 0 0 20px #00ff66;"></div>
+            `;
+          }
+          // (2, 2): Center Middle Cell is the Open Corridor (Middle tile returned to tray)
+          else if (r === 2 && c === 2) {
+            cell.classList.add('corridor-center');
+          }
+
+          boardGrid.appendChild(cell);
+          cellElements[key] = cell;
+        }
+      }
+
+      function getCellCenter(r, c) {
+        const cell = cellElements[`${r},${c}`];
+        if (!cell) return { x: 0, y: 0 };
+        const containerRect = boardContainer.getBoundingClientRect();
+        const rect = cell.getBoundingClientRect();
+        return {
+          x: rect.left - containerRect.left + rect.width / 2,
+          y: rect.top - containerRect.top + rect.height / 2
+        };
+      }
+
+      function clearTraversedCells() {
+        Object.values(cellElements).forEach(c => {
+          c.classList.remove('cell-traversed', 'deflect-hit', 'corridor-flash', 'delivered');
+        });
+        [chipSE, chipSW, chipNE, chipNW].forEach(chip => chip.classList.remove('chip-active'));
+        deliveryLabel.classList.remove('active');
+      }
+
+      let activeAnimationId = null;
+      let nextCycleTimer = null;
+
+      function runPacketLoop() {
+        clearTraversedCells();
+
+        // 5 Sequential Segments:
+        // Seg 0: (4, 0) -> (0, 0) [Col 0, traveling North]
+        // Seg 1: (0, 0) -> (0, 2) [Row 0, traveling East]
+        // Seg 2: (0, 2) -> (4, 2) [Col 2, traveling South: crossing (1,2), (2,2) MIDDLE, (3,2)]
+        // Seg 3: (4, 2) -> (4, 4) [Row 4, traveling East]
+        // Seg 4: (4, 4) -> (0, 4) [Col 4, traveling North: entering Server at (0,4)]
+
+        const waypoints = [
+          { r: 4, c: 0 },
+          { r: 0, c: 0, chip: chipSE },
+          { r: 0, c: 2, chip: chipSW },
+          { r: 4, c: 2, chip: chipNE },
+          { r: 4, c: 4, chip: chipNW },
+          { r: 0, c: 4, isServer: true }
+        ];
+
+        // Trigger Starter Node Launch Ripple
+        const startRipple = document.getElementById('rippleStart');
+        if (startRipple) {
+          startRipple.classList.remove('active');
+          void startRipple.offsetWidth;
+          startRipple.classList.add('active');
+        }
+
+        const pts = waypoints.map(wp => ({ ...getCellCenter(wp.r, wp.c), ...wp }));
+        
+        const segments = [];
+        let totalDuration = 0;
+        const SPEED_PX_PER_SEC = 125;
+
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p1 = pts[i];
+          const p2 = pts[i + 1];
+          const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+          const dur = (dist / SPEED_PX_PER_SEC) * 1000;
+          segments.push({
+            index: i,
+            p1,
+            p2,
+            duration: dur,
+            startTime: totalDuration,
+            endTime: totalDuration + dur
+          });
+          totalDuration += dur;
+        }
+
+        packetObj.style.opacity = '1';
+        packetObj.style.left = `${pts[0].x}px`;
+        packetObj.style.top = `${pts[0].y}px`;
+
+        const loopStart = performance.now();
+
+        function tick(now) {
+          const elapsed = now - loopStart;
+
+          if (elapsed >= totalDuration) {
+            // Reached Server!
+            packetObj.style.left = `${pts[pts.length - 1].x}px`;
+            packetObj.style.top = `${pts[pts.length - 1].y}px`;
+            packetObj.style.opacity = '0';
+
+            const serverCell = cellElements['0,4'];
+            if (serverCell) {
+              serverCell.classList.add('delivered');
+            }
+            const serverRipple = document.getElementById('rippleServer');
+            if (serverRipple) {
+              serverRipple.classList.remove('active');
+              void serverRipple.offsetWidth;
+              serverRipple.classList.add('active');
+            }
+
+            // Show Delivered Floating Text
+            const sPt = pts[pts.length - 1];
+            deliveryLabel.style.left = `${sPt.x - 20}px`;
+            deliveryLabel.style.top = `${sPt.y - 15}px`;
+            deliveryLabel.classList.remove('active');
+            void deliveryLabel.offsetWidth;
+            deliveryLabel.classList.add('active');
+
+            // Pause to appreciate delivery, then restart loop
+            nextCycleTimer = setTimeout(runPacketLoop, 1700);
+            return;
+          }
+
+          // Find and evaluate current segment
+          for (let seg of segments) {
+            if (elapsed >= seg.startTime && elapsed < seg.endTime) {
+              const segProgress = (elapsed - seg.startTime) / seg.duration;
+              const curX = seg.p1.x + (seg.p2.x - seg.p1.x) * segProgress;
+              const curY = seg.p1.y + (seg.p2.y - seg.p1.y) * segProgress;
+
+              packetObj.style.left = `${curX}px`;
+              packetObj.style.top = `${curY}px`;
+
+              // ==========================================
+              // STEP-BY-STEP CELL LIGHTING BY SEGMENT
+              // ==========================================
+              if (seg.index === 0) {
+                // (4,0) -> (0,0): going North up col 0
+                cellElements['4,0']?.classList.add('cell-traversed');
+                if (segProgress >= 0.20) cellElements['3,0']?.classList.add('cell-traversed');
+                if (segProgress >= 0.45) cellElements['2,0']?.classList.add('cell-traversed');
+                if (segProgress >= 0.70) cellElements['1,0']?.classList.add('cell-traversed');
+                if (segProgress >= 0.88) {
+                  cellElements['0,0']?.classList.add('cell-traversed', 'deflect-hit');
+                  chipSE.classList.add('chip-active');
+                }
+              } else if (seg.index === 1) {
+                // (0,0) -> (0,2): going East along row 0
+                cellElements['0,0']?.classList.add('cell-traversed');
+                if (segProgress >= 0.35) cellElements['0,1']?.classList.add('cell-traversed');
+                if (segProgress >= 0.88) {
+                  cellElements['0,2']?.classList.add('cell-traversed', 'deflect-hit');
+                  chipSW.classList.add('chip-active');
+                }
+              } else if (seg.index === 2) {
+                // (0,2) -> (4,2): going South down col 2
+                cellElements['0,2']?.classList.add('cell-traversed');
+                if (segProgress >= 0.18) cellElements['1,2']?.classList.add('cell-traversed');
+
+                // MIDDLE TILE (2, 2): Lights up brightly when packet passes through!
+                if (segProgress >= 0.38) {
+                  const midCell = cellElements['2,2'];
+                  if (midCell && !midCell.classList.contains('cell-traversed')) {
+                    midCell.classList.add('cell-traversed', 'corridor-flash');
+                  }
+                }
+
+                if (segProgress >= 0.68) cellElements['3,2']?.classList.add('cell-traversed');
+                if (segProgress >= 0.88) {
+                  cellElements['4,2']?.classList.add('cell-traversed', 'deflect-hit');
+                  chipNE.classList.add('chip-active');
+                }
+              } else if (seg.index === 3) {
+                // (4,2) -> (4,4): going East along row 4
+                cellElements['4,2']?.classList.add('cell-traversed');
+                if (segProgress >= 0.35) cellElements['4,3']?.classList.add('cell-traversed');
+                if (segProgress >= 0.88) {
+                  cellElements['4,4']?.classList.add('cell-traversed', 'deflect-hit');
+                  chipNW.classList.add('chip-active');
+                }
+              } else if (seg.index === 4) {
+                // (4,4) -> (0,4): going North up col 4
+                cellElements['4,4']?.classList.add('cell-traversed');
+                if (segProgress >= 0.20) cellElements['3,4']?.classList.add('cell-traversed');
+                if (segProgress >= 0.45) cellElements['2,4']?.classList.add('cell-traversed');
+                if (segProgress >= 0.70) cellElements['1,4']?.classList.add('cell-traversed');
+                if (segProgress >= 0.90) cellElements['0,4']?.classList.add('cell-traversed');
+              }
+
+              break;
+            }
+          }
+
+          activeAnimationId = requestAnimationFrame(tick);
+        }
+
+        activeAnimationId = requestAnimationFrame(tick);
+      }
+
+      window.addEventListener('load', () => {
+        setTimeout(runPacketLoop, 300);
+      });
+
+      window.addEventListener('resize', () => {
+        if (activeAnimationId) cancelAnimationFrame(activeAnimationId);
+        if (nextCycleTimer) clearTimeout(nextCycleTimer);
+        runPacketLoop();
+      });
+    })();
+  </script>
+</body>
+</html>
