@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "publishedAt": "2026-10-23T13:55:23.670Z",
+  "publishedAt": "2026-10-23T13:58:52.302Z",
   "packs": {
     "A": {
-      "version": 1,
-      "file": "pack-A.v1.json",
-      "sha256": "4315db751500c1d6ff7000092c0139c9af5cfc2cee9adde2251781fb7800dcea",
+      "version": 2,
+      "file": "pack-A.v2.json",
+      "sha256": "b29944641565eda7af7f13d11945e1e2f762487b0dcb6c4cbaca21bc5c306b30",
       "minBuildCode": 14
     },
     "B": {
