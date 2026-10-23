@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "pack": "C",
+  "version": 1,
+  "levels": [
+    {
+      "id": 201,
+      "title": "TARGET: PROPEDIEM GATE // DEMO",
+      "baseRewards": {
+        "xp": 200,
+        "dc": 100,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 5,
+      "boardHeight": 5,
+      "planningPhaseTimer": 5000,
+      "initiateCountdown": 3000,
+      "packetDelays": [0, 1500, 1500],
+      "map": [
+        ["W", "W", "W", "W", "W"],
+        ["W", "0", "0", "0", "E"],
+        ["W", "0", "W", "W", "W"],
+        ["0", "0", "0", "0", "W"],
+        ["SU", "W", "W", "W", "W"]
+      ],
+      "inventory": {
+        "SE": 1,
+        "NW": 1
+      },
+      "dialogues": ["Propediem. Deep-web access point — stealth protocols only.", "This node is a test rig — the real tunnels are still being mapped."]
+    }
+  ]
+}

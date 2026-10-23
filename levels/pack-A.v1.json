@@ -1,0 +1,1390 @@
+{
+  "schema": 1,
+  "pack": "A",
+  "version": 1,
+  "levels": [
+    {
+      "id": 1,
+      "title": "TARGET: LOCALHOST // TRAINING",
+      "speed": 120,
+      "cipherGate": false,
+      "baseRewards": {
+        "xp": 100,
+        "dc": 50,
+        "qc": 0
+      },
+      "timeLimit": 1200,
+      "boardWidth": 3,
+      "boardHeight": 3,
+      "planningPhaseTimer": 0,
+      "map": [
+        ["0", "0", "E"],
+        ["B", "W", "0"],
+        ["SU", "0", "0"]
+      ],
+      "inventory": {
+        "SE": 1
+      },
+      "packetDelays": [0],
+      "lockThrottle": true,
+      "tutorial": {
+        "skipGraceMs": 2500,
+        "steps": [
+          {
+            "type": "select",
+            "tile": "SE",
+            "text": "Select the [ ╔ ] deflector (South/East Router) from your inventory.",
+            "before": [
+              {
+                "guide": {
+                  "url": "https://mtxgames.lk/guides/tiles/deflector_se/page_1.html",
+                  "title": "FIELD MANUAL // TACTICAL ROUTING",
+                  "subtitle": "SYSTEM DIRECTIVE // TILE PLACEMENT",
+                  "fallbackText": "Select the [ ╔ ] deflector from your inventory and place it in cell (0, 0) to route the payload away from the grid boundary."
+                }
+              }
+            ]
+          },
+          {
+            "type": "place",
+            "tile": "SE",
+            "targetX": 0,
+            "targetY": 0,
+            "text": "Place the deflector in cell (0, 0) to redirect the packet away from the boundary."
+          },
+          {
+            "type": "tap_node",
+            "targetX": 0,
+            "targetY": 2,
+            "text": "Tap the compromised starter node to launch the payload!",
+            "before": [
+              {
+                "say": "Deflector locked. Trajectory routed away from the grid boundary."
+              },
+              {
+                "guide": {
+                  "url": "https://mtxgames.lk/guides/tiles/deflectors/page_1.html",
+                  "title": "FIELD MANUAL // DEFLECTOR DYNAMICS",
+                  "subtitle": "SYSTEM DIRECTIVE // 90° MULTI-VECTOR REDIRECTION",
+                  "fallbackText": "Deflectors redirect payloads at 90-degree angles. Use ╔, ╗, ╚, and ╝ to route signals safely around boundaries."
+                }
+              },
+              {
+                "say": "Initiate manual uplink from the compromised node."
+              },
+              {
+                "guide": {
+                  "url": "https://mtxgames.lk/guides/tiles/start_node/page_1.html",
+                  "title": "FIELD MANUAL // TACTICAL ROUTING",
+                  "subtitle": "SYSTEM DIRECTIVE // START NODE",
+                  "fallbackText": "Initiate manual uplink from the compromised node [ SU ] to launch the payload."
+                }
+              }
+            ]
+          }
+        ],
+        "successMessage": "Payload launched. Monitoring trajectory..."
+      },
+      "dialogues": ["System breach successful. I've established a low-level uplink.", "Target is the green node. We need to route the payload there."],
+      "postPlacementDialogues": ["Deflector locked. Trajectory routed away from the grid boundary.", "Initiate manual uplink from the compromised node."],
+      "hardPause": {
+        "triggerY": 1,
+        "triggerX": 0,
+        "text": "Ahh Energy block they are double edge swords..",
+        "then": "resume",
+        "guide": {
+          "url": "https://mtxgames.lk/guides/tiles/energy_block/page_1.html",
+          "title": "FIELD MANUAL // ENERGY CACHE",
+          "subtitle": "SYSTEM DIRECTIVE // DOUBLE-EDGED PROTOCOL",
+          "fallbackText": "Energy caches are double-edged: collecting them awards +200 integrity points, but missing them incurs penalties."
+        }
+      },
+      "tutorialPhases": {
+        "placementGuideUrl": "https://mtxgames.lk/guides/tiles/deflector_se/page_1.html",
+        "deflectorGuideUrl": "https://mtxgames.lk/guides/tiles/deflectors/page_1.html",
+        "launchGuideUrl": "https://mtxgames.lk/guides/tiles/start_node/page_1.html",
+        "energyGuideUrl": "https://mtxgames.lk/guides/tiles/energy_block/page_1.html"
+      }
+    },
+    {
+      "id": 2,
+      "title": "TARGET: GATEWAY // OVERCLOCK",
+      "cipherGate": false,
+      "baseRewards": {
+        "xp": 150,
+        "dc": 75,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 4,
+      "boardHeight": 4,
+      "planningPhaseTimer": 0,
+      "map": [
+        ["0", "0", "0", "E"],
+        ["0", "0", "0", "0"],
+        ["0", "0", "0", "0"],
+        ["SR", "0", "0", "W"]
+      ],
+      "inventory": {
+        "NW": 1,
+        "SE": 1
+      },
+      "packetDelays": [1000],
+      "tutorial": {
+        "steps": [
+          {
+            "type": "slider",
+            "targetValue": -1,
+            "text": "Security is tightening. Hold the SPD slider DOWN to slow time. This gives you a window to react."
+          },
+          {
+            "type": "select",
+            "tile": "NW",
+            "text": "Now, select the [ ╝ ] deflector (North/West Router)."
+          },
+          {
+            "type": "place",
+            "tile": "NW",
+            "targetX": 2,
+            "targetY": 3,
+            "text": "Place it here to redirect the packet UP before it hits the firewall."
+          },
+          {
+            "type": "select",
+            "tile": "SE",
+            "text": "Now, select the [ ╔ ] deflector."
+          },
+          {
+            "type": "place",
+            "tile": "SE",
+            "targetX": 2,
+            "targetY": 0,
+            "text": "Place it next to the exit node."
+          },
+          {
+            "type": "slider",
+            "targetValue": 1,
+            "text": "OVERCLOCK NOW. Push the slider UP to resume full speed."
+          }
+        ],
+        "successMessage": "Good. You've mastered the throttle. Keep it steady."
+      },
+      "dialogues": ["They've detected our signature. Security protocols are escalating.", "I can't freeze time anymore, but I've patched in a throttle script.", "Hold the SPD slider DOWN to slow the system clock. It'll give you time to react.", "Route the packet around the new barriers. Stay sharp."],
+      "hardPause": {
+        "triggerY": 3,
+        "triggerX": 1,
+        "text": "WAIT! The packet is moving too fast for a manual drop. Look at the SPD slider on the left. I've suspended time until you engage the throttle.",
+        "then": "tutorial"
+      },
+      "speed": 80
+    },
+    {
+      "id": 3,
+      "title": "TARGET: MAINFRAME // RECYCLE",
+      "speed": 120,
+      "cipherGate": false,
+      "baseRewards": {
+        "xp": 200,
+        "dc": 100,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 5,
+      "boardHeight": 5,
+      "planningPhaseTimer": 5000,
+      "initiateCountdown": 3000,
+      "packetDelays": [0, 1500, 1500],
+      "map": [
+        ["W", "W", "W", "W", "W"],
+        ["W", "0", "0", "0", "E"],
+        ["W", "0", "W", "W", "W"],
+        ["0", "0", "0", "0", "W"],
+        ["SU", "W", "W", "W", "W"]
+      ],
+      "inventory": {
+        "SE": 1,
+        "NW": 1
+      },
+      "dialogues": ["Resources are low. We only have two deflectors for this entire sector.", "You'll need to 'hot-swap' your hardware. Once a packet passes a deflector, it's no longer needed there.", "Hold the screen to slow time, then tap a placed deflector to pull it back into your inventory.", "Recycle your tools to reach the server. Efficiency is the only way through."]
+    },
+    {
+      "id": 4,
+      "title": "TARGET: DATA VAULT // DEEP DIVE",
+      "speed": 120,
+      "baseRewards": {
+        "xp": 250,
+        "dc": 125,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 4,
+      "boardHeight": 4,
+      "planningPhaseTimer": 10000,
+      "initiateCountdown": 3000,
+      "packetDelays": [0, 2000, 2000, 2000],
+      "map": [
+        ["0", "0", "0", "E"],
+        ["0", "W", "W", "W"],
+        ["0", "0", "0", "0"],
+        ["SR", "0", "W", "W"]
+      ],
+      "inventory": {
+        "NW": 1,
+        "SW": 1,
+        "NE": 1,
+        "SE": 1
+      },
+      "cipherConfig": {
+        "pinLength": 0,
+        "allowDuplicates": [0, 0, 0, 0],
+        "autoDisableDeadNodes": [1, 0, 0, 100],
+        "autoLockMatches": [0, 0, 0, 0],
+        "scrambleKeypad": [0, 0, 0, 0],
+        "hiddenHistory": [0, 0, 0, 0],
+        "obfuscateFeedback": [0, 0, 0, 0]
+      },
+      "cipherDialogues": ["Wait. The Data Vault is protected by a Security Gateway.", "I've tapped into their proxy network, but every attempt burns one of our Proxies.", "Green: Correct number, correct position.", "Yellow: Correct number, wrong position.", "Red/Dark Gray: Dead signal. This number is not in the sequence.", "Crack the code to bypass the lock. Don't waste our connection."],
+      "dialogues": ["We're approaching the Data Vault's inner sanctum.", "The grid is larger, and the firewall patterns are tighter. No more hand-holding.", "Trust your instincts. Get that data."]
+    },
+    {
+      "id": 5,
+      "title": "TARGET: AUX NODE // U-TURN TEST",
+      "speed": 120,
+      "baseRewards": {
+        "xp": 300,
+        "dc": 150,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 4,
+      "boardHeight": 3,
+      "planningPhaseTimer": 5000,
+      "initiateCountdown": 3000,
+      "packetDelays": [0, 1500, 1500],
+      "map": [
+        ["0", "0", "0", "E"],
+        ["0", "0", "0", "0"],
+        ["SR", "0", "0", "UT"]
+      ],
+      "inventory": {
+        "SE": 1,
+        "NE": 1
+      },
+      "cipherConfig": {
+        "pinLength": 1,
+        "allowDuplicates": [3, 50, 45, 5],
+        "autoDisableDeadNodes": [0, 0, 0, 0],
+        "autoLockMatches": [0, 0, 0, 0],
+        "scrambleKeypad": [3, 50, 45, 5],
+        "hiddenHistory": [0, 0, 0, 0],
+        "obfuscateFeedback": [0, 0, 0, 0]
+      },
+      "cipherDialogues": ["This node is more resilient. The keypad is scrambling after every attempt.", "And they've enabled duplicate codes. '8-8-2-1' is now a possibility.", "Stay focused. We can't afford to lose the connection now."],
+      "dialogues": ["I've scavenged some experimental hardware: The U-Turn Bounce Pad (🔄).", "It reflects the payload 180 degrees. It's perfect for when you're backed into a corner.", "Try it out on this AUX node."]
+    },
+    {
+      "id": 6,
+      "title": "TARGET: CORE SERVER // THE GAUNTLET",
+      "speed": 120,
+      "baseRewards": {
+        "xp": 400,
+        "dc": 200,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 6,
+      "boardHeight": 6,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 5000,
+      "packetDelays": [1000, 1000, 1000, 1000, 1000],
+      "map": [
+        ["W", "W", "W", "W", "W", "W"],
+        ["W", "0", "0", "0", "0", "E"],
+        ["W", "0", "W", "W", "W", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "W", "W", "W", "0", "W"],
+        ["SR", "0", "0", "0", "0", "W"]
+      ],
+      "inventory": {
+        "NW": 2,
+        "SE": 2,
+        "NE": 1,
+        "SW": 1
+      },
+      "dialogues": ["The Core Server. The heart of the machine.", "Everything you've learned comes down to this.", "Inject the payload. End this."]
+    },
+    {
+      "id": 7,
+      "speed": 120,
+      "title": "TARGET: MAINFRAME // PURE LOGIC",
+      "baseRewards": {
+        "xp": 500,
+        "dc": 250,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 7,
+      "boardHeight": 9,
+      "planningPhaseTimer": 20000,
+      "initiateCountdown": 5000,
+      "packetDelays": [0, 500, 500, 500, 500, 500],
+      "map": [
+        ["W", "W", "W", "W", "W", "0", "E"],
+        ["0", "0", "W", "0", "0", "0", "0"],
+        ["0", "0", "0", "W", "0", "0", "0"],
+        ["0", "W", "0", "W", "W", "W", "0"],
+        ["B", "W", "B", "0", "0", "0", "0"],
+        ["0", "W", "0", "0", "W", "W", "0"],
+        ["0", "0", "0", "0", "0", "0", "0"],
+        ["0", "W", "W", "0", "W", "W", "0"],
+        ["0", "0", "0", "SU", "0", "0", "0"]
+      ],
+      "inventory": {
+        "NW": 1,
+        "NE": 2,
+        "SE": 1,
+        "SW": 1
+      },
+      "cipherConfig": {
+        "pinLength": 0,
+        "allowDuplicates": [0, 0, 0, 0],
+        "autoDisableDeadNodes": [3, 50, 45, 5],
+        "autoLockMatches": [0, 0, 0, 0],
+        "scrambleKeypad": [0, 0, 0, 0],
+        "hiddenHistory": [0, 0, 0, 0],
+        "obfuscateFeedback": [0, 0, 0, 0]
+      },
+      "dialogues": ["We've hit a regional mainframe. The grid architecture here is massive (7x9).", "The system won't hold your hand anymore. Red nodes won't disable on your keypad, and Green nodes won't auto-lock.", "Navigate the firewall maze, grab the energy block, and get out. Pure deduction required."]
+    },
+    {
+      "id": 8,
+      "speed": 120,
+      "title": "TARGET: LOGIC GATE // THE FLIP-FLOP",
+      "baseRewards": {
+        "xp": 600,
+        "dc": 300,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 7,
+      "boardHeight": 5,
+      "planningPhaseTimer": 0,
+      "initiateCountdown": 0,
+      "packetDelays": [0, 0],
+      "map": [
+        ["W", "W", "W", "W", "W", "W", "W"],
+        ["W", "0", "0", "0", "G0_A", "E", "W"],
+        ["SR", "0", "SW_A", "0", "W", "W", "W"],
+        ["W", "0", "0", "0", "G1_A", "E", "W"],
+        ["W", "W", "W", "W", "W", "W", "W"]
+      ],
+      "inventory": {
+        "NW": 1,
+        "SE": 1,
+        "SW": 1,
+        "NE": 1
+      },
+      "cipherConfig": {
+        "pinLength": 2,
+        "pinLengthConfig": [3, 50, 45, 5],
+        "allowDuplicates": [3, 50, 45, 5],
+        "autoDisableDeadNodes": [0, 0, 0, 0],
+        "autoLockMatches": [0, 0, 0, 0],
+        "scrambleKeypad": [3, 50, 45, 5],
+        "hiddenHistory": [3, 50, 45, 5],
+        "obfuscateFeedback": [3, 50, 45, 5]
+      },
+      "cipherDialogues": ["This is it. The Core Server. They've pulled out all the stops.", "Obfuscated feedback. Scrambled keys. Hidden history.", "You'll have to rely on pure deduction and memory. If you fail here, we're done.", "🟢x1 | 🟡x1 ... that's all the terminal will give you. Good luck."],
+      "dialogues": ["New obstacle detected: Logic Gates.", "The node in the center is a Logic Switch. Routing a packet through it will flip its channel state.", "Gate [ 0 ] is open when the channel is OFF. Gate [ 1 ] is open when the channel is ON.", "You have two packets. Route the first to the top server, which will flip the switch and open the bottom gate for your second packet."]
+    },
+    {
+      "id": 9,
+      "speed": 120,
+      "title": "TARGET: DATA BUS // THE SHIFT REGISTER",
+      "baseRewards": {
+        "xp": 700,
+        "dc": 350,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 7,
+      "boardHeight": 7,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "packetDelays": [0, 2000, 2000],
+      "map": [
+        ["W", "W", "W", "W", "W", "W", "W"],
+        ["W", "0", "W", "0", "W", "E", "W"],
+        ["W", "0", "W", "0", "W", "0", "W"],
+        ["W", "0", "0", "0", "0", "0", "W"],
+        ["W", "0", "W", "0", "W", "0", "W"],
+        ["W", "B", "W", "0", "W", "0", "W"],
+        ["W", "SU", "W", "W", "W", "W", "W"]
+      ],
+      "inventory": {
+        "SR_R": 4
+      },
+      "dialogues": ["New hardware, pulled from a decommissioned switch: the Shift Register (⇉).", "It doesn't turn the payload. It displaces it one lane sideways — instantly. No travel time, no change of heading.", "This node's lanes are isolated. Every one of them dead-ends into the ceiling except the lane holding the server.", "Chain them across the bus row. Each register hands the payload to the next one inside the same clock cycle."]
+    },
+    {
+      "id": 10,
+      "speed": 120,
+      "title": "TARGET: SWITCH FABRIC // THE CROSSBAR",
+      "baseRewards": {
+        "xp": 800,
+        "dc": 400,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 7,
+      "boardHeight": 8,
+      "planningPhaseTimer": 20000,
+      "initiateCountdown": 5000,
+      "packetDelays": [0, 0],
+      "map": [
+        ["W", "W", "W", "E", "W", "W", "W"],
+        ["W", "0", "0", "0", "0", "0", "W"],
+        ["W", "B", "W", "W", "W", "0", "W"],
+        ["W", "G1_A", "W", "W", "W", "G0_A", "W"],
+        ["W", "0", "0", "0", "0", "0", "W"],
+        ["W", "0", "W", "SW_A", "W", "0", "W"],
+        ["W", "0", "0", "0", "0", "0", "W"],
+        ["W", "W", "W", "SU", "W", "W", "W"]
+      ],
+      "inventory": {
+        "SE": 2,
+        "NW": 2,
+        "SW": 1,
+        "NE": 1,
+        "SR_L": 2,
+        "SR_R": 2
+      },
+      "dialogues": ["Two payloads, one server, and a crossbar you don't control.", "Both gates run off a single channel — [0] and [1] are never live at the same time. The switch on the lower bus flips which.", "There's more than one way through. The straight run gets both payloads home. The long way, through the left gate, passes an energy cache.", "Registers, deflectors, or both — your call. Just don't strand the second payload behind a gate you closed yourself."]
+    },
+    {
+      "id": 11,
+      "speed": 120,
+      "title": "TARGET: SEQUENCER // THE BISTABLE",
+      "baseRewards": {
+        "xp": 900,
+        "dc": 450,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 5,
+      "boardHeight": 6,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "packetDelays": [0, 1500, 1500],
+      "map": [
+        ["W", "E", "W", "E", "W"],
+        ["W", "0", "W", "0", "W"],
+        ["W", "B", "W", "B", "W"],
+        ["W", "0", "0", "0", "W"],
+        ["W", "W", "0", "W", "W"],
+        ["W", "W", "SU", "W", "W"]
+      ],
+      "inventory": {
+        "FF": 1,
+        "NW": 1,
+        "NE": 1
+      },
+      "dialogues": ["Salvaged a bistable latch off a dead sequencer — the Flip-Flop (↻).", "Every payload that crosses it leaves turning the opposite way to the last one. Right, then left, then right again.", "One tile, two routes. You don't get a second turn at that junction, so both branches have to work.", "There's a cache on each branch. Alternate cleanly and you take them both."]
+    },
+    {
+      "id": 12,
+      "speed": 120,
+      "title": "TARGET: WAVELENGTH GATE // THE SPECTRUM LOCK",
+      "baseRewards": {
+        "xp": 1000,
+        "dc": 500,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 6,
+      "boardHeight": 12,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "packetDelays": [0],
+      "map": [
+        ["W", "W", "W", "W", "E", "W"],
+        ["W", "0", "0", "0", "ICE_B", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "PSE", "0", "0", "W"],
+        ["W", "0", "ICE_R", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "B", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "W", "SU", "W", "W", "W"]
+      ],
+      "inventory": {
+        "SPF_R": 1,
+        "SPF_B": 1,
+        "NW": 1
+      },
+      "dialogues": ["New firewall class on this node: Stateful ICE. It only passes a payload carrying its exact wavelength signature — anything else, uncoloured included, burns on contact.", "Salvaged a Color Spoofer off the breach kit. Route a payload through one and it inherits that colour instantly — watch for the callout confirming the shift. No charge limit, but a second spoofer overwrites the first, it doesn't stack.", "Spoof red before the first firewall. Clear it, and you're through into a second area.", "That routing plate at the junction is original hardware, not player-issued. Permanently welded in — can't pick it up, can't move it — but it turns exactly like the ones in your tray.", "Spoof blue in the second area. Clear the second firewall and you're straight into the server — no more turns after that one."]
+    },
+    {
+      "id": 13,
+      "speed": 120,
+      "title": "TARGET: DARKNET RELAY // GHOST PROTOCOL",
+      "baseRewards": {
+        "xp": 1100,
+        "dc": 550,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 6,
+      "boardHeight": 12,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "packetDelays": [0],
+      "map": [
+        ["W", "W", "E", "W", "W", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "PVPN", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "ICE_BASIC", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "W", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "W"],
+        ["W", "0", "B", "0", "0", "W"],
+        ["W", "W", "SU", "W", "W", "W"]
+      ],
+      "inventory": {
+        "VPN": 1
+      },
+      "dialogues": ["New hardware off the breach kit: a VPN Tunnel. Route a payload through it and it goes dark — cloaked, invisible to most of this node's defenses.", "A cloaked payload phases straight through physical barriers — walls, basic ICE bricks — like they aren't there. Watch the opacity drop when it goes dark.", "It's still cloaked on the other side. Cross another VPN to bring it back into the open — the server won't accept a payload it can't see.", "That second tunnel ahead is original hardware, permanently welded in — same toggle, can't be picked up or moved."]
+    },
+    {
+      "id": 14,
+      "speed": 120,
+      "title": "TARGET: CIPHER VAULT // ASYMMETRIC HANDSHAKE",
+      "baseRewards": {
+        "xp": 1200,
+        "dc": 600,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 3,
+      "boardHeight": 6,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "packetDelays": [0, 0],
+      "map": [
+        ["W", "W", "E"],
+        ["0", "0", "0"],
+        ["PNE", "AS_KEY_1", "0"],
+        ["W", "W", "B"],
+        ["W", "W", "0"],
+        ["W", "W", "SU"]
+      ],
+      "locks": [
+        {
+          "x": 2,
+          "y": 0,
+          "keyId": "1"
+        }
+      ],
+      "inventory": {
+        "SW": 1,
+        "SR_R": 2
+      },
+      "dialogues": ["New objective type: the server ahead is locked. It won't accept any payload — cracked cipher or not — until its paired key has been delivered. Send one in without a key and see for yourself.", "There's an Asymmetric Key off to the side. Deflect a payload into the detour to pick it up, then the shift registers carry it back — no extra turns needed, they're free.", "Deliver it once and the lock opens for good. Every payload after that walks straight in, key or not.", "If a keyed payload goes down before reaching the server, the key simply waits back at the pickup for the next one — nothing is lost for good."]
+    },
+    {
+      "id": 15,
+      "speed": 120,
+      "title": "TARGET: SUBSPACE TUNNEL // EVENT HORIZON",
+      "baseRewards": {
+        "xp": 1300,
+        "dc": 650,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 5,
+      "boardHeight": 10,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "packetDelays": [0, 0, 0],
+      "map": [
+        ["W", "W", "E", "W", "W"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "WH", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["W", "W", "W", "W", "W"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "WH", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "B", "0", "0"],
+        ["W", "W", "SU", "W", "W"]
+      ],
+      "wormholes": [
+        {
+          "pairId": "A",
+          "a": {
+            "x": 2,
+            "y": 6
+          },
+          "b": {
+            "x": 2,
+            "y": 2
+          }
+        }
+      ],
+      "inventory": {
+        "NE": 2,
+        "NW": 2,
+        "SE": 2,
+        "SW": 2,
+        "SR_R": 1,
+        "SR_L": 1,
+        "SR_U": 1,
+        "SR_D": 1
+      },
+      "dialogues": ["This one's a diagnostic relay, not a straight run — whoever built it left room to actually stress-test the tunnel instead of just walking through it once.", "Both ends sit in open floor now, not a single fixed lane. Approach from any side, redirect right after you land, even loop a payload back through a second time — the tunnel doesn't care, it just relocates whatever reaches its center, heading unchanged, every time.", "Three payloads, all yours to launch whenever you want. Send two in close together if you're curious what happens when both are mid-crossing at once."]
+    },
+    {
+      "id": 16,
+      "speed": 120,
+      "title": "TARGET: LOAD BALANCER // FORK IN THE WIRE",
+      "baseRewards": {
+        "xp": 1400,
+        "dc": 700,
+        "qc": 0
+      },
+      "timeLimit": 40,
+      "boardWidth": 5,
+      "boardHeight": 12,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["PSE", "0", "E", "0", "PSW"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "FORK_YR_N", "0", "PNW"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["PNE", "0", "FORK_YL_N", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "SU", "0", "0"]
+      ],
+      "packetDelays": [0],
+      "inventory": {
+        "NE": 1,
+        "NW": 1,
+        "SE": 1,
+        "SW": 1
+      },
+      "dialogues": ["New hazard, welded into this node: a Splitter. It's not something you deploy — it's ICE the server itself uses to mirror traffic it doesn't trust, and it duplicates whatever crosses it without asking.", "A Y-junction Splitter never touches the packet that hits it — that one keeps going exactly where it was headed. What comes out the side is a full second payload, same cipher state, same everything, just carrying a new heading.", "Every fragment counts now. The board remembers how many payloads are actually in flight, and it grows the instant a Splitter fires — losing one on the way down reads exactly like losing any other payload would.", "A few spare deflectors are yours if you'd rather reroute a fragment somewhere else entirely. The server doesn't care which path a payload takes, only that it arrives."]
+    },
+    {
+      "id": 17,
+      "speed": 120,
+      "title": "TARGET: MEMORY BUS // BUFFER QUEUE",
+      "baseRewards": {
+        "xp": 1600,
+        "dc": 800,
+        "qc": 0
+      },
+      "timeLimit": 45,
+      "boardWidth": 5,
+      "boardHeight": 10,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["PSE", "0", "E", "0", "PSW"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["AS_KEY_1", "0", "0", "0", "BUFFER"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["PNE", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "SU", "0", "0"]
+      ],
+      "locks": [
+        {
+          "keyId": "1",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "packetDelays": [0, 1500],
+      "inventory": {
+        "FF": 1,
+        "NW": 1,
+        "NE": 1,
+        "SE": 1,
+        "SW": 1
+      },
+      "dialogues": ["Detected an active Buffer node on this bus line. Unlike standard routing components, this is hardwired ICE — fixed in place, impossible to move or relocate.", "Any payload entering a Buffer is captured at the core and held indefinitely. If multiple payloads arrive, they stack inside an internal FIFO queue.", "The bus stays suspended until you manual-signal the release. Tap the Buffer cell to eject the oldest queued payload along its stored heading.", "Synchronize the flow carefully. Hold the second payload in the buffer until the security lock ahead has been fully decrypted."]
+    },
+    {
+      "id": 18,
+      "speed": 120,
+      "title": "TARGET: MEMORY BUS // SHIFT RELAY",
+      "baseRewards": {
+        "xp": 1800,
+        "dc": 900,
+        "qc": 0
+      },
+      "timeLimit": 45,
+      "boardWidth": 5,
+      "boardHeight": 8,
+      "planningPhaseTimer": 15000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["WH", "0", "0", "ICE_R", "E"],
+        ["0", "UT", "UT", "0", "UT"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "W", "0", "W"],
+        ["AS_KEY_1", "W", "0", "BUFFER", "0"],
+        ["0", "WH", "0", "0", "0"],
+        ["W", "W", "SU", "W", "W"]
+      ],
+      "wormholes": [
+        {
+          "pairId": "A",
+          "a": {
+            "x": 1,
+            "y": 6
+          },
+          "b": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ],
+      "locks": [
+        {
+          "keyId": "1",
+          "x": 4,
+          "y": 0
+        }
+      ],
+      "packetDelays": [0],
+      "inventory": {
+        "SR_L": 1,
+        "SR_R": 1,
+        "NW": 1,
+        "SW": 2,
+        "NE": 2,
+        "SPF_R": 1
+      },
+      "dialogues": ["Advanced bus topology detected. A static Buffer node is anchored in the mid-sector, with server clearance locked behind a Stateful Firewall.", "Column 4 dead-ends into reinforced ICE. Deploy a Shift Register to push the payload laterally into the Buffer holding cell.", "Once stabilized, tap the Buffer to release. Route down to collect the cryptographic key and transmit through Subspace Tunnel WH-A.", "The top chamber is guarded by a bounce array. Warp through the tunnel, spoof red wavelength in the corridor, and breach the locked server."]
+    },
+    {
+      "id": 19,
+      "speed": 120,
+      "title": "TARGET: DEAD SECTOR // THE MINEFIELD",
+      "baseRewards": {
+        "xp": 2000,
+        "dc": 1000,
+        "qc": 0
+      },
+      "timeLimit": 75,
+      "boardWidth": 5,
+      "boardHeight": 11,
+      "planningPhaseTimer": 20000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["0", "0", "0", "0", "E"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "EMP", "0", "EMP", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "EMP", "0", "EMP", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["SU", "0", "0", "0", "0"]
+      ],
+      "packetDelays": [0, 0, 0, 0, 0, 0],
+      "inventory": {
+        "VPN": 2,
+        "SE": 2,
+        "NW": 2,
+        "NE": 2,
+        "SW": 2
+      },
+      "dialogues": ["Dead sector. Two mine belts across the approach, four charges total, and every charge covers a full cell in each direction — diagonals included. Nothing walks between them.", "Good news: a charge only fires once. Whatever trips it is gone, but the belt goes dark behind it and everything after you walks straight over the crater.", "Do not bother plating a live cell. A node dropped in the blast radius protects nothing — and when the charge goes, the node is fused to the board for good.", "Six payloads, all on your signal. Spend two to open the belts and you deliver four. Spend none and you deliver six — if you can work out how to cross a live belt without tripping it.", "Last read from the scan: the triggers are detection coils, not pressure plates. A cloaked payload walks right over a live charge and leaves it armed. Just remember the server will not take a payload still running dark."]
+    },
+    {
+      "id": 20,
+      "speed": 120,
+      "title": "TARGET: PATROL GRID // THE SENTRY",
+      "baseRewards": {
+        "xp": 2200,
+        "dc": 1100,
+        "qc": 0
+      },
+      "timeLimit": 90,
+      "boardWidth": 5,
+      "boardHeight": 9,
+      "planningPhaseTimer": 20000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["0", "0", "0", "0", "E"],
+        ["W", "W", "W", "0", "0"],
+        ["0", "0", "0", "0", "W"],
+        ["0", "0", "0", "0", "0"],
+        ["W", "0", "W", "W", "W"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "SU", "0", "0", "0"]
+      ],
+      "sentries": [
+        {
+          "path": [
+            {
+              "x": 0,
+              "y": 3
+            },
+            {
+              "x": 4,
+              "y": 3
+            }
+          ]
+        }
+      ],
+      "packetDelays": [0, 0, 0, 0, 0, 0],
+      "inventory": {
+        "SE": 2,
+        "NW": 2,
+        "NE": 1,
+        "SW": 1
+      },
+      "dialogues": ["Patrol grid. There is a Sentry ICE sweeping the mid-corridor — autonomous, on its own clock, and it does not care how fast you throttle the line.", "It runs the full width and parks for six seconds at each end before turning. That pause is your window. Watch it once before you commit anything.", "It eats any payload it closes on. Worse, it shoulders your nodes off the board — anything you leave standing in the corridor comes straight back to your tray.", "There is no way around row three. Build the crossing, take the window, and be ready to rebuild it every time the sweep comes back."]
+    },
+    {
+      "id": 21,
+      "speed": 120,
+      "title": "TARGET: BLACK SITE // DEMOLITION",
+      "baseRewards": {
+        "xp": 2400,
+        "dc": 1200,
+        "qc": 0
+      },
+      "timeLimit": 100,
+      "boardWidth": 5,
+      "boardHeight": 9,
+      "planningPhaseTimer": 20000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["E", "0", "0", "0", "0"],
+        ["0", "W", "W", "W", "W"],
+        ["0", "W", "0", "0", "0"],
+        ["0", "W", "0", "W", "0"],
+        ["ICE_BASIC", "W", "0", "W", "0"],
+        ["0", "0", "0", "W", "0"],
+        ["W", "W", "ICE_BASIC", "W", "W"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "SU", "0", "0"]
+      ],
+      "sentries": [
+        {
+          "path": [
+            {
+              "x": 0,
+              "y": 7
+            },
+            {
+              "x": 4,
+              "y": 7
+            }
+          ]
+        }
+      ],
+      "packetDelays": [0, 0, 0, 0, 0, 0],
+      "inventory": {
+        "EMP_P": 1,
+        "EMP_X": 1,
+        "VPN": 2,
+        "SW": 2,
+        "NE": 2,
+        "NW": 1,
+        "SE": 1
+      },
+      "dialogues": ["Black site. Two ICE barriers, no way around either, and a Sentry running the approach corridor.", "You are carrying demolition charges now. Drop one and route a payload straight into it — the charge takes the payload with it, so every barrier you blow costs you a delivery.", "Blast shapes differ. The plus charge hits the four cells around it; the cross charge hits the four corners. Pick the one that reaches the ICE without burying the cell you still need to turn on.", "Anything caught in a blast is fused where it stands, and ICE just burns out grey — it stops blocking, it does not disappear.", "The Sentry will knock your charge off the board if it reaches it first. Then again, it is standing well inside the blast radius. Your call which way that race goes.", "One last thing: both barriers are basic ICE. A dark payload walks through those untouched — and a Sentry cannot see it either. Blow your way in, or slip in clean and lose nothing."]
+    },
+    {
+      "id": 22,
+      "speed": 120,
+      "title": "TARGET: DEAD ZONE // THE SUPPRESSOR",
+      "baseRewards": {
+        "xp": 2600,
+        "dc": 1300,
+        "qc": 0
+      },
+      "timeLimit": 90,
+      "boardWidth": 7,
+      "boardHeight": 9,
+      "planningPhaseTimer": 25000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["0", "0", "E", "0", "0", "0", "0"],
+        ["W", "W", "0", "W", "W", "W", "W"],
+        ["W", "W", "0", "W", "W", "W", "W"],
+        ["W", "W", "0", "W", "W", "EMPF", "W"],
+        ["W", "W", "0", "W", "W", "0", "W"],
+        ["W", "W", "0", "W", "W", "0", "W"],
+        ["W", "W", "0", "W", "W", "0", "W"],
+        ["0", "0", "0", "0", "0", "0", "0"],
+        ["0", "0", "SU", "0", "0", "0", "0"]
+      ],
+      "empFields": [
+        {
+          "id": "suppressor",
+          "controller": {
+            "x": 5,
+            "y": 3
+          },
+          "cells": [
+            {
+              "x": 2,
+              "y": 3
+            },
+            {
+              "x": 2,
+              "y": 4
+            },
+            {
+              "x": 2,
+              "y": 5
+            },
+            {
+              "x": 2,
+              "y": 6
+            }
+          ]
+        }
+      ],
+      "packetDelays": [0, 0, 0, 0, 0, 0],
+      "inventory": {
+        "SPF_R": 4,
+        "EMP_P": 1,
+        "SE": 2,
+        "NW": 2,
+        "NE": 1,
+        "SW": 1
+      },
+      "dialogues": ["Suppression field across the only riser. Four cells of it, and it is live the whole run — anything crossing bare gets wiped.", "It can be smothered, though. Drop a node on a suppressed cell and the cell is safe to cross — the node absorbs it. Do it now, while the field is still cold: once transmission starts, nothing inside the footprint can be lifted again.", "Or take the head off. The emitter is not in the field — it never is — it is parked in that dead-end shaft on the far side. Reach it, put a charge under it, and the whole zone drops at once.", "Do not stage a charge inside the field. Three seconds in a live zone and it cooks by itself, and one plus-blast does not span four cells — you would lose the charge and clear nothing."]
+    },
+    {
+      "id": 23,
+      "speed": 120,
+      "title": "TARGET: THE GAUNTLET // EVERYTHING AT ONCE",
+      "baseRewards": {
+        "xp": 2800,
+        "dc": 1400,
+        "qc": 0
+      },
+      "timeLimit": 120,
+      "boardWidth": 7,
+      "boardHeight": 11,
+      "planningPhaseTimer": 30000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["0", "0", "0", "E", "0", "0", "0"],
+        ["W", "W", "0", "0", "0", "W", "W"],
+        ["0", "0", "0", "W", "0", "0", "EMPF"],
+        ["0", "W", "0", "W", "0", "W", "0"],
+        ["0", "0", "0", "0", "0", "0", "0"],
+        ["0", "W", "0", "W", "0", "W", "0"],
+        ["0", "0", "0", "0", "0", "0", "0"],
+        ["W", "W", "0", "0", "0", "W", "W"],
+        ["0", "0", "0", "EMP", "0", "0", "0"],
+        ["0", "0", "0", "0", "0", "0", "0"],
+        ["0", "0", "0", "SU", "0", "0", "0"]
+      ],
+      "empFields": [
+        {
+          "id": "gauntlet",
+          "controller": {
+            "x": 6,
+            "y": 2
+          },
+          "cells": [
+            {
+              "x": 2,
+              "y": 6
+            },
+            {
+              "x": 3,
+              "y": 6
+            },
+            {
+              "x": 4,
+              "y": 6
+            },
+            {
+              "x": 2,
+              "y": 5
+            },
+            {
+              "x": 4,
+              "y": 5
+            }
+          ]
+        }
+      ],
+      "sentries": [
+        {
+          "path": [
+            {
+              "x": 0,
+              "y": 6
+            },
+            {
+              "x": 6,
+              "y": 6
+            }
+          ]
+        }
+      ],
+      "packetDelays": [0, 0, 0, 0, 0, 0],
+      "inventory": {
+        "VPN": 2,
+        "SPF_R": 5,
+        "EMP_P": 1,
+        "EMP_X": 1,
+        "NE": 2,
+        "NW": 2,
+        "SE": 2,
+        "SW": 2
+      },
+      "dialogues": ["Everything they had left, stacked on one approach. Mine belt at the bottom, suppression field in the middle, and a Sentry running its line straight through the field.", "The mine belt seals row seven and only a detonation opens it, so the first payload is already spoken for. Feed it and move on.", "The field is an arch — five cells, and no single charge spans it. Smother it with nodes during planning, or go hunting: the emitter is parked in the east pocket, off the patrol line.", "Watch the Sentry in the field. It walks through its own side's suppression without a scratch, and it will not shoulder a node the field has clamped down — locked is locked, for it as much as for you.", "One warning. A node the field is holding is only held while the field lives. Catch that same node in a blast and it is welded for good — kill the emitter afterwards and everything else comes free, but that one stays where it is.", "Or run the whole gauntlet dark. Cloak crosses a live field and a Sentry cannot see you at all. Costs you nothing but the two tunnels — and it is the only way through here that spends no payload but the mine's."]
+    },
+    {
+      "id": 24,
+      "speed": 120,
+      "title": "TARGET: CHECKPOINT // DEAD MAN'S SWITCH",
+      "baseRewards": {
+        "xp": 3000,
+        "dc": 1500,
+        "qc": 0
+      },
+      "timeLimit": 120,
+      "boardWidth": 5,
+      "boardHeight": 9,
+      "planningPhaseTimer": 20000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["0", "0", "E", "0", "0"],
+        ["W", "W", "0", "W", "W"],
+        ["W", "W", "0", "W", "W"],
+        ["W", "W", "TGATE", "W", "W"],
+        ["W", "W", "0", "W", "W"],
+        ["W", "W", "0", "W", "W"],
+        ["W", "W", "0", "W", "W"],
+        ["W", "W", "TGATE", "W", "W"],
+        ["0", "0", "SU", "0", "0"]
+      ],
+      "timedGates": [
+        {
+          "x": 2,
+          "y": 7,
+          "closedMs": 2000,
+          "openMs": 3000,
+          "offsetMs": 0
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "closedMs": 2000,
+          "openMs": 3000,
+          "offsetMs": 3560
+        }
+      ],
+      "packetDelays": [0, 0, 0, 0],
+      "inventory": {},
+      "dialogues": ["Two shutters on the only line in. They run on a fixed beat — no sensor, no trigger, nothing to spoof. They are just doors, and doors do not care that you are invisible.", "Watch the near one cycle before you fire anything. Red is shut, and a payload that reaches a shut door is gone. Amber means it is coming down — anything entering then is already too late.", "Fire when the near shutter goes green. It stays up three seconds and drops for two — you have better than two seconds of green to catch it in.", "Now look at the far one. Same beat, but it trails the near one by the length of the climb between them. Watch it and it looks like a wall. It is not: a payload that caught the near door on green arrives at the far one while it is still open. Get the rhythm and the whole line is one move.", "And leave the throttle where you like. The doors keep their own time regardless — it only moves your payloads."]
+    },
+    {
+      "id": 25,
+      "speed": 120,
+      "title": "TARGET: KEY ESCROW // DEAD DROP",
+      "baseRewards": {
+        "xp": 3200,
+        "dc": 1600,
+        "qc": 0
+      },
+      "timeLimit": 140,
+      "boardWidth": 7,
+      "boardHeight": 9,
+      "planningPhaseTimer": 25000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["0", "0", "0", "E", "0", "0", "0"],
+        ["W", "W", "W", "0", "W", "W", "W"],
+        ["W", "W", "W", "0", "W", "W", "W"],
+        ["W", "W", "W", "EMP", "W", "W", "W"],
+        ["W", "W", "W", "0", "W", "W", "W"],
+        ["0", "0", "0", "0", "0", "0", "0"],
+        ["0", "W", "W", "W", "W", "W", "0"],
+        ["SM_KEY_1", "W", "W", "W", "W", "W", "0"],
+        ["0", "0", "0", "SL", "0", "0", "0"]
+      ],
+      "locks": [
+        {
+          "x": 3,
+          "y": 0,
+          "keyId": "1",
+          "keyType": "SM"
+        }
+      ],
+      "packetDelays": [0, 0, 0, 0, 0, 0],
+      "inventory": {
+        "NE": 2,
+        "NW": 2,
+        "SE": 2,
+        "SW": 2,
+        "VPN": 2
+      },
+      "dialogues": ["Server's in escrow. It will not open for anything but the symmetric key, and that key is sitting in the west shaft.", "Understand what makes this one different. An asymmetric key is bookkeeping — lose the carrier and the key is simply back on its pedestal, waiting. A symmetric key is a physical object. Lose the carrier and it falls wherever the carrier was standing a moment earlier, and it stays there.", "There is a mine in the only climb. Feed it a payload and it is spent for good — and the key it was carrying lands one cell short of the blast, right in the middle of the route you just opened. Every payload after that walks past and picks it up. You only make the west detour once.", "Or run it dark. Cloak crosses the ring without dying and without arming it, so the key never leaves the carrier and the mine stays live behind you. Costs you nothing but the two tunnels — and it is the only way through here that spends no payload at all."]
+    },
+    {
+      "id": 26,
+      "speed": 120,
+      "title": "TARGET: RELAY PICKET // IT TAKES THE TUNNEL",
+      "baseRewards": {
+        "xp": 3400,
+        "dc": 1700,
+        "qc": 0
+      },
+      "timeLimit": 150,
+      "boardWidth": 7,
+      "boardHeight": 9,
+      "planningPhaseTimer": 25000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["W", "W", "W", "W", "W", "E", "W"],
+        ["W", "0", "0", "0", "0", "0", "W"],
+        ["W", "0", "0", "0", "0", "0", "W"],
+        ["W", "0", "0", "WH", "0", "0", "W"],
+        ["W", "W", "W", "W", "W", "W", "W"],
+        ["W", "0", "0", "0", "0", "0", "W"],
+        ["W", "0", "0", "WH", "0", "0", "W"],
+        ["W", "0", "W", "0", "W", "W", "W"],
+        ["W", "SU", "W", "0", "W", "W", "W"]
+      ],
+      "wormholes": [
+        {
+          "pairId": "A",
+          "a": {
+            "x": 3,
+            "y": 6
+          },
+          "b": {
+            "x": 3,
+            "y": 3
+          },
+          "entities": true
+        }
+      ],
+      "sentries": [
+        {
+          "path": [
+            {
+              "x": 3,
+              "y": 8
+            },
+            {
+              "x": 3,
+              "y": 5
+            },
+            {
+              "x": 5,
+              "y": 5
+            }
+          ]
+        }
+      ],
+      "packetDelays": [0, 0, 0, 0],
+      "inventory": {
+        "SE": 2,
+        "NW": 2,
+        "NE": 1,
+        "SW": 1
+      },
+      "dialogues": ["Two decks, one tunnel. The row between them is solid — there is no walking route across, for you or for anything else down there.", "There is a picket on the lower deck. Before you commit a single payload, understand what it does at the tunnel mouth: it does not turn around. It goes through.", "It comes out upstairs still climbing, then sweeps east along the ceiling of your run — and it parks on the cell at the top of your climb for six seconds at a time. The deck you were counting on is where it spends most of the run.", "You are firing all four by hand, so the timing is yours. The tunnel is only hot for a breath in each direction. The climb is the part that shuts."]
+    },
+    {
+      "id": 27,
+      "speed": 120,
+      "title": "TARGET: THE VAULT // KILL THE POWER",
+      "baseRewards": {
+        "xp": 4200,
+        "dc": 2100,
+        "qc": 0
+      },
+      "timeLimit": 180,
+      "boardWidth": 9,
+      "boardHeight": 12,
+      "planningPhaseTimer": 30000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["0", "0", "0", "0", "0", "0", "0", "0", "E"],
+        ["0", "W", "W", "W", "W", "W", "W", "0", "0"],
+        ["BUFFER", "W", "W", "W", "WH", "W", "W", "0", "W"],
+        ["OTS_9", "W", "W", "W", "ICE_B", "W", "W", "AS_KEY_2", "W"],
+        ["0", "W", "W", "W", "0", "0", "W", "WH", "W"],
+        ["0", "W", "0", "0", "0", "SM_KEY_1", "W", "W", "W"],
+        ["0", "W", "W", "W", "0", "0", "W", "W", "W"],
+        ["0", "W", "W", "W", "0", "W", "W", "W", "W"],
+        ["BUFFER", "W", "W", "W", "ICE_BASIC", "W", "W", "W", "W"],
+        ["0", "W", "W", "W", "0", "W", "W", "W", "W"],
+        ["0", "0", "0", "0", "0", "W", "W", "W", "W"],
+        ["W", "W", "W", "W", "SU", "W", "W", "W", "EMPF"]
+      ],
+      "empFields": [
+        {
+          "id": "vault",
+          "controller": {
+            "x": 8,
+            "y": 11
+          },
+          "cells": [
+            {
+              "x": 2,
+              "y": 5
+            },
+            {
+              "x": 3,
+              "y": 5
+            },
+            {
+              "x": 4,
+              "y": 5
+            },
+            {
+              "x": 5,
+              "y": 5
+            }
+          ],
+          "channelId": "9"
+        }
+      ],
+      "sentries": [
+        {
+          "path": [
+            {
+              "x": 4,
+              "y": 3
+            },
+            {
+              "x": 4,
+              "y": 4
+            }
+          ]
+        },
+        {
+          "path": [
+            {
+              "x": 4,
+              "y": 7
+            },
+            {
+              "x": 4,
+              "y": 6
+            }
+          ]
+        }
+      ],
+      "wormholes": [
+        {
+          "pairId": "A",
+          "a": {
+            "x": 4,
+            "y": 2
+          },
+          "b": {
+            "x": 7,
+            "y": 4
+          }
+        }
+      ],
+      "locks": [
+        {
+          "x": 4,
+          "y": 3,
+          "keyId": "1",
+          "keyType": "SM"
+        },
+        {
+          "x": 8,
+          "y": 0,
+          "keyId": "2",
+          "keyType": "AS"
+        }
+      ],
+      "packetDelays": [0, 0],
+      "inventory": {
+        "EMP_X": 1,
+        "VPN": 2,
+        "SPF_B": 1,
+        "SR_R": 1,
+        "SR_L": 1,
+        "SW": 1,
+        "NE": 1,
+        "SE": 1
+      },
+      "dialogues": ["Vault node. The riser is the only way up and there are two pickets standing on it, and the whole midsection is a live suppression field. You have one charge and two payloads. Nothing about this is generous.", "Stage the charge INSIDE the field, on the riser's shoulder — a charge left in a live zone cooks off by itself after three seconds. That is not a warning here, it is the plan: the blast throws to the corners, and the corners are where both pickets will be standing.", "The kill switch is up the west shaft, and the instant you throw it the field goes cold — which also snuffs the fuse. Throw it early and your charge never goes off, and those pickets never leave. Order matters more than speed here.", "So the shaft has two hold nodes. Send the first payload up and let it settle in the lower one. Sit there. Watch the charge cook and both pickets drop. Then tap it on.", "It carries on through the switch — one-shot, starts live, goes down once, never comes back — and settles into the upper hold node. Leave it. The server is still locked, and a payload that reaches a locked server is gone.", "Now the riser. There is basic ICE in it — go dark to cross, and come back out of the dark before the key, because a cloaked payload cannot pick anything up. Uncloak inside a live field and it kills you, which is precisely why the field has to be off first.", "Key out of the vault, paint it blue, and the lock on that firewall opens for a symmetric key and nothing else. Through the warp, take the second key, and shift east onto the server column — you have no deflector to spare for that corner, so use the register.", "Server open? Then wake the upper hold node. Your first payload still has a run to finish, straight up and along the top."]
+    },
+    {
+      "id": 28,
+      "speed": 120,
+      "title": "TARGET: PRISM NODE // FULL SPECTRUM",
+      "baseRewards": {
+        "xp": 4400,
+        "dc": 2200,
+        "qc": 0
+      },
+      "timeLimit": 90,
+      "boardWidth": 9,
+      "boardHeight": 12,
+      "planningPhaseTimer": 30000,
+      "initiateCountdown": 4000,
+      "map": [
+        ["W", "W", "W", "W", "E", "W", "W", "W", "W"],
+        ["W", "W", "W", "W", "ICE_G", "W", "W", "W", "W"],
+        ["W", "W", "W", "W", "0", "W", "W", "W", "W"],
+        ["W", "W", "W", "W", "0", "W", "W", "W", "W"],
+        ["W", "0", "0", "0", "0", "0", "0", "0", "W"],
+        ["W", "0", "W", "W", "W", "W", "W", "0", "W"],
+        ["W", "ICE_B", "W", "W", "W", "W", "W", "ICE_R", "W"],
+        ["W", "0", "0", "0", "0", "0", "0", "0", "W"],
+        ["W", "W", "W", "W", "ICE_Y", "W", "W", "W", "W"],
+        ["W", "W", "W", "W", "B", "W", "W", "W", "W"],
+        ["W", "W", "W", "W", "0", "W", "W", "W", "W"],
+        ["W", "W", "W", "W", "SU", "W", "W", "W", "W"]
+      ],
+      "packetDelays": [0, 0],
+      "inventory": {
+        "SPF_R": 1,
+        "SPF_B": 1,
+        "SPF_G": 1,
+        "SPF_Y": 1,
+        "FF": 2,
+        "NE": 1,
+        "NW": 1,
+        "SE": 1,
+        "SW": 1
+      },
+      "dialogues": ["Prism node. Four stateful firewalls, one of every wavelength — red, blue, green, and a new one: yellow. Each burns anything not wearing its exact colour.", "You have one spoofer per colour and two payloads. Count the firewalls each payload has to cross, then count your spoofers. Some of them will have to serve both.", "The junction splits the stream with a Flip-Flop. It remembers: the first payload through goes one way, the next goes the other. Know which way the first one turns before you paint anything.", "Your deflectors only accept traffic from one side. Two branches coming back together from opposite directions need something that turns each of them a different way — and turns them both north.", "Last firewall sits right under the server. Whatever colour your payloads are when they meet again, it had better not be the one they left the trunk with."]
+    }
+  ]
+}
