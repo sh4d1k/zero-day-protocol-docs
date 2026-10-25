@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Start Node // Rapid Injection // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <div class="guide-badge">PAGE 2 // RAPID INJECTION</div>
+    <h1 class="guide-title">Start Node</h1>
+    <div class="guide-subtitle">TAP TO SKIP DELAY // RAPID INJECTION</div>
+  </header>
+
+  <!-- 5x5 Interactive Board Animation -->
+  <div class="media-container board-5x5" id="boardContainer">
+    <!-- 5x5 Board Grid -->
+    <div class="board-grid-5x5" id="boardGrid">
+      <!-- 25 cells populated dynamically by JS for pixel-perfect alignment -->
+    </div>
+
+    <!-- Hand Pointer with Index Finger -->
+    <div class="hand-pointer" id="handPointer">
+      <img src="../../assets/icons/hand-tap.svg" alt="Tap Pointer" />
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">⚡</span>
+      <div class="simple-title">
+        Tap the <span class="highlight-green">Start Node</span> repeatedly to launch queued packets immediately.
+      </div>
+    </div>
+    <div class="simple-sub">
+      You don't need to wait for automatic launch intervals. Tap to skip the countdown and inject payloads on demand.
+    </div>
+  </div>
+
+  <!-- Operational Status / Field Note -->
+  <div class="content-card">
+    <div class="section-label">⚡ TACTICAL ADVANTAGE</div>
+    <p class="guide-text">
+      Manual injection gives you full stream control. Rapid-tap to burst-fire data packets into open lanes before ICE countermeasures adapt.
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script -->
+  <script>
+    (function () {
+      const COLS = 5;
+      const ROWS = 5;
+
+      // Location: Middle of the bottom row (Column 2, Row 4)
+      const NODE_COL = 2;
+      const NODE_ROW = 4;
+
+      const boardGrid = document.getElementById('boardGrid');
+      const boardContainer = document.getElementById('boardContainer');
+      const handPointer = document.getElementById('handPointer');
+
+      let startCellElement = null;
+      const cellElements = [];
+      let timeouts = [];
+      let animFrames = [];
+
+      // 1. Build the 5x5 Grid Cells
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'board-cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          // Target starter node cell (Center of bottom row)
+          if (r === NODE_ROW && c === NODE_COL) {
+            cell.classList.add('start-node-cell');
+            cell.innerHTML = `
+              <img src="../../assets/icons/starter-node.svg" class="node-icon-img" alt="Starter Node" />
+            `;
+            startCellElement = cell;
+          }
+
+          boardGrid.appendChild(cell);
+          cellElements.push(cell);
+        }
+      }
+
+      function addTimeout(fn, delay) {
+        const id = setTimeout(fn, delay);
+        timeouts.push(id);
+        return id;
+      }
+
+      function clearAllTimers() {
+        timeouts.forEach(clearTimeout);
+        timeouts = [];
+        animFrames.forEach(cancelAnimationFrame);
+        animFrames = [];
+      }
+
+      function clearTransientElements() {
+        const dynamicItems = boardContainer.querySelectorAll('.packet-object, .packet-trail, .tap-ripple');
+        dynamicItems.forEach(el => el.remove());
+      }
+
+      // Helper to calculate element center relative to board container
+      function getCellCenter(cell) {
+        const containerRect = boardContainer.getBoundingClientRect();
+        const cellRect = cell.getBoundingClientRect();
+        return {
+          x: cellRect.left - containerRect.left + cellRect.width / 2,
+          y: cellRect.top - containerRect.top + cellRect.height / 2,
+          width: cellRect.width,
+          height: cellRect.height
+        };
+      }
+
+      // Highlight a cell when traversed
+      function setCellTraversed(row, col, active) {
+        const target = cellElements.find(
+          el => parseInt(el.dataset.row, 10) === row && parseInt(el.dataset.col, 10) === col
+        );
+        if (target && !target.classList.contains('start-node-cell')) {
+          if (active) target.classList.add('cell-traversed');
+          else target.classList.remove('cell-traversed');
+        }
+      }
+
+      function clearTraversedCells() {
+        cellElements.forEach(el => el.classList.remove('cell-traversed'));
+      }
+
+      // Visual feedback on tap: ripple + node flash
+      function triggerNodeTap() {
+        if (!startCellElement) return;
+
+        // Clean reflow for node flash
+        startCellElement.classList.remove('node-tapped');
+        void startCellElement.offsetWidth;
+        startCellElement.classList.add('node-tapped');
+
+        // Dynamic ripple so rapid taps don't cancel previous ripples
+        const ripple = document.createElement('div');
+        ripple.className = 'tap-ripple active';
+        startCellElement.appendChild(ripple);
+        setTimeout(() => {
+          if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+        }, 600);
+      }
+
+      // Launch an independent packet heading upward
+      function launchPacket(cellPos) {
+        const p = document.createElement('div');
+        p.className = 'packet-object';
+        const t = document.createElement('div');
+        t.className = 'packet-trail';
+        boardContainer.appendChild(t);
+        boardContainer.appendChild(p);
+
+        const startY = cellPos.y;
+        const exitY = -25; // Shoots beyond top border
+        const launchDuration = 1300; // ms
+        const startTime = performance.now();
+
+        p.style.left = `${cellPos.x}px`;
+        p.style.top = `${startY}px`;
+        p.style.opacity = '1';
+
+        t.style.left = `${cellPos.x}px`;
+        t.style.top = `${startY}px`;
+        t.style.opacity = '0.9';
+
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / launchDuration);
+          const easeProgress = Math.pow(progress, 1.25);
+
+          const currentY = startY + (exitY - startY) * easeProgress;
+          p.style.top = `${currentY}px`;
+          t.style.top = `${currentY + 2}px`;
+
+          const boardRect = boardContainer.getBoundingClientRect();
+          const relY = currentY / boardRect.height;
+          const currentRow = Math.floor(relY * ROWS);
+
+          for (let r = NODE_ROW - 1; r >= currentRow && r >= 0; r--) {
+            setCellTraversed(r, NODE_COL, true);
+          }
+
+          if (progress < 1) {
+            const frameId = requestAnimationFrame(step);
+            animFrames.push(frameId);
+          } else {
+            p.remove();
+            t.remove();
+          }
+        }
+
+        const initialFrame = requestAnimationFrame(step);
+        animFrames.push(initialFrame);
+      }
+
+      // 2. Animation Timeline Sequence:
+      // Cadence: tap----tap-tap-tap--tap then loop
+      // Tap 1 at 800ms
+      // Pause ~1.38s
+      // Tap 2 at 2180ms
+      // Tap 3 at 2480ms (300ms gap)
+      // Tap 4 at 2780ms (300ms gap)
+      // Pause ~0.71s
+      // Tap 5 at 3490ms
+      // Retract hand at 3700ms
+      // Packets exit, settle, loop reset at 5600ms
+      function runAnimationCycle() {
+        if (!startCellElement) return;
+
+        clearAllTimers();
+        clearTransientElements();
+        clearTraversedCells();
+
+        const cellPos = getCellCenter(startCellElement);
+
+        // Initial Hand State
+        handPointer.style.opacity = '0';
+        handPointer.style.transition = 'none';
+
+        // Position hand fingertip (~22px x, 6px y of 50px hand SVG) on node center
+        const targetHandX = cellPos.x - 22;
+        const targetHandY = cellPos.y - 6;
+
+        // Start hand from bottom-right outside node
+        handPointer.style.transform = `translate(${targetHandX + 50}px, ${targetHandY + 50}px) scale(1)`;
+
+        // Step 1: Hand enters and hovers over node (0.2s -> 0.7s)
+        addTimeout(() => {
+          handPointer.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease';
+          handPointer.style.opacity = '1';
+          handPointer.style.transform = `translate(${targetHandX}px, ${targetHandY}px) scale(1)`;
+        }, 200);
+
+        // Helper for tap action
+        function scheduleTap(tapTime, liftTime, isFinalBurstTap = false) {
+          // Tap down
+          addTimeout(() => {
+            handPointer.style.transition = 'transform 0.12s cubic-bezier(0.3, 0, 0.8, 0.15)';
+            handPointer.style.transform = `translate(${targetHandX}px, ${targetHandY}px) scale(0.85)`;
+
+            triggerNodeTap();
+            launchPacket(cellPos);
+          }, tapTime);
+
+          // Lift up
+          addTimeout(() => {
+            handPointer.style.transition = 'transform 0.14s ease-out';
+            handPointer.style.transform = `translate(${targetHandX}px, ${targetHandY}px) scale(1)`;
+          }, liftTime);
+        }
+
+        // --- TAP 1 (Initial release) ---
+        scheduleTap(800, 980);
+
+        // --- PAUSE ---- (~1.2s - 1.38s while Packet 1 ascends) ---
+
+        // --- TAP 2 (Burst Start) ---
+        scheduleTap(2180, 2330);
+
+        // --- TAP 3 (Rapid follow-up) ---
+        scheduleTap(2480, 2630);
+
+        // --- TAP 4 (Rapid follow-up) ---
+        scheduleTap(2780, 2940);
+
+        // --- SHORT PAUSE -- (~0.55s) ---
+
+        // --- TAP 5 (Final burst pulse) ---
+        scheduleTap(3490, 3660, true);
+
+        // Step 5: Hand retracts and fades out
+        addTimeout(() => {
+          handPointer.style.transition = 'transform 0.5s ease-out, opacity 0.4s ease-out';
+          handPointer.style.transform = `translate(${targetHandX + 45}px, ${targetHandY + 45}px) scale(1)`;
+          handPointer.style.opacity = '0';
+          if (startCellElement) startCellElement.classList.remove('node-tapped');
+        }, 3720);
+
+        // Step 6: Settle and loop reset (5.6s total cycle)
+        addTimeout(() => {
+          clearTraversedCells();
+          runAnimationCycle();
+        }, 5600);
+      }
+
+      // Start loop when page loads
+      window.addEventListener('load', () => {
+        setTimeout(runAnimationCycle, 150);
+      });
+
+      // Recalculate on window resize / orientation change
+      window.addEventListener('resize', () => {
+        clearAllTimers();
+        clearTransientElements();
+        clearTraversedCells();
+        runAnimationCycle();
+      });
+    })();
+  </script>
+</body>
+</html>
