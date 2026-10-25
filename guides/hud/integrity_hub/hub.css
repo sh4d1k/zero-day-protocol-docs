@@ -1,0 +1,168 @@
+/* Integrity hub guide — a mock of the in-game hub (TransmissionTimelineBar.tsx colours). */
+.media-container.hub-demo {
+  aspect-ratio: auto;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 14px 14px;
+  background: #02050b;
+  box-sizing: border-box;
+}
+
+.hub-line {
+  font-family: var(--font-mono);
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  padding: 3px 0;
+  border-radius: 4px;
+}
+.hub-line.baseline { color: #93c5fd; background: rgba(59, 130, 246, 0.25); }
+.hub-line.bonus { color: #4ade80; }
+.hub-line.status { color: #60a5fa; font-size: 12px; min-height: 18px; }
+
+.hub-timeline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-top: 1px solid #1a1a24;
+  padding-top: 10px;
+  margin-top: 2px;
+}
+
+.hub-seg {
+  position: relative;
+  flex: 1;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid rgba(26, 58, 90, 1);
+  background: rgba(26, 58, 90, 0.15);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-seg .fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  opacity: 0.85;
+}
+.hub-seg .mark {
+  position: relative;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+}
+.hub-seg.plan { border-color: rgba(0, 255, 102, 0.35); }
+.hub-seg.plan .fill { background: #00ff66; opacity: 0.4; }
+.hub-seg.plan .mark { color: #00ff66; }
+.hub-seg.auto { border-color: rgba(0, 240, 255, 0.35); }
+.hub-seg.auto .fill { background: #00f0ff; }
+.hub-seg.auto .mark { color: #00f0ff; }
+.hub-seg.manual { border-color: rgba(255, 204, 0, 0.35); }
+.hub-seg.manual .fill { background: #ffcc00; }
+.hub-seg.manual .mark { color: #ffcc00; }
+.hub-seg.active .mark { color: #fff; opacity: 1; }
+.hub-seg.done .mark { color: #0a0f18; opacity: 1; }
+.hub-seg.plan.done .mark { color: #00ff66; }
+.hub-seg.spot { box-shadow: 0 0 0 2px #fff, 0 0 14px rgba(255, 255, 255, 0.6); }
+
+.hub-bulb {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #0d1b2a;
+  border: 1px solid #1a3a5a;
+  transition: background 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.hub-bulb.lit {
+  background: #e6fdff;
+  border-color: #00f3ff;
+  box-shadow: 0 0 8px #00f3ff, 0 0 2px #fff;
+}
+.hub-bulb.spot { outline: 2px solid #fff; outline-offset: 3px; }
+
+.hub-caption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  color: var(--text-muted);
+  min-height: 14px;
+  margin-top: 8px;
+}
+
+/* The start node, for the manual-launch page. */
+.hub-node-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  position: relative;
+}
+.hub-node {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 243, 255, 0.35);
+  background: rgba(0, 243, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.hub-node img { width: 34px; height: 34px; }
+.hub-node.ready { box-shadow: 0 0 14px rgba(255, 204, 0, 0.55); border-color: #ffcc00; }
+.hub-node.tapped { transform: scale(0.9); }
+.hub-hand {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  left: 50%;
+  top: 22px;
+  opacity: 0;
+  transform: translate(10px, 30px);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s;
+  pointer-events: none;
+}
+.hub-hand img { width: 100%; height: 100%; }
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-white);
+  line-height: 1.35;
+}
+.legend-chip {
+  flex-shrink: 0;
+  min-width: 34px;
+  height: 18px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.legend-chip.auto { color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.5); }
+.legend-chip.manual { color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.5); }
+.legend-chip.bulb { min-width: 34px; border: none; }
+
+.highlight-cyan { color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+.highlight-amber { color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.45); }

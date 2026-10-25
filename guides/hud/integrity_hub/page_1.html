@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Integrity Hub // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../../tiles/styles.css">
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <header class="guide-header">
+    <h1 class="guide-title">Integrity Hub</h1>
+    <div class="guide-subtitle">ONE BOX PER PACKET</div>
+  </header>
+
+  <!-- Mock of the hub at the top of the router screen -->
+  <div class="media-container hub-demo" id="hub">
+    <div class="hub-line baseline">1000/1000</div>
+    <div class="hub-line bonus">0/800</div>
+    <div class="hub-line status">AWAITING UPLINK</div>
+    <div class="hub-timeline"></div>
+    <div class="hub-caption"></div>
+  </div>
+
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        Count the boxes: that's <span class="highlight-cyan">how many packets</span> this node sends.
+      </div>
+    </div>
+    <div class="simple-sub">
+      The first box is your planning time. Every box after it is one packet, in launch order.
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="section-label">⚡ THE BULBS</div>
+    <div class="legend">
+      <div class="legend-row"><span class="legend-chip bulb"><span class="hub-bulb lit"></span></span>Lit: the packet is still waiting inside the start node.</div>
+      <div class="legend-row"><span class="legend-chip bulb"><span class="hub-bulb"></span></span>Off: the packet has launched.</div>
+    </div>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <script src="hub.js"></script>
+  <script>
+    HubDemo.run(document.getElementById('hub'), {
+      segments: ['plan', 'auto', 'auto', 'manual'],
+      script: async ({ segs, bulbs, wait, say }) => {
+        say('AWAITING UPLINK', '');
+        await wait(700);
+        for (let i = 0; i < bulbs.length; i++) {
+          segs[i + 1].classList.add('spot');
+          bulbs[i].classList.add('spot');
+          say('AWAITING UPLINK', `PACKET ${i + 1}`);
+          await wait(900);
+          segs[i + 1].classList.remove('spot');
+          bulbs[i].classList.remove('spot');
+        }
+        say('AWAITING UPLINK', `${bulbs.length} BOXES = ${bulbs.length} PACKETS`);
+        await wait(2200);
+      },
+    });
+  </script>
+</body>
+</html>

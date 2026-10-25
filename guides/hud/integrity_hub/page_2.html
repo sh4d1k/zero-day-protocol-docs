@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Integrity Hub // Auto Launch // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../../tiles/styles.css">
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <header class="guide-header">
+    <h1 class="guide-title">Auto Launch</h1>
+    <div class="guide-subtitle">THE BOX THAT FILLS ITSELF</div>
+  </header>
+
+  <div class="media-container hub-demo" id="hub">
+    <div class="hub-line baseline">1000/1000</div>
+    <div class="hub-line bonus">0/800</div>
+    <div class="hub-line status"></div>
+    <div class="hub-timeline"></div>
+    <div class="hub-caption"></div>
+  </div>
+
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        A <span class="highlight-cyan">&gt; box</span> fills up on its own. When it's full, its packet launches.
+      </div>
+    </div>
+    <div class="simple-sub">
+      Ready or not. The box only counts down; it never waits for your route.
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="section-label">⚠ INCIDENT NOTE</div>
+    <p class="guide-text">
+      A short box fills almost at once. That's what happened on the last node: its only packet was set to
+      <strong>auto-launch</strong> straight away.
+    </p>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <script src="hub.js"></script>
+  <script>
+    HubDemo.run(document.getElementById('hub'), {
+      segments: ['plan', 'auto', 'auto', 'manual'],
+      script: async ({ segs, bulbs, fill, wait, say }) => {
+        // Planning drains, then each > box fills and launches its packet.
+        segs[0].classList.add('active');
+        say('PLANNING', 'PLANNING TIME');
+        await fill(segs[0], 1, 0, 1500);
+        segs[0].classList.remove('active');
+        segs[0].classList.add('done');
+        segs[0].querySelector('.fill').style.width = '100%';
+        for (let i = 1; i <= 2; i++) {
+          segs[i].classList.add('active');
+          say('AUTO-LAUNCH IN PROGRESS', `PACKET ${i} // FILLING`);
+          await fill(segs[i], 0, 1, 1600);
+          segs[i].classList.remove('active');
+          segs[i].classList.add('done');
+          bulbs[i - 1].classList.remove('lit');
+          say('PAYLOAD INJECTED', `PACKET ${i} // LAUNCHED`);
+          await wait(700);
+        }
+        segs[3].classList.add('active');
+        segs[3].querySelector('.fill').style.width = '87%';
+        say('AWAITING MANUAL LAUNCH', 'PACKET 3 // WAITING FOR YOU');
+        await wait(1800);
+      },
+    });
+  </script>
+</body>
+</html>

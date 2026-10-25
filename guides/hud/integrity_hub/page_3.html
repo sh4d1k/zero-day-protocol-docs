@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Integrity Hub // Manual Launch // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../../tiles/styles.css">
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <header class="guide-header">
+    <h1 class="guide-title">Manual Launch</h1>
+    <div class="guide-subtitle">II WAITS FOR YOU</div>
+  </header>
+
+  <div class="media-container hub-demo" id="hub">
+    <div class="hub-line baseline">1000/1000</div>
+    <div class="hub-line bonus">0/800</div>
+    <div class="hub-line status"></div>
+    <div class="hub-timeline"></div>
+    <div class="hub-node-row">
+      <div class="hub-node" id="node"><img src="../../assets/icons/starter-node.svg" alt="Start Node" /></div>
+      <div class="hub-hand" id="hand"><img src="../../assets/icons/hand-tap.svg" alt="" /></div>
+    </div>
+    <div class="hub-caption"></div>
+  </div>
+
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        A <span class="highlight-amber">II box</span> holds its packet until you <span class="highlight-green">tap the Start Node</span>.
+      </div>
+    </div>
+    <div class="simple-sub">
+      No rush from the box. Launch when your route is ready.
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="section-label">⚡ READ THE HUB FIRST</div>
+    <div class="legend">
+      <div class="legend-row"><span class="legend-chip auto">&gt;</span>Launches on its own when the box is full.</div>
+      <div class="legend-row"><span class="legend-chip manual">II</span>Waits for your tap on the Start Node.</div>
+    </div>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <script src="hub.js"></script>
+  <script>
+    const node = document.getElementById('node');
+    const hand = document.getElementById('hand');
+    HubDemo.run(document.getElementById('hub'), {
+      segments: ['plan', 'manual'],
+      script: async ({ segs, bulbs, fill, wait, say }) => {
+        segs[0].classList.add('done');
+        segs[0].querySelector('.fill').style.width = '100%';
+        // The II box arms and holds just short of full.
+        segs[1].classList.add('active');
+        say('AWAITING MANUAL LAUNCH', 'PACKET 1 // WAITING');
+        await fill(segs[1], 0, 0.87, 500);
+        node.classList.add('ready');
+        await wait(1600);
+        // The tap.
+        hand.style.opacity = '1';
+        hand.style.transform = 'translate(-6px, 0px)';
+        await wait(650);
+        node.classList.add('tapped');
+        await wait(160);
+        node.classList.remove('tapped', 'ready');
+        segs[1].classList.remove('active');
+        segs[1].classList.add('done');
+        segs[1].querySelector('.fill').style.width = '100%';
+        bulbs[0].classList.remove('lit');
+        say('PAYLOAD INJECTED', 'PACKET 1 // LAUNCHED');
+        hand.style.opacity = '0';
+        hand.style.transform = 'translate(10px, 30px)';
+        await wait(1500);
+      },
+    });
+  </script>
+</body>
+</html>
