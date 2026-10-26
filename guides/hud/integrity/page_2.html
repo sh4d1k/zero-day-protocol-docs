@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Overclock Gear // Speed & Decay // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../../tiles/styles.css">
+  <link rel="stylesheet" href="integrity.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <div class="guide-badge">PAGE 2 // SPEED VS DECAY</div>
+    <h1 class="guide-title">Overclock Gear</h1>
+    <div class="guide-subtitle">DYNAMIC DECAY &amp; VELOCITY COUPLING</div>
+  </header>
+
+  <!-- Interactive Overclock & Bounce Demo -->
+  <div class="media-container overclock-demo" id="overclockDemo">
+    <!-- Top Baseline Decay Bar with Dynamic Glow -->
+    <div class="decay-bar-container">
+      <div class="decay-bar-chassis" id="barChassis">
+        <div class="decay-fill" id="decayFill"></div>
+        <div class="decay-text" id="decayText">1000/1000</div>
+      </div>
+      <div class="decay-status-sub" id="statusSub">SCENE 1: NORM GEAR // STANDARD DECAY</div>
+    </div>
+
+    <!-- Arena: Overclock Gear (Left) + Bounce Corridor (Right) -->
+    <div class="overclock-arena">
+      <!-- Left: Animated Overclock Gear Chassis -->
+      <div class="gear-module">
+        <span class="gear-spd-label" id="gearSpdLabel">SPD</span>
+        <div class="gear-track" id="gearTrack">
+          <div class="gear-slot-line"></div>
+          <!-- 3 Gear Notches -->
+          <div class="gear-notch top"></div>
+          <div class="gear-notch center"></div>
+          <div class="gear-notch bottom"></div>
+          <!-- Movable Thumb Handle -->
+          <div class="gear-thumb" id="gearThumb" style="top: 70px;">
+            <div class="gear-thumb-pip" id="gearPip"></div>
+          </div>
+        </div>
+        <div class="gear-readout" id="gearReadout">NORM</div>
+      </div>
+
+      <!-- Right: U-Turn Bounce Corridor -->
+      <div class="bounce-corridor" id="bounceCorridor">
+        <!-- Top U-Turn Pad (Deflects Downward) -->
+        <div class="u-pad top-pad" id="topPad">
+          <img src="../../assets/icons/uturn-pad.svg" alt="U-Turn Pad" />
+        </div>
+
+        <!-- Bouncing Data Packet & Trail -->
+        <div class="bounce-packet" id="bouncePacket" style="top: 80px;"></div>
+        <div class="bounce-trail" id="bounceTrail"></div>
+
+        <!-- Live Corridor Telemetry Tag -->
+        <div class="corridor-stats">
+          <span class="stats-speed" id="statsSpeed">1.0× SPD</span>
+          <span class="stats-decay" id="statsDecay">1.0× DRAIN</span>
+        </div>
+
+        <!-- Bottom U-Turn Pad (Deflects Upward) -->
+        <div class="u-pad" id="bottomPad">
+          <img src="../../assets/icons/uturn-pad.svg" alt="U-Turn Pad" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        The <span class="highlight-cyan">Overclock Gear</span> controls packet speed <span class="highlight-green">AND</span> decay rate.
+      </div>
+    </div>
+    <div class="simple-sub">
+      Pushing the gear <strong style="color: #22c55e;">UP</strong> cuts integrity decay in half to save your score. Pulling <strong style="color: #ef4444;">DOWN</strong> slows time to give you breathing room, but burns integrity twice as fast.
+    </div>
+  </div>
+
+  <!-- Operational Protocol / Gear Table -->
+  <div class="content-card">
+    <div class="section-label">⚡ TACTICAL PROTOCOL</div>
+    <div class="tier-legend">
+      <div class="tier-row" style="border-left-color: #22c55e;">
+        <span class="tier-label" style="color: #22c55e;">FAST (+1)</span>
+        <span class="tier-range">3.2× Speed // 0.5× Decay (Score Saver)</span>
+      </div>
+      <div class="tier-row" style="border-left-color: #60a5fa;">
+        <span class="tier-label" style="color: #60a5fa;">NORM (0)</span>
+        <span class="tier-range">1.0× Speed // 1.0× Decay (Standard)</span>
+      </div>
+      <div class="tier-row" style="border-left-color: #ef4444;">
+        <span class="tier-label" style="color: #ef4444;">SLOW (-1)</span>
+        <span class="tier-range">0.3× Speed // 2.0× Decay (Emergency Brake)</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script: 3 Sequential Scenes in Loop -->
+  <script>
+    (function () {
+      const barChassis = document.getElementById('barChassis');
+      const decayFill = document.getElementById('decayFill');
+      const decayText = document.getElementById('decayText');
+      const statusSub = document.getElementById('statusSub');
+
+      const gearThumb = document.getElementById('gearThumb');
+      const gearPip = document.getElementById('gearPip');
+      const gearReadout = document.getElementById('gearReadout');
+      const gearSpdLabel = document.getElementById('gearSpdLabel');
+
+      const topPad = document.getElementById('topPad');
+      const bottomPad = document.getElementById('bottomPad');
+      const bouncePacket = document.getElementById('bouncePacket');
+      const bounceTrail = document.getElementById('bounceTrail');
+      const statsSpeed = document.getElementById('statsSpeed');
+      const statsDecay = document.getElementById('statsDecay');
+
+      // Corridor dimensions
+      const TOP_Y = 32;   // Just below top U-pad
+      const BOTTOM_Y = 128; // Just above bottom U-pad
+      const CENTER_Y = 80;
+
+      // Thumb positions
+      const POS_FAST = 18;  // Top notch
+      const POS_NORM = 70;  // Center notch
+      const POS_SLOW = 122; // Bottom notch
+
+      let activeTimeouts = [];
+      let packetAnimId = null;
+      let decayAnimId = null;
+
+      function clearAll() {
+        activeTimeouts.forEach(clearTimeout);
+        activeTimeouts = [];
+        if (packetAnimId) cancelAnimationFrame(packetAnimId);
+        if (decayAnimId) cancelAnimationFrame(decayAnimId);
+      }
+
+      function addTimeout(fn, delay) {
+        const id = setTimeout(fn, delay);
+        activeTimeouts.push(id);
+        return id;
+      }
+
+      // Continuous packet bouncing controller
+      let currentLegDuration = 650; // ms per half bounce (top <-> bottom)
+      let packetDirection = 1; // 1 = down, -1 = up
+      let legStartTime = performance.now();
+      let legStartY = CENTER_Y;
+      let legTargetY = BOTTOM_Y;
+
+      function startPacketLoop() {
+        function packetStep(now) {
+          const elapsed = now - legStartTime;
+          const progress = Math.min(1, elapsed / currentLegDuration);
+
+          const currentY = legStartY + (legTargetY - legStartY) * progress;
+          bouncePacket.style.top = `${currentY}px`;
+
+          // Trail styling behind packet
+          if (packetDirection === 1) {
+            bounceTrail.style.top = `${currentY - 14}px`;
+            bounceTrail.style.height = '14px';
+            bounceTrail.style.background = 'linear-gradient(to bottom, transparent, #00f3ff)';
+          } else {
+            bounceTrail.style.top = `${currentY}px`;
+            bounceTrail.style.height = '14px';
+            bounceTrail.style.background = 'linear-gradient(to top, transparent, #00f3ff)';
+          }
+
+          if (progress >= 1) {
+            // Hit a U-turn pad: trigger impact shockwave
+            if (legTargetY === BOTTOM_Y) {
+              bottomPad.classList.add('pad-impact');
+              setTimeout(() => bottomPad.classList.remove('pad-impact'), 180);
+              packetDirection = -1;
+              legStartY = BOTTOM_Y;
+              legTargetY = TOP_Y;
+            } else {
+              topPad.classList.add('pad-impact');
+              setTimeout(() => topPad.classList.remove('pad-impact'), 180);
+              packetDirection = 1;
+              legStartY = TOP_Y;
+              legTargetY = BOTTOM_Y;
+            }
+            legStartTime = performance.now();
+          }
+
+          packetAnimId = requestAnimationFrame(packetStep);
+        }
+
+        legStartTime = performance.now();
+        packetAnimId = requestAnimationFrame(packetStep);
+      }
+
+      // Smooth decay bar countdown controller
+      function animateDecay(fromVal, toVal, durationMs) {
+        if (decayAnimId) cancelAnimationFrame(decayAnimId);
+        const startTime = performance.now();
+
+        function decayStep(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / durationMs);
+          const currentVal = Math.max(0, fromVal + (toVal - fromVal) * progress);
+
+          decayText.textContent = `${Math.round(currentVal)}/1000`;
+          decayFill.style.width = `${(currentVal / 1000) * 100}%`;
+
+          // Dynamic fill color based on value
+          if (currentVal >= 900) {
+            decayFill.style.backgroundColor = '#00f0ff';
+            decayText.style.color = '#00f0ff';
+          } else if (currentVal >= 600) {
+            decayFill.style.backgroundColor = '#60a5fa';
+            decayText.style.color = '#60a5fa';
+          } else if (currentVal >= 300) {
+            decayFill.style.backgroundColor = '#ffcc00';
+            decayText.style.color = '#ffcc00';
+          } else {
+            decayFill.style.backgroundColor = '#ff3366';
+            decayText.style.color = '#ff3366';
+          }
+
+          if (progress < 1) {
+            decayAnimId = requestAnimationFrame(decayStep);
+          }
+        }
+
+        decayAnimId = requestAnimationFrame(decayStep);
+      }
+
+      const demoContainer = document.getElementById('overclockDemo');
+
+      function transitionToScene(sceneFn) {
+        demoContainer.style.transition = 'opacity 0.28s ease';
+        demoContainer.style.opacity = '0';
+        addTimeout(() => {
+          sceneFn();
+          demoContainer.style.opacity = '1';
+        }, 280);
+      }
+
+      function setGearUI(mode, topPx, color, label) {
+        gearThumb.style.top = `${topPx}px`;
+        gearThumb.style.borderColor = color;
+        gearThumb.style.boxShadow = `0 0 12px ${color}`;
+        gearPip.style.backgroundColor = color;
+        gearReadout.textContent = label;
+        gearReadout.style.color = color;
+        gearSpdLabel.style.color = color;
+      }
+
+      // === SCENE 1: NORM MODE (1.0x Speed // 1.0x Decay) ===
+      function runScene1() {
+        barChassis.className = 'decay-bar-chassis';
+        setGearUI('NORM', POS_NORM, '#60a5fa', 'NORM');
+        currentLegDuration = 650; // standard bounce speed
+        statsSpeed.textContent = '1.0× SPD';
+        statsSpeed.style.color = '#38bdf8';
+        statsDecay.textContent = '1.0× DRAIN';
+        statsDecay.style.color = '#94a3b8';
+        statusSub.textContent = 'SCENE 1: NORM GEAR // STANDARD DECAY';
+
+        // Bar starts at 1000 and gently drains to 880 over 2.0s
+        animateDecay(1000, 880, 2000);
+
+        // Fade out and transition to Scene 2
+        addTimeout(() => {
+          transitionToScene(runScene2);
+        }, 2200);
+      }
+
+      // === SCENE 2: SLOW MODE (0.3x Speed // 2.0x Rapid Drain) ===
+      function runScene2() {
+        barChassis.className = 'decay-bar-chassis glow-slow';
+        setGearUI('SLOW', POS_SLOW, '#ef4444', 'SLOW');
+        currentLegDuration = 1800; // slow motion bounce
+        statsSpeed.textContent = '0.3× SPD';
+        statsSpeed.style.color = '#ef4444';
+        statsDecay.textContent = '2.0× DRAIN!';
+        statsDecay.style.color = '#ef4444';
+        statusSub.textContent = 'SCENE 2: SLOW GEAR // RAPID 2.0× DRAIN';
+
+        // Bar drains rapidly from 880 to 0 in 2500ms
+        animateDecay(880, 0, 2500);
+
+        // Hold at 0 briefly, then fade out and transition to Scene 3
+        addTimeout(() => {
+          transitionToScene(runScene3);
+        }, 3000);
+      }
+
+      // === SCENE 3: FAST MODE (3.2x Speed // 0.5x Half Drain) ===
+      function runScene3() {
+        barChassis.className = 'decay-bar-chassis glow-fast';
+        setGearUI('FAST', POS_FAST, '#22c55e', 'FAST');
+        currentLegDuration = 220; // rapid bounce streak
+        statsSpeed.textContent = '3.2× SPD';
+        statsSpeed.style.color = '#22c55e';
+        statsDecay.textContent = '0.5× DRAIN';
+        statsDecay.style.color = '#22c55e';
+        statusSub.textContent = 'SCENE 3: FAST GEAR // HALF DRAIN';
+
+        // Bar resets to 1000 and drains slowly at half rate: reaching 500 over 5.0s
+        animateDecay(1000, 500, 5000);
+
+        // Fade out and transition back to Scene 1 to complete the loop
+        addTimeout(() => {
+          transitionToScene(runScene1);
+        }, 5300);
+      }
+
+      function startMasterLoop() {
+        clearAll();
+        startPacketLoop();
+        runScene1();
+      }
+
+      window.addEventListener('load', () => {
+        setTimeout(startMasterLoop, 200);
+      });
+
+      window.addEventListener('resize', () => {
+        startMasterLoop();
+      });
+    })();
+  </script>
+</body>
+</html>

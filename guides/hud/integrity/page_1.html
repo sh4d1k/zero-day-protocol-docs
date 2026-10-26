@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Signal Integrity // Decay & Clearance // Zero Day Protocol</title>
+  <link rel="stylesheet" href="../../tiles/styles.css">
+  <link rel="stylesheet" href="integrity.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="guide-header">
+    <div class="guide-badge">HUD DIRECTIVE // SIGNAL INTEGRITY</div>
+    <h1 class="guide-title">Integrity Decay</h1>
+    <div class="guide-subtitle">DRAIN CLOCK &amp; CLEARANCE TIERS</div>
+  </header>
+
+  <!-- Interactive Decay & Clearance Demo -->
+  <div class="media-container integrity-demo" id="integrityDemo">
+    <!-- Top Baseline Decay Bar -->
+    <div class="decay-bar-container">
+      <div class="decay-bar-chassis" id="barChassis">
+        <div class="decay-fill" id="decayFill"></div>
+        <div class="decay-text" id="decayText">1000/1000</div>
+      </div>
+      <div class="decay-status-sub" id="statusSub">UPLINK TRANSMITTING...</div>
+    </div>
+
+    <!-- Center Stage: Clearance Rank & 3 Star Slots -->
+    <div class="rank-stage">
+      <div class="rank-badge" id="rankBadge">ROOT</div>
+      
+      <div class="stars-row">
+        <div class="star-slot">
+          <div class="star-icon" id="star1">★</div>
+        </div>
+        <div class="star-slot">
+          <div class="star-icon" id="star2">★</div>
+        </div>
+        <div class="star-slot">
+          <div class="star-icon" id="star3">★</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Red Connection Lost / Game Over Overlay -->
+    <div class="connection-lost-overlay" id="lostOverlay">
+      <div class="danger-icon">⚠</div>
+      <div class="danger-title">CONNECTION LOST</div>
+    </div>
+  </div>
+
+  <!-- Simple Explanation (No Jargon) -->
+  <div class="simple-card">
+    <div class="simple-lead">
+      <span class="simple-finger">👉</span>
+      <div class="simple-title">
+        The top bar is your <span class="highlight-cyan">Signal Integrity</span>. It starts at 1000 and drains over time.
+      </div>
+    </div>
+    <div class="simple-sub">
+      Deliver all packets before the bar drains too far. As integrity drops, you lose stars and rank. If it hits zero, your connection is terminated.
+    </div>
+  </div>
+
+  <!-- Operational Status / Clearance Table -->
+  <div class="content-card">
+    <div class="section-label">⚡ CLEARANCE THRESHOLDS</div>
+    <div class="tier-legend">
+      <div class="tier-row root">
+        <span class="tier-label" style="color: var(--color-root);">ROOT <span class="tier-stars">★★★</span></span>
+        <span class="tier-range">900 – 1000</span>
+      </div>
+      <div class="tier-row user">
+        <span class="tier-label" style="color: var(--color-user);">USER <span class="tier-stars">★★☆</span></span>
+        <span class="tier-range">600 – 899</span>
+      </div>
+      <div class="tier-row guest">
+        <span class="tier-label" style="color: var(--color-guest);">GUEST <span class="tier-stars">★☆☆</span></span>
+        <span class="tier-range">300 – 599</span>
+      </div>
+      <div class="tier-row restricted">
+        <span class="tier-label" style="color: var(--color-restricted);">RESTRICTED <span class="tier-stars">☆☆☆</span></span>
+        <span class="tier-range">1 – 299</span>
+      </div>
+      <div class="tier-row" style="border-left-color: #ef4444; background: rgba(239, 68, 68, 0.08);">
+        <span class="tier-label" style="color: #ef4444;">TERMINATED</span>
+        <span class="tier-range" style="color: #ef4444;">0 (GAME OVER)</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="guide-footer">
+    ZERO-DAY PROTOCOL // MTXGAMES.LK FIELD MANUAL
+  </footer>
+
+  <!-- Animation Script -->
+  <script>
+    (function () {
+      const decayFill = document.getElementById('decayFill');
+      const decayText = document.getElementById('decayText');
+      const statusSub = document.getElementById('statusSub');
+      const rankBadge = document.getElementById('rankBadge');
+      const star1 = document.getElementById('star1');
+      const star2 = document.getElementById('star2');
+      const star3 = document.getElementById('star3');
+      const lostOverlay = document.getElementById('lostOverlay');
+      const barChassis = document.getElementById('barChassis');
+
+      const COLORS = {
+        root: '#00f0ff',
+        user: '#60a5fa',
+        guest: '#ffcc00',
+        restricted: '#ff3366',
+      };
+
+      let animFrameId = null;
+      let cycleTimeout = null;
+
+      function resetElements() {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        if (cycleTimeout) clearTimeout(cycleTimeout);
+
+        // Reset bar
+        decayFill.style.width = '100%';
+        decayFill.style.backgroundColor = COLORS.root;
+        decayText.textContent = '1000/1000';
+        decayText.style.color = COLORS.root;
+        statusSub.textContent = 'UPLINK TRANSMITTING...';
+        statusSub.style.color = 'var(--text-muted)';
+        barChassis.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        barChassis.style.boxShadow = 'none';
+
+        // Reset rank badge
+        rankBadge.textContent = 'ROOT';
+        rankBadge.style.color = COLORS.root;
+        rankBadge.style.textShadow = '0 0 16px rgba(0, 240, 255, 0.6)';
+        rankBadge.classList.remove('glitch-text');
+
+        // Reset stars
+        [star1, star2, star3].forEach(star => {
+          star.classList.remove('dropping');
+          star.style.opacity = '1';
+          star.style.transform = 'none';
+        });
+
+        // Reset overlay
+        lostOverlay.classList.remove('active');
+      }
+
+      function runDecayCycle() {
+        resetElements();
+
+        const DURATION_MS = 5000; // 5 seconds from 1000 to 0
+        const startTime = performance.now();
+
+        let droppedStar3 = false;
+        let droppedStar2 = false;
+        let droppedStar1 = false;
+
+        function updateRank(name, color) {
+          rankBadge.textContent = name;
+          rankBadge.style.color = color;
+          rankBadge.style.textShadow = `0 0 16px ${color}`;
+          rankBadge.classList.remove('glitch-text');
+          void rankBadge.offsetWidth; // Force reflow
+          rankBadge.classList.add('glitch-text');
+        }
+
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / DURATION_MS);
+          const currentVal = Math.max(0, 1000 * (1 - progress));
+
+          // 1. Update text and bar width
+          decayText.textContent = `${Math.round(currentVal)}/1000`;
+          decayFill.style.width = `${(currentVal / 1000) * 100}%`;
+
+          // 2. Threshold Check: Dropping Stars and Changing Rank
+          if (currentVal < 900 && !droppedStar3) {
+            droppedStar3 = true;
+            star3.classList.add('dropping');
+            updateRank('USER', COLORS.user);
+            decayFill.style.backgroundColor = COLORS.user;
+            decayText.style.color = COLORS.user;
+          }
+
+          if (currentVal < 600 && !droppedStar2) {
+            droppedStar2 = true;
+            star2.classList.add('dropping');
+            updateRank('GUEST', COLORS.guest);
+            decayFill.style.backgroundColor = COLORS.guest;
+            decayText.style.color = COLORS.guest;
+          }
+
+          if (currentVal < 300 && !droppedStar1) {
+            droppedStar1 = true;
+            star1.classList.add('dropping');
+            updateRank('RESTRICTED', COLORS.restricted);
+            decayFill.style.backgroundColor = COLORS.restricted;
+            decayText.style.color = COLORS.restricted;
+            barChassis.style.borderColor = COLORS.restricted;
+            barChassis.style.boxShadow = '0 0 10px rgba(255, 51, 102, 0.4)';
+          }
+
+          if (progress < 1) {
+            animFrameId = requestAnimationFrame(step);
+          } else {
+            // Reached 0: Connection Lost trigger!
+            decayText.textContent = '0/1000';
+            decayFill.style.width = '0%';
+            statusSub.textContent = 'SIGNAL FAILURE!';
+            statusSub.style.color = COLORS.restricted;
+
+            lostOverlay.classList.add('active');
+
+            // Hold on Connection Lost for 2.1s (+0.3s), then loop
+            cycleTimeout = setTimeout(() => {
+              runDecayCycle();
+            }, 2100);
+          }
+        }
+
+        // Slight initial settle before decay starts
+        cycleTimeout = setTimeout(() => {
+          animFrameId = requestAnimationFrame(step);
+        }, 500);
+      }
+
+      window.addEventListener('load', () => {
+        setTimeout(runDecayCycle, 200);
+      });
+
+      window.addEventListener('resize', () => {
+        runDecayCycle();
+      });
+    })();
+  </script>
+</body>
+</html>
