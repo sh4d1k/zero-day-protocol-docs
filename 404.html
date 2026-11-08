@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 // Node Not Found — Zero Day Protocol | MTX Games</title>
   <meta name="robots" content="noindex, follow">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
   <meta name="theme-color" content="#07090e">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,6 +99,24 @@
       box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
       transform: translateY(-2px);
     }
+    .alt-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1.1rem;
+      margin-top: 1.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .alt-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .alt-links a:hover { color: var(--cyan); }
+    @media (max-width: 480px) {
+      .card { padding: 2.25rem 1.25rem; }
+      h1 { font-size: 2.8rem; }
+    }
   </style>
 </head>
 <body>
@@ -110,6 +128,12 @@
       The network sector or data conduit you requested cannot be located. It may have been purged, relocated, or encrypted behind ICE firewalls.
     </p>
     <a href="/" class="btn">&larr; RETURN TO ACCESS POINT</a>
+    <nav class="alt-links" aria-label="Other pages">
+      <a href="/GAME_GUIDE.html">Field Manual</a>
+      <a href="/transmissions.html">Transmissions</a>
+      <a href="/CHANGELOG.html">Chainlog</a>
+      <a href="/index.html#contact">Support</a>
+    </nav>
   </div>
 </body>
 </html>
