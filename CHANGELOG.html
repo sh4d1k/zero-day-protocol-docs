@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <!-- Primary Meta Tags -->
-  <title>Public Development Chainlog — Zero Day Protocol | MTX Games</title>
-  <meta name="title" content="Public Development Chainlog — Zero Day Protocol | MTX Games">
-  <meta name="description" content="Official public version history and changelog for Zero Day Protocol by MTX Games. Review features, balance updates, and tactical engine optimizations across every release.">
+  <title>Public Chainlog — Zero Day Protocol | MTX Games</title>
+  <meta name="title" content="Public Chainlog — Zero Day Protocol | MTX Games">
+  <meta name="description" content="Every Zero Day Protocol release on Google Play testing: new levels, tiles, features and fixes, version by version, from the first closed test to today.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://mtxgames.lk/CHANGELOG.html">
-  
+
   <!-- Favicons and App Icons -->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="icon-512.png">
-  <meta name="theme-color" content="#07090e">
+  <meta name="theme-color" content="#050508">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mtxgames.lk/CHANGELOG.html">
-  <meta property="og:title" content="Zero Day Protocol — Public Development Chainlog">
-  <meta property="og:description" content="Official version history and feature changelog across every release of Zero Day Protocol.">
+  <meta property="og:title" content="Zero Day Protocol — Public Chainlog">
+  <meta property="og:description" content="Every release of Zero Day Protocol, version by version: new levels, tiles, features and fixes.">
   <meta property="og:image" content="https://mtxgames.lk/og-image.jpg">
 
   <!-- Google Fonts -->
@@ -34,37 +34,51 @@
       --surface: #0a0a14;
       --card-bg: rgba(13, 17, 28, 0.78);
       --card-border: rgba(0, 243, 255, 0.2);
+      --line: rgba(255, 255, 255, 0.08);
       --cyan: #00f3ff;
-      --cyan-bright: #3dffff;
+      --sky: #38bdf8;
       --purple: #a855f7;
-      --green: #10b981;
+      --green: #4ade80;
       --amber: #f59e0b;
-      --red: #ef4444;
+      --amber-text: #fbbf24;
       --text: #f1f5f9;
       --text-muted: #94a3b8;
       --text-subtle: #64748b;
+      /* Currency standards (GLOBAL_UI_RULES.md) */
+      --qc: #c084fc;
+      --dc: #eab308;
+      --proxy: #4ade80;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: 'Outfit', -apple-system, sans-serif;
       line-height: 1.6;
-      background-image: 
+      background-image:
         radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.07) 0%, transparent 40%),
         radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      background-attachment: fixed;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
+    a { color: var(--cyan); }
+
+    /* ---------- Header ---------- */
     header {
       border-bottom: 1px solid var(--card-border);
-      background: rgba(5, 5, 8, 0.88);
+      background: rgba(5, 5, 8, 0.9);
       backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
       z-index: 50;
@@ -73,23 +87,24 @@
     .nav-container {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 1rem 1.5rem;
+      padding: 0.9rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.75rem 1rem;
     }
 
     .logo {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-weight: 800;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: var(--cyan);
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      white-space: nowrap;
     }
 
     .logo span {
@@ -103,7 +118,7 @@
 
     nav {
       display: flex;
-      gap: 1.25rem;
+      gap: 0.4rem 1.1rem;
       align-items: center;
       flex-wrap: wrap;
     }
@@ -114,31 +129,42 @@
       font-weight: 500;
       font-size: 0.9rem;
       transition: color 0.2s;
+      white-space: nowrap;
     }
 
-    nav a:hover, nav a.active {
-      color: var(--cyan);
+    nav a:hover, nav a.active { color: var(--cyan); }
+
+    .nav-btn {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(0, 243, 255, 0.12);
+      border: 1px solid var(--cyan);
+      color: var(--cyan) !important;
     }
 
+    /* ---------- Layout ---------- */
     main {
-      max-width: 950px;
+      max-width: 920px;
       margin: 0 auto;
       padding: 3rem 1.5rem 6rem;
     }
 
-    .hero-section {
+    .hero {
       text-align: center;
-      padding-bottom: 2.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--line);
     }
 
     .hud-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--cyan);
@@ -149,10 +175,20 @@
       margin-bottom: 1rem;
     }
 
+    .hud-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse { 50% { opacity: 0.35; } }
+
     h1 {
-      font-size: 2.5rem;
+      font-size: clamp(1.9rem, 6vw, 2.6rem);
       font-weight: 900;
       letter-spacing: -0.5px;
+      line-height: 1.15;
       background: linear-gradient(135deg, #fff 40%, var(--cyan) 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -163,146 +199,344 @@
     .subtitle {
       color: var(--text-muted);
       font-size: 1.05rem;
-      max-width: 700px;
+      max-width: 660px;
       margin: 0 auto;
     }
 
-    /* Version Cards */
+    /* ---------- Track status ---------- */
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 0.75rem;
+    }
+
+    .tracks {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .track {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-top: 2px solid var(--track-color);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+    }
+
+    .track-name {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--track-color);
+    }
+
+    .track-version {
+      font-family: var(--mono);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0.15rem 0;
+    }
+
+    .track-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .t-internal { --track-color: var(--amber-text); }
+    .t-closed   { --track-color: var(--cyan); }
+    .t-open     { --track-color: var(--green); }
+
+    /* ---------- Version jump bar ---------- */
+    .jump {
+      position: sticky;
+      top: 62px;
+      z-index: 40;
+      background: rgba(5, 5, 8, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .jump a {
+      flex: 0 0 auto;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .jump a:hover {
+      color: var(--cyan);
+      border-color: rgba(0, 243, 255, 0.35);
+      background: rgba(0, 243, 255, 0.06);
+    }
+
+    /* ---------- Version cards ---------- */
     .version-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 2rem;
-      margin-bottom: 2rem;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.75rem;
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       position: relative;
       overflow: hidden;
+      scroll-margin-top: 130px;
     }
 
     .version-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: var(--cyan);
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--accent, var(--text-subtle));
     }
 
-    .version-card.internal::before {
-      background: var(--amber);
-    }
-
-    .version-card.closed::before {
-      background: var(--cyan);
-    }
+    .version-card.internal { --accent: var(--amber); }
+    .version-card.closed   { --accent: var(--cyan); }
+    .version-card.retired  { --accent: var(--text-subtle); opacity: 0.92; }
 
     .version-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0.5rem 1rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1rem;
     }
 
-    .version-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #fff;
+    .version-title {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.75rem;
     }
 
-    .track-badge {
-      font-size: 0.75rem;
+    .version-card h2 {
+      font-family: var(--mono);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .release-name {
+      width: 100%;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 0.68rem;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 4px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
     }
 
-    .badge-dev {
-      background: rgba(168, 85, 247, 0.15);
-      border: 1px solid var(--purple);
-      color: #c084fc;
+    .b-internal { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--amber); color: var(--amber-text); }
+    .b-closed   { background: rgba(0, 243, 255, 0.12); border: 1px solid var(--cyan); color: var(--cyan); }
+    .b-retired  { background: rgba(148, 163, 184, 0.12); border: 1px solid var(--text-subtle); color: var(--text-muted); }
+
+    .version-date {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+      white-space: nowrap;
+      padding-top: 0.3rem;
     }
 
-    .badge-internal {
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid var(--amber);
-      color: #fbbf24;
-    }
-
-    .badge-closed {
-      background: rgba(0, 243, 255, 0.15);
-      border: 1px solid var(--cyan);
-      color: var(--cyan);
-    }
-
-    .badge-baseline {
-      background: rgba(148, 163, 184, 0.15);
-      border: 1px solid var(--text-subtle);
+    .summary {
       color: var(--text-muted);
+      font-size: 0.98rem;
+      margin-bottom: 0.25rem;
     }
 
-    .section-heading {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+    .group-heading {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin: 1.25rem 0 0.75rem;
+      margin: 1.2rem 0 0.6rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      color: var(--h-color);
     }
 
-    .heading-features { color: #4ade80; }
-    .heading-fixes { color: #38bdf8; }
+    .group-heading::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 2px;
+      background: var(--h-color);
+      box-shadow: 0 0 8px var(--h-color);
+    }
+
+    .h-new     { --h-color: var(--green); }
+    .h-fix     { --h-color: var(--sky); }
+    .h-rollout { --h-color: var(--cyan); }
+    .h-testing { --h-color: var(--amber-text); }
+    .h-launch  { --h-color: var(--qc); }
 
     .change-list {
       list-style: none;
       display: flex;
-      flex-col: column;
-      gap: 0.6rem;
-      margin-bottom: 1rem;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
-    .change-item {
-      display: flex;
-      gap: 0.75rem;
+    .change-list li {
+      position: relative;
+      padding-left: 1.2rem;
       font-size: 0.95rem;
-      color: var(--text);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
-    .bullet {
+    .change-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      top: -1px;
       color: var(--cyan);
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
+      font-weight: 800;
+    }
+
+    .change-list.muted li { color: var(--text-muted); }
+    .change-list.muted li::before { color: var(--amber-text); }
+
+    .change-list strong { color: #fff; font-weight: 600; }
+
+    .note {
+      margin-top: 1.1rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      border-left: 2px solid var(--line);
+      padding: 0.15rem 0 0.15rem 0.8rem;
+    }
+
+    .qc    { color: var(--qc); font-weight: 700; white-space: nowrap; }
+    .dc    { color: var(--dc); font-weight: 700; white-space: nowrap; }
+    .proxy { color: var(--proxy); font-weight: 700; white-space: nowrap; }
+
+    code, .tag {
+      font-family: var(--mono);
+      font-size: 0.85em;
+      color: var(--cyan);
+    }
+
+    /* ---------- Early builds ---------- */
+    details.early {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.1rem 1.5rem;
+      scroll-margin-top: 130px;
+    }
+
+    details.early summary {
+      cursor: pointer;
+      font-family: var(--mono);
       font-weight: 700;
-      user-select: none;
-    }
-
-    .change-item strong {
       color: #fff;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
+    details.early summary::-webkit-details-marker { display: none; }
+    details.early summary::after { content: '+'; color: var(--cyan); }
+    details.early[open] summary::after { content: '−'; }
+
+    .early-list {
+      list-style: none;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .early-list li {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+    }
+
+    .early-list .v {
+      font-family: var(--mono);
+      font-weight: 700;
+      color: #fff;
+      margin-right: 0.4rem;
+    }
+
+    .early-list .d {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-subtle);
+      margin-right: 0.4rem;
+    }
+
+    /* ---------- Footer ---------- */
     footer {
       border-top: 1px solid rgba(255, 255, 255, 0.05);
       text-align: center;
-      padding: 2.5rem;
+      padding: 2.5rem 1.5rem;
       color: var(--text-muted);
       font-size: 0.9rem;
     }
 
     footer a { color: var(--cyan); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
+    footer p + p { margin-top: 0.4rem; }
+
+    /* ---------- Phone ---------- */
+    @media (max-width: 640px) {
+      .nav-container { padding: 0.75rem 1rem; }
+      nav { gap: 0.35rem 0.9rem; }
+      nav a { font-size: 0.85rem; }
+      main { padding: 2rem 1rem 4rem; }
+      .tracks { grid-template-columns: 1fr; }
+      .jump { top: 0; position: relative; }
+      .version-card { padding: 1.25rem 1.1rem 1.25rem 1.35rem; scroll-margin-top: 90px; }
+      .version-card h2 { font-size: 1.2rem; }
+      details.early { padding: 1rem 1.1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hud-badge .dot { animation: none; }
+    }
   </style>
 </head>
 <body>
@@ -317,351 +551,362 @@
         <a href="index.html">Mainframe</a>
         <a href="GAME_GUIDE.html">Field Manual</a>
         <a href="transmissions.html">Transmissions</a>
-        <a href="CHANGELOG.html" class="active">Public Chainlog</a>
-        <a href="PRIVACY_POLICY.html">Privacy</a>
-        <a href="TERMS_OF_SERVICE.html">Terms</a>
+        <a href="CHANGELOG.html" class="active" aria-current="page">Chainlog</a>
+        <a href="PRIVACY_POLICY.html">Privacy Policy</a>
+        <a href="index.html#contact" class="nav-btn">Support</a>
       </nav>
     </div>
   </header>
 
   <main>
     <!-- HERO -->
-    <div class="hero-section">
-      <div class="hud-badge">
-        <span>OPERATIONAL HISTORY // DISCLOSURE LEDGER</span>
-      </div>
-      <h1>Public Development Chainlog</h1>
+    <section class="hero">
+      <div class="hud-badge"><span class="dot"></span><span>OPERATIONAL HISTORY // PUBLIC LEDGER</span></div>
+      <h1>Public Chainlog</h1>
       <p class="subtitle">
-        Comprehensive version record tracking gameplay mechanics, user interface overhauls, engine refinements, and optimizations introduced across all releases of Zero Day Protocol.
+        Every Zero Day Protocol release on Google Play testing, newest first: the levels, tiles, features and fixes each version brought to operatives.
       </p>
+    </section>
+
+    <!-- WHERE EACH BUILD IS -->
+    <div class="section-label">Live on Google Play — November 2026</div>
+    <div class="tracks">
+      <div class="track t-open">
+        <div class="track-name">Open testing</div>
+        <div class="track-version">v1.1.5</div>
+        <div class="track-note">Next — anyone can join from the Play Store.</div>
+      </div>
+      <div class="track t-closed">
+        <div class="track-name">Closed testing</div>
+        <div class="track-version">v1.1.3</div>
+        <div class="track-note">Moves to v1.1.5 after internal testing.</div>
+      </div>
+      <div class="track t-internal">
+        <div class="track-name">Internal testing</div>
+        <div class="track-version">v1.1.5</div>
+        <div class="track-note">The release being checked now.</div>
+      </div>
     </div>
 
-    <!-- VERSION v1.1.5 -->
-    <article class="version-card">
-      <div class="version-header">
-        <div class="version-tag">
-          <span>v1.1.5</span>
-          <span class="track-badge badge-dev">DEV // BUILD 16</span>
-        </div>
-        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-subtle);">PRE-REGISTRATION PHASE</span>
-      </div>
+    <!-- JUMP BAR -->
+    <nav class="jump" aria-label="Jump to version">
+      <a href="#v1-1-5">v1.1.5</a>
+      <a href="#v1-1-4">v1.1.4</a>
+      <a href="#v1-1-3">v1.1.3</a>
+      <a href="#v1-1-2">v1.1.2</a>
+      <a href="#v1-1-1">v1.1.1</a>
+      <a href="#v1-1-0">v1.1.0</a>
+      <a href="#v1-0-9">v1.0.9</a>
+      <a href="#v1-0-8">v1.0.8</a>
+      <a href="#v1-0-7">v1.0.7</a>
+      <a href="#v1-0-6">v1.0.6</a>
+      <a href="#early">v1.0.0–1.0.5</a>
+    </nav>
 
-      <div class="section-heading heading-features">⚡ Features Introduced</div>
+    <!-- v1.1.5 -->
+    <article class="version-card internal" id="v1-1-5">
+      <div class="version-header">
+        <div class="version-title">
+          <h2>v1.1.5</h2>
+          <span class="badge b-internal">Internal testing</span>
+          <div class="release-name">PROTOCOL: HARDENED UPLINK</div>
+        </div>
+        <time class="version-date" datetime="2026-11">NOV 2026</time>
+      </div>
+      <p class="summary">A fix release. It also carries everything from v1.1.4, which never left internal testing — closed and open testers go straight from v1.1.3 to here.</p>
+
+      <div class="group-heading h-new">New</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Founder Clearance Protocol:</strong> Configured Google Play Pre-Registration reward entitlement, granting registered operatives 450 Quantum Crystals, 60,000 DarkCoins, and 50 Bonus Proxies on launch day.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Tactical Laboratory Expansion:</strong> Restored multi-slot Data Core synthesis capabilities, enabling parallel decryption queues and higher-tier core compression for mid-game campaign operations.</div>
-        </li>
+        <li><strong>Decryptor slots 3 and 4 unlock again</strong> when you clear their levels. Saves that missed an unlock are repaired automatically when the game loads.</li>
+        <li><strong>Defence: view your active base</strong> — the deployed grid now opens in a full read-only view.</li>
+        <li><strong>Black Market:</strong> when the supply line can't be reached, you get a retry button instead of an empty shelf.</li>
+        <li><strong>Google Play Games sign-in:</strong> on a fresh install your operative loads by itself, with no prompt. A Play Games profile that already belongs to another operative is refused with a clear message.</li>
+        <li><strong>Handler briefing:</strong> progress dots in place of the slide counter.</li>
+        <li><strong>Navigation bar:</strong> the raised HOME button sits lower when you're away from the home screen.</li>
       </ul>
 
-      <div class="section-heading heading-fixes">🛠️ Fixes &amp; Optimizations</div>
+      <div class="group-heading h-fix">Fixes</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Hardware GPU Surface Stability:</strong> Resolved a native graphics surface recycling issue that could cause brief instability during rapid terminal menu transitions on modern high-refresh-rate devices.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Ledger Delivery Hardening:</strong> Enhanced transaction verification and local ledger deduplication to guarantee zero-latency asset delivery even during unstable network connections.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Memory Optimization:</strong> Streamlined background cache cleanup across session restarts to preserve system resources.</div>
-        </li>
+        <li>Fixed a rare crash in the graphics engine that could close the game on some phones.</li>
+      </ul>
+
+      <div class="group-heading h-launch">Pre-registration reward</div>
+      <ul class="change-list">
+        <li><strong>Founder bundle</strong> for operatives who pre-register on Google Play: <span class="qc">⟠ 450 QC</span>, <span class="dc">Ɖ 60,000 DC</span> and <span class="proxy">50 proxies</span>, delivered when the game launches.</li>
+      </ul>
+
+      <div class="group-heading h-testing">In testing — may change</div>
+      <ul class="change-list muted">
+        <li>A short "AD" countdown ring before an ad plays, so it never jumps in unannounced.</li>
+        <li>Sign in with Google straight from the first-launch briefing.</li>
+        <li>Features that open as you clear campaign levels.</li>
       </ul>
     </article>
 
-    <!-- VERSION v1.1.4 -->
-    <article class="version-card internal">
+    <!-- v1.1.4 -->
+    <article class="version-card internal" id="v1-1-4">
       <div class="version-header">
-        <div class="version-tag">
-          <span>v1.1.4</span>
-          <span class="track-badge badge-internal">INTERNAL // BUILD 15</span>
+        <div class="version-title">
+          <h2>v1.1.4</h2>
+          <span class="badge b-internal">Internal testing only</span>
+          <div class="release-name">PROTOCOL: HANDLER BRIEFING</div>
         </div>
-        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-subtle);">NOVEMBER 07, 2026</span>
+        <time class="version-date" datetime="2026-11-07">07 NOV 2026</time>
       </div>
+      <p class="summary">Held back on internal testing — a graphics crash was found during testing. Everything below reaches closed and open testers with v1.1.5.</p>
 
-      <div class="section-heading heading-features">⚡ Features Introduced</div>
+      <div class="group-heading h-new">New</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>First-Launch Narrative Briefing:</strong> Interactive 8-slide operative onboarding sequence introducing the Handler, featuring terminal typewriter text, animated sector diagrams, and direct tactical guidance.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Floating Tactical Room Sheets (UI v3):</strong> Overhauled Shop, Terminal Upgrades, Operative Dossier, and Decryptor Lab into floating tactile sheets with frosted glass backdrops, custom grip bars, and quick-dismiss controls.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Data Core Lineage Tree:</strong> Introduced unique serial markers for every extracted data core, tracking its discovery sector, synthesis generation, and ownership timeline.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Safe Guest Migration Warnings:</strong> Added clear confirmation warnings when linking guest profiles to permanent accounts to ensure saved progress is never unintentionally overwritten.</div>
-        </li>
+        <li><strong>First-launch handler briefing:</strong> eight illustrated slides, the handler's lines typed out on screen, for new operatives only.</li>
+        <li><strong>Redesigned home screen</strong> with an operative header and a new navigation bar: Defence, Lab, Home, Upgrades, Shop.</li>
+        <li><strong>Miner and proxy boosts</strong> now run side by side, each on its own timer.</li>
+        <li><strong>Reworked Upgrades screen</strong> with live countdown timers.</li>
+        <li><strong>Guest accounts:</strong> a clear warning before a guest account is left behind for a signed-in operative — the guest account is then deleted.</li>
       </ul>
 
-      <div class="section-heading heading-fixes">🛠️ Fixes &amp; Optimizations</div>
-      <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Mission Debrief Transmission Delivery:</strong> Fixed an issue where post-victory transmissions could stall or require extra taps to initialize under low network signal.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Display Layout Geometry:</strong> Corrected padding around modern camera cutouts and gesture navigation bars.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Audio Balance:</strong> Eliminated background audio pops when resuming the terminal from sleep mode.</div>
-        </li>
+      <div class="group-heading h-testing">In testing — may change</div>
+      <ul class="change-list muted">
+        <li>The operative room: an isometric home base with your server rack, miner tower and cloning tubes.</li>
+        <li>Six distinct data-core looks, and a history for every core.</li>
       </ul>
     </article>
 
-    <!-- VERSION v1.1.3 -->
-    <article class="version-card closed">
+    <!-- v1.1.3 -->
+    <article class="version-card closed" id="v1-1-3">
       <div class="version-header">
-        <div class="version-tag">
-          <span>v1.1.3</span>
-          <span class="track-badge badge-closed">CLOSED BETA // BUILD 14</span>
+        <div class="version-title">
+          <h2>v1.1.3</h2>
+          <span class="badge b-closed">Closed testing</span>
+          <div class="release-name">PROTOCOL: INCIDENT LOG</div>
         </div>
-        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-subtle);">OCTOBER 27, 2026</span>
+        <time class="version-date" datetime="2026-10-27">27 OCT 2026</time>
       </div>
+      <p class="summary">The tutorial rework, levels delivered from the server, and fresh level leaderboards. Your campaign progress is kept.</p>
 
-      <div class="section-heading heading-features">⚡ Features Introduced</div>
+      <div class="group-heading h-new">New</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>3D Holographic Cyber Globe:</strong> Replaced the legacy 2D mission list with an interactive, rotating 3D Cyber Globe showcasing hexagonal territory sectors, active operative nodes, and regional threat matrices.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Asynchronous Multiplayer Raids:</strong> Operatives can now infiltrate rival bases, bypass player-constructed defensive grids, and extract stored data cores in competitive asymmetric heists.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Base Defense Grid Authoring:</strong> Build and deploy custom network defense layouts with directional deflectors, Sentry scan lines, and security gates to protect stored loot against rival players.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Dynamic Puzzle Streaming (Over-The-Air):</strong> Transitioned campaign level distribution to a live streaming engine, allowing real-time puzzle balancing and new level packs without requiring full client updates.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Global Competitive Matrix:</strong> Integrated high-speed global leaderboards for single-player sector records and competitive raid offensive/defensive ratings.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Battle Logs:</strong> Added dedicated Attack and Defense activity logs directly on the Cyber Globe to track raid results, stolen payloads, and defense victories.</div>
-        </li>
+        <li><strong>New tutorial Level 3 — RELAY // INCIDENT LOG:</strong> targeting cells, energy and the integrity hub. Boot Origin now has 29 levels, so the level numbers after it move up.</li>
+        <li><strong>Level 1</strong> is simpler — the energy block moved out of it.</li>
+        <li><strong>Level 2</strong> is reworked around the <strong>Overclock Gear</strong>, the new name for the packet speed control.</li>
+        <li><strong>Levels can now be updated without an app update.</strong></li>
+        <li><strong>New level leaderboards</strong> with a fairer score and clear times to the millisecond. Every board started fresh.</li>
+        <li><strong>Field Manual windows</strong> in a level now show only the pages that level needs.</li>
       </ul>
 
-      <div class="section-heading heading-fixes">🛠️ Fixes &amp; Optimizations</div>
+      <div class="group-heading h-rollout">Now on for everyone</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Campaign Node Indexing:</strong> Standardized level identification across all city sectors, ensuring player completion medals and high scores remain permanently preserved.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Raid Cooldown Timers:</strong> Fixed defense target availability logic to prevent targeting operatives who are actively modifying their layouts.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Touch Responsiveness:</strong> Eliminated multi-touch deadzones during fast board manipulation.</div>
-        </li>
+        <li>The Cyber Globe, full-screen mode, vector tile icons, tile glide, packet effects and packet cosmetics.</li>
       </ul>
     </article>
 
-    <!-- VERSION v1.1.2 -->
-    <article class="version-card">
+    <!-- v1.1.2 -->
+    <article class="version-card closed" id="v1-1-2">
       <div class="version-header">
-        <div class="version-tag">
-          <span>v1.1.2</span>
-          <span class="track-badge badge-baseline">BUILD 13</span>
+        <div class="version-title">
+          <h2>v1.1.2</h2>
+          <span class="badge b-closed">Closed testing</span>
         </div>
-        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-subtle);">OCTOBER 21, 2026</span>
+        <time class="version-date" datetime="2026-10-21">21 OCT 2026</time>
       </div>
+      <p class="summary">A guided Level 1, a geared speed control, new crystal packs and a round of fixes.</p>
 
-      <div class="section-heading heading-features">⚡ Features Introduced</div>
+      <div class="group-heading h-new">New</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Hardware-Accelerated 2D Engine:</strong> Migrated the entire puzzle board, packet transit system, and Sentry lasers to a dedicated GPU canvas for locked 60 FPS performance and reduced battery drain.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>3-Speed Tactical Overclock Throttle:</strong> Replaced legacy throttle controls with a calibrated 3-speed gear system featuring physical detents, real-speed visual feedback, and lock rings.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Multi-Touch Infiltration:</strong> Added full simultaneous multi-touch support, allowing operatives to adjust the speed gear while simultaneously placing or moving tiles on the board.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Tactile Tile Gliding:</strong> Introduced smooth ease-out motion interpolation when swapping, picking up, or placing tiles on the grid.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Direct Drag-to-Swap:</strong> Placed tiles can now be dragged directly onto other occupied grid cells to swap positions instantly.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Dynamic Vector Iconography:</strong> Converted all grid components to resolution-independent vector icons with smooth morphological state transitions.</div>
-        </li>
+        <li><strong>Geared speed control:</strong> three gears with a lock detent (later named the Overclock Gear).</li>
+        <li><strong>Guided Level 1 tutorial</strong> with Field Manual windows inside the level.</li>
+        <li><strong>Two new crystal packs:</strong> Quantum Pulse <span class="qc">⟠ 105</span> and Quantum Surge <span class="qc">⟠ 160</span>.</li>
+        <li><strong>Bigger spends ask first</strong> with a confirmation box.</li>
+        <li><strong>Cyber Globe:</strong> a "TAP TO INFILTRATE" callout on your city.</li>
+        <li><strong>The GPU-drawn board</strong> is now on for everyone.</li>
       </ul>
 
-      <div class="section-heading heading-fixes">🛠️ Fixes &amp; Optimizations</div>
+      <div class="group-heading h-fix">Fixes</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Display Geometry:</strong> Corrected layout clipping on tall aspect-ratio screens (20:9 and 21:9).</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Audio State Machine:</strong> Fixed an issue where audio mute state did not persist after exiting settings.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Sentry Patrol Animation:</strong> Smoothed patrol turnaround interpolation for oscillating Sentries.</div>
-        </li>
+        <li>Level 1 no longer freezes after SKIP followed by a fast launch.</li>
+        <li>The purchase overlay now clears when a purchase is cancelled or fails.</li>
+        <li>Changing the interface font no longer resets your sound settings.</li>
+        <li>The Back button closes Settings, and text wraps correctly on Android 16.</li>
+        <li>The profile card in the menu opens the alias screen.</li>
       </ul>
     </article>
 
-    <!-- VERSION v1.1.1 -->
-    <article class="version-card">
+    <!-- v1.1.1 -->
+    <article class="version-card closed" id="v1-1-1">
       <div class="version-header">
-        <div class="version-tag">
-          <span>v1.1.1</span>
-          <span class="track-badge badge-baseline">BUILD 12</span>
+        <div class="version-title">
+          <h2>v1.1.1</h2>
+          <span class="badge b-closed">Closed testing</span>
         </div>
-        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-subtle);">OCTOBER 14, 2026</span>
+        <time class="version-date" datetime="2026-10-13">13 OCT 2026</time>
       </div>
+      <p class="summary">The build that brought the Cyber Globe and multiplayer raids — switched on for players on 21 October.</p>
 
-      <div class="section-heading heading-features">⚡ Features Introduced</div>
+      <div class="group-heading h-new">New</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Tactical Handler HUD v2:</strong> Modernized in-mission dialogue and alert systems with responsive portrait badges and audio-synced text delivery.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Integrity Engine v2:</strong> Reworked transmission integrity drain calculation with discrete tiered decay formulas (Root, User, Guest clearance tiers).</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Haptic Feedback Profiles:</strong> Integrated custom stepped vibration profiles for tile snaps, Sentry warnings, and puzzle completion.</div>
-        </li>
+        <li><strong>Themed confirmation boxes</strong> across the game.</li>
+        <li><strong>New operatives start with a deployed starter base.</strong></li>
+        <li><strong>The redesigned handler message box</strong> is on for everyone.</li>
+        <li><strong>Integrity v2</strong> for everyone: integrity drains slower at high speed and faster at low speed, the HUD shows the baseline and your bonuses on two lines, and the run ends if integrity reaches zero with nothing delivered.</li>
       </ul>
 
-      <div class="section-heading heading-fixes">🛠️ Fixes &amp; Optimizations</div>
+      <div class="group-heading h-fix">Fixes</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Sentry Beam Collision:</strong> Fixed precision sub-pixel packet collision detection during high-velocity diagonal deflections.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Inventory Tray Snap:</strong> Eliminated border clipping on small-screen mobile displays during rapid tile placement.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Save State Hydration:</strong> Improved background local save recovery during unexpected app exits.</div>
-        </li>
+        <li>Your profile now loads after signing in on a fresh install.</li>
+      </ul>
+
+      <div class="group-heading h-rollout">Switched on — 21 Oct 2026</div>
+      <ul class="change-list">
+        <li><strong>The Cyber Globe:</strong> a holographic globe to pick your city, with a connection sequence, a city unlock ceremony, a network view and a cell grid over each city.</li>
+        <li><strong>Defence Grid:</strong> build and deploy your own base for other operatives to raid.</li>
+        <li><strong>Raids:</strong> FIND OPPONENT, a scout card, two attempts, data-core extraction from a beaten base, and an under-attack alert with a shield afterwards.</li>
+        <li><strong>Battle logs</strong> on the globe — your attacks and the raids on your base.</li>
+        <li><strong>Full-screen mode</strong> and <strong>interface font themes</strong>.</li>
       </ul>
     </article>
 
-    <!-- VERSION v1.1.0 -->
-    <article class="version-card">
+    <!-- v1.1.0 -->
+    <article class="version-card closed" id="v1-1-0">
       <div class="version-header">
-        <div class="version-tag">
-          <span>v1.1.0</span>
-          <span class="track-badge badge-baseline">BUILD 11</span>
+        <div class="version-title">
+          <h2>v1.1.0</h2>
+          <span class="badge b-closed">Closed testing</span>
+          <div class="release-name">SKIA RENDERER MIGRATION</div>
         </div>
-        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-subtle);">OCTOBER 08, 2026</span>
+        <time class="version-date" datetime="2026-10-01">01 OCT 2026</time>
       </div>
+      <p class="summary">Shipped looking and playing like v1.0.9. The new board engine and its effects were switched on step by step during October.</p>
 
-      <div class="section-heading heading-features">⚡ Features Introduced</div>
+      <div class="group-heading h-new">New</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>28-Sector Campaign Framework:</strong> Expanded the initial story campaign with diverse corporate security nodes, timed EMP field barriers, and multi-packet splitters.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Matrix Shuffle Keypad v3:</strong> Enhanced the Cipher Security Gateway with anti-memorization key scrambling and dynamic clue deduction.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Botnet Mining Rigs:</strong> Introduced passive DarkCoin mining rigs with upgradeable compute capacity and automated harvest collection.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Quantum Exchange:</strong> Implemented store exchange kiosks for converting earned Quantum Crystals into DarkCoins and tactical bypass keys.</div>
-        </li>
+        <li><strong>Level 28 — PRISM NODE // FULL SPECTRUM</strong>, with the new <strong>Yellow Colour Spoofer</strong>.</li>
       </ul>
 
-      <div class="section-heading heading-fixes">🛠️ Fixes &amp; Optimizations</div>
+      <div class="group-heading h-fix">Fixes</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Cloud Save Hydration:</strong> Resolved race conditions during offline-to-online state synchronization.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Packet Physics Precision:</strong> Tightened routing corner turns to prevent corner-cutting bugs on fast forward speeds.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Input Latency:</strong> Reduced touch-to-drag initiation latency by 40ms.</div>
-        </li>
+        <li>Dragging from the inventory tray now starts reliably on Android, and tiles no longer vanish.</li>
+        <li>A smoother speed slider.</li>
+      </ul>
+
+      <div class="group-heading h-rollout">Switched on during October</div>
+      <ul class="change-list">
+        <li><strong>A GPU-drawn game board</strong> for smoother packets, Sentries and trails.</li>
+        <li><strong>Tile glide</strong> — tiles slide between cells — and <strong>drag-to-swap</strong> for placed tiles.</li>
+        <li><strong>Packet effects</strong> for wormholes and shift registers, and <strong>vector tile icons</strong>.</li>
+        <li><strong>Packet cosmetics</strong> and the LOADOUT screen to pick your trail and head.</li>
+        <li><strong>Sentry scan beam</strong> and auto-scroll to your current level on the level map.</li>
       </ul>
     </article>
 
-    <!-- VERSION v1.0.9 -->
-    <article class="version-card">
+    <!-- v1.0.9 -->
+    <article class="version-card retired" id="v1-0-9">
       <div class="version-header">
-        <div class="version-tag">
-          <span>v1.0.9</span>
-          <span class="track-badge badge-baseline">BASELINE // BUILD 10</span>
+        <div class="version-title">
+          <h2>v1.0.9</h2>
+          <span class="badge b-retired">No longer supported</span>
         </div>
-        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-subtle);">SEPTEMBER 28, 2026</span>
+        <time class="version-date" datetime="2026-09-23">23 SEP 2026</time>
       </div>
+      <p class="summary">The big tile drop: eight new tiles and eleven new levels.</p>
 
-      <div class="section-heading heading-features">⚡ Features Introduced</div>
+      <div class="group-heading h-new">New</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Dark Mode Cyberpunk UI:</strong> Established the neon high-contrast terminal theme across all screens.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Operative Profile &amp; Callsign:</strong> Enabled player alias selection and cloud-synced career statistics.</div>
-        </li>
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Field Manual Integration:</strong> Connected mobile-scaled HTML technical documentation directly accessible from within the game client.</div>
-        </li>
+        <li><strong>Eight new tiles:</strong> Buffer node, EMP Mine, Sentry ICE, EMP Bombs, EMP Field, Timed Gate, Symmetric Key and One-Time Switch.</li>
+        <li><strong>Levels 17–27</strong> — a 27-level campaign.</li>
+        <li><strong>Player titles</strong> and the <strong>Operative Dossier</strong>.</li>
+        <li><strong>Operative Inbox</strong> with supply drops, and a <strong>daily reset at 08:00 UTC</strong>.</li>
+        <li><strong>Field Manual</strong> guides in the game, and an <strong>interface font</strong> switcher.</li>
+        <li>Instant miner collection, a tappable score breakdown, an EMP blast preview, and an in-app update prompt.</li>
       </ul>
 
-      <div class="section-heading heading-fixes">🛠️ Fixes &amp; Optimizations</div>
+      <div class="group-heading h-fix">Fixes</div>
       <ul class="change-list">
-        <li class="change-item">
-          <span class="bullet">&bull;</span>
-          <div><strong>Initial Closed Testing Release:</strong> Baseline stability, network authentication, and memory profiling across supported Android devices.</div>
-        </li>
+        <li>Black Market recurring offers, a crash on start-up, and tiles wrongly ejected from field locks.</li>
       </ul>
     </article>
+
+    <!-- v1.0.8 -->
+    <article class="version-card retired" id="v1-0-8">
+      <div class="version-header">
+        <div class="version-title">
+          <h2>v1.0.8</h2>
+          <span class="badge b-retired">No longer supported</span>
+          <div class="release-name">WORMHOLES, LIVE-OPS &amp; NETWORK UPLINK</div>
+        </div>
+        <time class="version-date" datetime="2026-09-18">18 SEP 2026</time>
+      </div>
+
+      <div class="group-heading h-new">New</div>
+      <ul class="change-list">
+        <li><strong>VPN Tunnel</strong> and <strong>Basic ICE</strong> (Level 13), <strong>access keys</strong> (Level 14), <strong>Wormholes</strong> (Level 15) and the <strong>Splitter</strong> (Level 16).</li>
+        <li><strong>Black Market</strong> offers and a ten-tier purchase catalogue.</li>
+        <li>Editable cipher slots, tablet layouts, a quit confirmation on Back, and redesigned walls and ICE.</li>
+      </ul>
+
+      <div class="group-heading h-fix">Fixes</div>
+      <ul class="change-list">
+        <li>Integrity no longer drains while you wait to launch a packet by hand.</li>
+      </ul>
+    </article>
+
+    <!-- v1.0.7 -->
+    <article class="version-card retired" id="v1-0-7">
+      <div class="version-header">
+        <div class="version-title">
+          <h2>v1.0.7</h2>
+          <span class="badge b-retired">No longer supported</span>
+        </div>
+        <time class="version-date" datetime="2026-09-15">15 SEP 2026</time>
+      </div>
+
+      <div class="group-heading h-new">New</div>
+      <ul class="change-list">
+        <li><strong>Shift Registers</strong> (Levels 9–10), the <strong>Flip-Flop</strong> (Level 11), and <strong>Colour Spoofers</strong> with <strong>Stateful ICE</strong> (Level 12).</li>
+        <li>A scrollable inventory tray and a global dialogue skip.</li>
+      </ul>
+    </article>
+
+    <!-- v1.0.6 -->
+    <article class="version-card retired" id="v1-0-6">
+      <div class="version-header">
+        <div class="version-title">
+          <h2>v1.0.6</h2>
+          <span class="badge b-retired">No longer supported</span>
+        </div>
+        <time class="version-date" datetime="2026-09-11">11 SEP 2026</time>
+      </div>
+      <p class="summary">The first release open to testers in every country.</p>
+
+      <div class="group-heading h-new">New</div>
+      <ul class="change-list">
+        <li><strong>Integrity on a 0–1000 scale</strong> and a transmission timeline bar.</li>
+        <li><strong>Personal bests</strong> and a clear-time leaderboard with a NEW RECORD badge.</li>
+        <li>A system broadcast banner and an upgrade-complete celebration.</li>
+      </ul>
+
+      <div class="group-heading h-fix">Fixes</div>
+      <ul class="change-list">
+        <li>Haptics on Android, cut-off text on Android, and clearer notice wording.</li>
+      </ul>
+    </article>
+
+    <!-- EARLY BUILDS -->
+    <details class="early" id="early">
+      <summary><span>v1.0.0 – v1.0.5 · the first closed tests</span><span class="version-date">02 – 09 SEP 2026</span></summary>
+      <ul class="early-list">
+        <li><span class="v">v1.0.5</span><span class="d">09 SEP</span>The Decryptor with re-spins, an improved puzzle, a music loop and stepped volume buttons.</li>
+        <li><span class="v">v1.0.4</span><span class="d">09 SEP</span>Leaderboards, the archives and a UI overhaul.</li>
+        <li><span class="v">v1.0.3</span><span class="d">07 SEP</span>Packet routing physics and screen-size optimisation.</li>
+        <li><span class="v">v1.0.2</span><span class="d">06 SEP</span>The Shop rework, in-app purchases, VIP and ads.</li>
+        <li><span class="v">v1.0.1</span><span class="d">06 SEP</span>Google Play Games services and save sync.</li>
+        <li><span class="v">v1.0.0</span><span class="d">03 SEP</span>The first closed test: cloud saves, Google Play Games and Google sign-in, star-based level rewards, and a free alias change.</li>
+      </ul>
+    </details>
   </main>
 
   <footer>
-    <p>&copy; 2026 MTX Games — Zero Day Protocol. All rights reserved. | <a href="index.html">Mainframe</a> | <a href="CHANGELOG.html">Chainlog</a> | <a href="PRIVACY_POLICY.html">Privacy Policy</a> | <a href="TERMS_OF_SERVICE.html">Terms of Service</a></p>
+    <p>&copy; 2026 MTX Games — Zero Day Protocol. All rights reserved.</p>
+    <p><a href="index.html">Mainframe</a> · <a href="transmissions.html">Transmissions</a> · <a href="PRIVACY_POLICY.html">Privacy Policy</a> · <a href="TERMS_OF_SERVICE.html">Terms of Service</a> · <a href="mailto:info@mtxgames.lk">info@mtxgames.lk</a></p>
   </footer>
 
 </body>
 </html>
-
